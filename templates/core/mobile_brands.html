@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+
+{% block title %} {% translate "Mobile Brands" %} | {{ block.super }}
+{% endblock title %}
+
+{% block content %}
+{% for obj in object_list %}
+    <div class="card">
+        {{obj}}
+    </div>
+{% endfor %}
+{% endblock content %}

@@ -1,0 +1,103 @@
+{% load i18n %}
+<!-- Navbar -->
+<nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light scrolling-navbar">
+    <div class="container-fluid">
+
+      <!-- Brand -->
+      <a class="navbar-brand waves-effect" href="{% url 'core:home' %}">
+        <strong class="blue-text">Mobiltilbud</strong>
+      </a>
+
+      <!-- Collapse -->
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Links -->
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+        <!-- Left -->
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+              <a class="nav-link waves-effect" href=''>
+                <span class="clearfix d-none d-sm-inline-block"> {% translate "Compare" %} </span>
+              </a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link waves-effect" href=''>
+                <span class="clearfix d-none d-sm-inline-block"> {% translate "All" %} </span>
+              </a>
+          </li>
+
+          {% comment %} <li class="nav-item active">
+            <a class="nav-link waves-effect" href="{% url 'core:home' %}">Home
+              <span class="sr-only">(current)</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link waves-effect" href="{% url 'core:checkout' %}">Checkout</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link waves-effect" href="{% url 'core:items' %}">Products</a>
+          </li> {% endcomment %}
+        </ul>
+
+        <!-- Right -->
+        <ul class="navbar-nav nav-flex-icons">
+          {% if request.user.is_authenticated %}
+            {% comment %} <li class="nav-item"> {% endcomment %}
+              {% comment %} <a href="{% url 'core:order-summary' %}" class="nav-link waves-effect">
+                <span class="badge red z-depth-1 mr-1"> 
+                  {{ request.user|cart_item_count }} 
+                </span>
+                <i class="fas fa-shopping-cart"></i>
+                <span class="clearfix d-none d-sm-inline-block"> Cart </span>
+              </a> {% endcomment %}
+            {% comment %} </li> {% endcomment %}
+            <li class="nav-item">
+              <a class="nav-link waves-effect" href=''>
+                <span class="clearfix d-none d-sm-inline-block"> {% translate "Logout" %} </span>
+              </a>
+            </li>
+
+          {% else %}
+            <li class="nav-item">
+              <a class="nav-link waves-effect" href=''>
+                <span class="clearfix d-none d-sm-inline-block"> {% translate "Login" %} </span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link waves-effect" href=''>
+                <span class="clearfix d-none d-sm-inline-block"> {% translate "Signup" %}</span>
+              </a>
+            </li>
+          {% endif %}
+
+            {% get_current_language as LANGUAGE_CODE %}
+            <form class="navbar-form form-inline" action="{% url 'change_language' %}" method="post">
+                {% csrf_token %}
+                {% comment %} <select name="language"> {% endcomment %}
+                <select name="language" class="form-control" onchange="this.form.submit()">
+                    {% get_available_languages as LANGUAGES %}
+                    {% for language in LANGUAGES %}
+                    <option class="nav-item dropdown" value="{{ language.0 }}" {% if language.0 == LANGUAGE_CODE %} selected{% endif %}>
+                        {% comment %} {{ language.0|language_name_local }} {% endcomment %}
+                        {% comment %} ({{ language.0 }}) {% endcomment %}
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                          <a class="dropdown-item" href="{% url 'change_language' %}">{{ language.0 }}</a>
+                          {% comment %} <a class="dropdown-item" href="{% url 'change_language' %}">{{ language.0|language_name_local }}</a> {% endcomment %}
+                        </div>
+                        {% comment %} <a class="nav-link waves-effect" href="{% url 'change_language' %}">
+                          <span>{{ language.0|language_name_local }}</span>
+                        </a>  {% endcomment %}
+                    </option>
+                    {% endfor %}
+                </select>
+            </form>
+
+        </ul>
+      </div>
+    </div>
+</nav>
+<!-- Navbar -->

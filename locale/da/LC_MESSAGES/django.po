@@ -1,0 +1,71 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-11-15 02:27+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: mobiletilbud/settings/base.py:66
+msgid "English"
+msgstr "Engelsk"
+
+#: mobiletilbud/settings/base.py:67
+msgid "Danish"
+msgstr "Dansk"
+
+#: mobiletilbud/urls.py:15
+msgid "admin/"
+msgstr ""
+
+#: templates/home.html:5
+msgid "Welcome"
+msgstr "Velkommen"
+
+#: templates/left_menu.html:4
+msgid "Home"
+msgstr "Hjem"
+
+#: templates/left_menu.html:5
+msgid "Telecom Companies"
+msgstr "Teleselskaber"
+
+#: templates/left_menu.html:6 templates/main_nav.html:24
+msgid "Compare"
+msgstr "Sammenligne"
+
+#: templates/left_menu.html:7
+msgid "Offers"
+msgstr "Tilbud"
+
+#: templates/left_menu.html:8
+msgid "Set Reminders"
+msgstr "Indstil påmindelser"
+
+#: templates/main_nav.html:29
+msgid "All"
+msgstr "Alle"
+
+#: templates/main_nav.html:64
+msgid "Logout"
+msgstr "Log ud"
+
+#: templates/main_nav.html:71
+msgid "Login"
+msgstr "Log på"
+
+#: templates/main_nav.html:76
+msgid "Signup"
+msgstr "Tilmelde"

@@ -1,0 +1,9 @@
+CREATE LOCALE TRANSLATION FILE:
+django-admin makemessages --ignore="static" --ignore=".env" --ignore="bin" --ignore="include" --ignore="lib" --ignore="lib64" --ignore="share" --ignore=".gitignore" --ignore="quidelines-ideas" --ignore="db.sqlite3"  -l da
+
+
+COMPILE GENERATE TRANSLATION:
+django-admin compilemessages
+django-admin compilemessages --ignore venv --ignore bin --ignore include --ignore share --ignore quidelines-ideas --ignore pyvenv.cfg --ignore db.sqlite3 --ignore lib --ignore lib64 --ignore static --ignore .env --ignore .gitignore
+
+
