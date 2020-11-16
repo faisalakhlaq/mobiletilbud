@@ -4,11 +4,11 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
-msgid ""
-msgstr ""
+msgid "AUTHOR"
+msgstr "AUTHOR"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-15 02:27+0100\n"
+"POT-Creation-Date: 2020-11-15 22:47+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,6 +18,199 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+#: core/models.py:9 core/models.py:15
+msgid "name"
+msgstr "navn"
+
+#: core/models.py:17
+msgid "Brand"
+msgstr "Mærke"
+
+#: core/models.py:20
+msgid "Cash Price"
+msgstr "Kontantpris"
+
+#: core/models.py:22 core/models.py:139 core/models.py:169 core/models.py:228
+msgid "slug"
+msgstr "slug"
+
+#: core/models.py:42
+msgid "dimensions"
+msgstr "dimensioner"
+
+#: core/models.py:44
+msgid "weight"
+msgstr "vægt"
+
+#: core/models.py:46
+msgid "screen_type"
+msgstr "skærmtype"
+
+#: core/models.py:48
+msgid "screen_size"
+msgstr "skærmstørrelse"
+
+#: core/models.py:50
+msgid "screen_resolution"
+msgstr "skærmopløsning"
+
+#: core/models.py:52
+msgid "ip_certification"
+msgstr "ip_ertificering"
+
+#: core/models.py:54
+msgid "internal_storage"
+msgstr "intern_lagringshukommelse"
+
+#: core/models.py:56
+msgid "external_storage"
+msgstr "ekstern_ukommelse"
+
+#: core/models.py:58
+msgid "WLAN"
+msgstr "WLAN"
+
+#: core/models.py:60
+msgid "bluetooth"
+msgstr "bluetooth"
+
+#: core/models.py:63
+msgid "USB"
+msgstr "USB"
+
+#: core/models.py:65
+msgid "wireless_charging"
+msgstr "trådløs_opladning"
+
+#: core/models.py:67
+msgid "fast_charging"
+msgstr "hurtigopladning"
+
+#: core/models.py:69
+msgid "chipset"
+msgstr "chipset"
+
+#: core/models.py:71
+msgid "control_system"
+msgstr "styresystem"
+
+#: core/models.py:73
+msgid "RAM"
+msgstr "RAM"
+
+#: core/models.py:83
+msgid "rear_camera_lenses"
+msgstr "bagsidekamera_linser"
+
+#: core/models.py:84
+msgid "rear_camera_megapixel"
+msgstr "bagsidekamera_megapixel"
+
+#: core/models.py:86
+msgid "Rear Camera Aperture"
+msgstr "Bagsidekamera blændetal"
+
+#: core/models.py:88
+msgid "rear_camera_video_resolution"
+msgstr "bagsidekamera_videooptagelse"
+
+#: core/models.py:90
+msgid "front_camera_lenses"
+msgstr "frontkamera_linser"
+
+#: core/models.py:91
+msgid "front_camera_megapixel"
+msgstr "frontkamera_megapixel"
+
+#: core/models.py:93
+msgid "front_camera_aperture"
+msgstr "frontkamera_blændetal"
+
+#: core/models.py:95
+msgid "front_camera_video_resolution"
+msgstr "frontkamera_blændetal"
+
+#: core/models.py:106 core/models.py:138
+msgid "Name"
+msgstr "Navn"
+
+#: core/models.py:121
+msgid "value"
+msgstr "værdi"
+
+#: core/models.py:142 core/models.py:171 core/models.py:209
+msgid "Telecom Company"
+msgstr "Teleselskab"
+
+#: core/models.py:143 templates/core/telecom_companies.html:5
+#: templates/left_menu.html:5
+msgid "Telecom Companies"
+msgstr "Teleselskaber"
+
+#: core/models.py:156
+msgid "Country Name"
+msgstr "Landenavn"
+
+#: core/models.py:173
+msgid "Monthly Charges"
+msgstr "Månedlig Betaling"
+
+#: core/models.py:176
+msgid "Mobile Data"
+msgstr "Mobildata"
+
+#: core/models.py:178
+msgid "Data in other countries"
+msgstr "Data i andre lande"
+
+#: core/models.py:180
+msgid "For Young People"
+msgstr "For unge mennesker"
+
+#: core/models.py:186 core/models.py:212
+msgid "Package"
+msgstr "Abonnement"
+
+#: core/models.py:187
+msgid "Packages"
+msgstr "Abonnementer"
+
+#: core/models.py:204
+msgid "Mobile"
+msgstr "Mobil"
+
+#: core/models.py:216
+msgid "price"
+msgstr "pris"
+
+#: core/models.py:218
+msgid "6 months price"
+msgstr "6 måneder pris"
+
+#: core/models.py:220
+msgid "12 months price"
+msgstr "12 måneder pris"
+
+#: core/models.py:222
+msgid "24 months price"
+msgstr "24 måneder pris"
+
+#: core/models.py:224
+msgid "36 months price"
+msgstr "36 måneder pris"
+
+#: core/models.py:226
+msgid "40 months price"
+msgstr "40 måneder pris"
+
+#: core/models.py:231
+msgid "Mobile Price"
+msgstr "Mobilens pris"
+
+#: core/models.py:232
+msgid "Mobile Prices"
+msgstr "Mobilpriser"
+
 #: mobiletilbud/settings/base.py:66
 msgid "English"
 msgstr "Engelsk"
@@ -26,9 +219,17 @@ msgstr "Engelsk"
 msgid "Danish"
 msgstr "Dansk"
 
-#: mobiletilbud/urls.py:15
-msgid "admin/"
-msgstr ""
+#: templates/core/mobile_brands.html:5
+msgid "Mobile Brands"
+msgstr "Mobile mærker"
+
+#: templates/core/mobile_brands.html:10
+msgid "Explore different Mobile Brands"
+msgstr "Tjek forskellige mobilmærker"
+
+#: templates/core/telecom_companies.html:10
+msgid "Check out offers from different Telecom Companies"
+msgstr "Tjek tilbud fra forskellige teleselskaber"
 
 #: templates/home.html:5
 msgid "Welcome"
@@ -37,10 +238,6 @@ msgstr "Velkommen"
 #: templates/left_menu.html:4
 msgid "Home"
 msgstr "Hjem"
-
-#: templates/left_menu.html:5
-msgid "Telecom Companies"
-msgstr "Teleselskaber"
 
 #: templates/left_menu.html:6 templates/main_nav.html:24
 msgid "Compare"
@@ -53,6 +250,10 @@ msgstr "Tilbud"
 #: templates/left_menu.html:8
 msgid "Set Reminders"
 msgstr "Indstil påmindelser"
+
+#: templates/left_menu.html:9
+msgid "Mobile Manufacturers"
+msgstr "Mobilproducenter"
 
 #: templates/main_nav.html:29
 msgid "All"
@@ -69,3 +270,6 @@ msgstr "Log på"
 #: templates/main_nav.html:76
 msgid "Signup"
 msgstr "Tilmelde"
+
+#~ msgid "admin"
+#~ msgstr "admin"

@@ -5,7 +5,9 @@ from django.views import View
 from django.views.generic import ListView
 
 
-from .models import MobileBrand
+from .models import MobileBrand, TelecomCompany
+from telecompanies.telenor_spider import TelenorSpider
+from telecompanies.models import Offer
 
 class HomeView(View):
     def get(self, *args, **kwargs):
@@ -17,6 +19,18 @@ class MobileManufacturersView(ListView):
     template_name = 'core/mobile_brands.html'
     queryset = MobileBrand.objects.all()
 
+
+class TelecomCompaniesView(ListView):
+    template_name = 'core/telecom_companies.html'
+    queryset = TelecomCompany.objects.all()
+
+    def get_context_data(self, **kwargs):
+        context = super(TelecomCompaniesView, self).get_context_data(**kwargs)
+        # TelenorSpider().get_telenor_offers()
+        offers = Offer.objects.all()
+        context["offers"] = offers
+        return context
+    
 
 def change_language(request):
     response = HttpResponseRedirect('/')

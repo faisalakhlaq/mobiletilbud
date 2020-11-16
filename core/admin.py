@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from .models import (Mobile, MobileBrand, MobileCameraSpecification, 
-                     MobilePrice, MobileTechnicalSpecification, 
+                     MobilePrice, MobileTechnicalSpecification, Country,
                      MobileVariation, Variation, TelecomCompany, Package)
 
 admin.site.register(Mobile)
@@ -13,3 +13,4 @@ admin.site.register(MobileVariation)
 admin.site.register(Variation)
 admin.site.register(TelecomCompany)
 admin.site.register(Package)
+admin.site.register(Country)

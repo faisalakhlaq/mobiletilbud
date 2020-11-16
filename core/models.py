@@ -1,6 +1,8 @@
 from django.db import models
+from django.db.models.signals import pre_save
 from django.utils.translation import gettext_lazy as _
 
+from .utils import unique_slug_generator
 
 class MobileBrand(models.Model):
     """Represents the mobile manufacturers"""
@@ -17,7 +19,8 @@ class Mobile(models.Model):
                                   null=True, blank=True)
     cash_price                  = models.FloatField(_("Cash Price"), 
                                   blank=True, null=True)    
-    slug                        = models.SlugField(_("slug"))
+    slug                        = models.SlugField(_("slug"), 
+                                  blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -67,6 +70,8 @@ class MobileTechnicalSpecification(models.Model):
                                   max_length=30)
     control_system              = models.CharField(_("control_system"), 
                                   max_length=30)
+    ram                         = models.CharField(_("RAM"), 
+                                  max_length=10, blank=True, null=True)
 
     def __str__(self):
         return self.mobile.name
@@ -78,7 +83,7 @@ class MobileCameraSpecification(models.Model):
     rear_cam_lenses             = models.IntegerField(_("rear_camera_lenses"))
     rear_cam_megapixel          = models.CharField(_("rear_camera_megapixel"), 
                                   max_length=30)
-    back_cam_aperture           = models.CharField(_("rear_camera_megapixel"), 
+    back_cam_aperture           = models.CharField(_("Rear Camera Aperture"), 
                                   max_length=30)
     rear_cam_video_resolution   = models.CharField(_("rear_camera_video_resolution"), 
                                   max_length=30)
@@ -93,7 +98,7 @@ class MobileCameraSpecification(models.Model):
     def __str__(self):
         return self.mobile.name
 
-    
+
 class Variation(models.Model):
     """Store different variations of a mobile device. e.g. 
        Variation on color, memory. Price is dependent on variation
@@ -101,6 +106,10 @@ class Variation(models.Model):
     name            = models.CharField(_("Name"), max_length=50)
     mobile          = models.ForeignKey("Mobile", on_delete=models.CASCADE)
 
+    class Meta:
+        unique_together = (
+            ('name', 'mobile')
+        )
     def __str__(self):
         return self.name
 
@@ -127,8 +136,8 @@ class TelecomCompany(models.Model):
         which sales mobile phones with their monthly call 
         packages."""
     name            = models.CharField(_("Name"), max_length=50)
-    slug            = models.SlugField(_("slug"))
-    
+    slug            = models.SlugField(_("slug"), blank=True, null=True)
+
     class Meta:
         verbose_name = _("Telecom Company")
         verbose_name_plural = _("Telecom Companies")
@@ -140,16 +149,27 @@ class TelecomCompany(models.Model):
         return reverse("telecomcompany_detail", kwargs={"slug": self.slug})
 
 
+class Country(models.Model):
+    """Country model will save the countries for a telecom
+       company. One company can be operating in different
+       countries."""
+    name                    = models.CharField(_("Country Name"), max_length=80)
+    telecom_company         = models.ManyToManyField("TelecomCompany")
+
+    def __str__(self):
+        return self.name
+
+
 class Package(models.Model):
-    """Package is monthly phone subscription provided and charged 
-    by a Telecom Company. It can be refered to as call and data package.
-    There can be different call and data packages. Prices for 
-    mobile phones vary depending on the package s/he chooses.
+    """Subscription / Package is monthly phone subscription provided 
+    and charged by a Telecom Company. It can be refered to as call 
+    and data package. There can be different call and data packages. 
+    Prices for mobile phones vary depending on the package s/he chooses.
     """
     slug                    = models.SlugField(_("slug"))
     telecom_company         = models.ForeignKey("TelecomCompany", 
-                                verbose_name=_("Telecom Company"), 
-                                on_delete=models.CASCADE)
+                              verbose_name=_("Telecom Company"), 
+                              on_delete=models.CASCADE)
     monthly_charges         = models.FloatField(_("Monthly Charges"))
     # Mobile data is the amount of data provided on a monthly base. 
     # 500 MB, 5 GB
@@ -157,8 +177,12 @@ class Package(models.Model):
                               blank=True, null=True, max_length=50)
     data_in_other_countries = models.CharField(_("Data in other countries"), 
                               blank=True, null=True, max_length=50)
-
+    for_young               = models.BooleanField(_("For Young People"),
+                              default=False)
     class Meta:
+        unique_together = (
+            ('monthly_charges', 'telecom_company', 'for_young')
+        )
         verbose_name = _("Package")
         verbose_name_plural = _("Packages")
 
@@ -179,6 +203,11 @@ class MobilePrice(models.Model):
     mobile              = models.ForeignKey("Mobile", 
                           verbose_name=_("Mobile"), 
                           on_delete=models.CASCADE)
+    # prices will vary based on variation e.g. mobile memory, color
+    mobile_variations   = models.ManyToManyField(MobileVariation)
+    telecom_company     = models.ForeignKey("TelecomCompany", 
+                          verbose_name=_("Telecom Company"), 
+                          on_delete=models.CASCADE)
     package             = models.ForeignKey("Package", 
                                 verbose_name=_("Package"), 
                                 on_delete=models.CASCADE)
@@ -186,19 +215,32 @@ class MobilePrice(models.Model):
     # irrespective of the package
     cash_price          = models.FloatField(_("price"))
     # Monthly price in 6 months according to company and package 
-    price_6_months      = models.FloatField(_("price"))
-    price_12_months     = models.FloatField(_("price"))
-    price_24_months     = models.FloatField(_("price"))
-    price_36_months     = models.FloatField(_("price"))
+    price_6_months      = models.FloatField(_("6 months price"), 
+                          blank=True, null=True)
+    price_12_months     = models.FloatField(_("12 months price"),
+                          blank=True, null=True)
+    price_24_months     = models.FloatField(_("24 months price"),
+                          blank=True, null=True)
+    price_36_months     = models.FloatField(_("36 months price"),
+                          blank=True, null=True)
+    price_40_months     = models.FloatField(_("40 months price"),
+                          blank=True, null=True)
     slug                = models.SlugField(_("slug"))
 
     class Meta:
-        verbose_name = _("MobilePrice")
-        verbose_name_plural = _("MobilePrices")
+        verbose_name = _("Mobile Price")
+        verbose_name_plural = _("Mobile Prices")
 
     def __str__(self):
         return str(self.price)
 
     def get_absolute_url(self):
         return reverse("mobile_price", kwargs={"pk": self.pk})
-    # TODO prices according to the mobile variation
+
+
+def pre_save_receiver(sender, instance, *args, **kwargs):
+    if not instance.slug:
+        instance.slug = unique_slug_generator(instance=instance)
+
+pre_save.connect(pre_save_receiver, sender=Mobile)
+pre_save.connect(pre_save_receiver, sender=TelecomCompany)
