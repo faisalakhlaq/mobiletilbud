@@ -31,13 +31,12 @@ def samsung_models_spider():
     soup = BeautifulSoup(content, "html.parser")
     rows = soup.find("table", {"id": "tablepress-39"}).find("tbody", {"class", "row-hover"}).find_all("tr")
     brand = MobileBrand.objects.get(name='Samsung')
-    # import pdb; pdb.set_trace()
     for row in rows:
         try:
             name1 = row.find("td", {"column-1"}).text.strip().split(' ', 1)[1].strip()
             name2 = row.find("td", {"column-2"}).text.strip().split(" ", 1)[1].strip()
-            print(name1)
-            print(name2)
+            # print(name1)
+            # print(name2)
             _ = Mobile.objects.get_or_create(name=name1, brand=brand)
             _ = Mobile.objects.get_or_create(name=name2, brand=brand)
         except:
@@ -46,8 +45,10 @@ def samsung_models_spider():
 def save_offer(mobile_name, telecom_company_name, 
                offer_url=None, discount=0, price=0):
     """Save the offer in the database"""
+    # import pdb; pdb.set_trace()
     offer = Offer()
-    mobile = Mobile.objects.filter(name=mobile_name)
+    mobile = Mobile.objects.filter(Q(name=mobile_name) | 
+                                   Q(full_name=mobile_name))
     if mobile: offer.mobile = mobile[0]
     telecom_company = TelecomCompany.objects.filter(
         name=telecom_company_name)
@@ -97,11 +98,10 @@ class TeliaSpider:
                 discount = 0
                 if discount_div: discount = discount_div.find('b').text.strip()
                 name_and_link = p_box.find('h2').find('a', href=True)
-                mobile_name = name_and_link.text.strip()
+                mobile_name = name_and_link.text.strip().rsplit(' ', 1)[0]
                 offer_url = name_and_link['href']
                 table = p_box.find('table', {'class': 'product-prices'})
                 # price_tr = table.find('tbody').find_all('tr')
-                import pdb; pdb.set_trace()
                 price_tr = table.find_all('tr')
                 price = 0
                 for tr in price_tr:
@@ -163,7 +163,6 @@ class ThreeSpider:
             self.firefox_driver.quit()
 
     def save_tilbud_devices(self, devices_li):
-        # import pdb; pdb.set_trace()
         for li in devices_li:
             try:
                 article = li.find("article")

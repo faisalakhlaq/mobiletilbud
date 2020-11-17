@@ -13,6 +13,9 @@ class MobileBrand(models.Model):
 
 class Mobile(models.Model):
     name                        = models.CharField(_("name"), max_length=50)
+    # full name will be Brand name
+    full_name                   = models.CharField(_("Full Name"), max_length=50, 
+                                  blank=True, null=True)
     brand                       = models.ForeignKey("MobileBrand", 
                                   verbose_name=_("Brand"), 
                                   on_delete=models.SET_NULL, 

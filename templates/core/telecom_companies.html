@@ -21,7 +21,8 @@
             <div class="col-auto">
         {% comment %} {{ forloop.counter }} {% endcomment %}
                 <div class="card border-success mb-3" style="max-width: 18rem;">
-                        <div class="card-header bg-transparent border-success">{{offer.discount}}</div>
+                        <div class="card-header bg-transparent border-success">
+                        {% trans "Discount"%} {% if offer.discount %}:{{offer.discount}}{% endif %}</div>
                         <div class="card-body text-success">
                         <h5 class="card-title">{% if offer.mobile %}
                         {{offer.mobile.name}} {% elif offer.mobile_name %}

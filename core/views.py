@@ -5,7 +5,7 @@ from django.views import View
 from django.views.generic import ListView
 
 
-from .models import MobileBrand, TelecomCompany
+from .models import MobileBrand, TelecomCompany, Mobile
 from telecompanies.spider import ThreeSpider, TelenorSpider, TeliaSpider
 from telecompanies.models import Offer
 
@@ -18,7 +18,11 @@ class HomeView(View):
 class MobileManufacturersView(ListView):
     template_name = 'core/mobile_brands.html'
     queryset = MobileBrand.objects.all()
-
+    # mobiles = Mobile.objects.all()
+    # import pdb; pdb.set_trace()
+    # for m in mobiles:
+    #     m.full_name = m.brand.name + " " + m.name
+    #     m.save()
 
 class TelecomCompaniesView(ListView):
     template_name = 'core/telecom_companies.html'

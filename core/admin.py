@@ -4,7 +4,17 @@ from .models import (Mobile, MobileBrand, MobileCameraSpecification,
                      MobilePrice, MobileTechnicalSpecification, Country,
                      MobileVariation, Variation, TelecomCompany, Package)
 
-admin.site.register(Mobile)
+class MobileAdmin(admin.ModelAdmin):
+    list_display = [
+        'name',
+        'full_name',
+        'brand',
+        'cash_price',
+    ]    
+    list_filter = [
+        'brand',
+    ]
+admin.site.register(Mobile, MobileAdmin)
 admin.site.register(MobileBrand)
 admin.site.register(MobileCameraSpecification)
 admin.site.register(MobilePrice)
