@@ -9,7 +9,7 @@ from core.utils import unique_slug_generator
 class Offer(models.Model):
     mobile                  = models.ForeignKey(Mobile, 
                               verbose_name=_("Mobile"), 
-                              on_delete=models.CASCADE, 
+                              on_delete=models.CASCADE,
                               blank=True, null=True)
     telecom_company         = models.ForeignKey(TelecomCompany, 
                               verbose_name=_("Telecom Company"), 
@@ -21,6 +21,8 @@ class Offer(models.Model):
     # link to the company offer page
     offer_url               = models.URLField(_("Offer Url"), max_length=300,
                               blank=True, null=True)
+    price                   = models.CharField(_("Price"), max_length=50,
+                              blank=True, null=True)
     slug                    = models.SlugField(_("slug"), 
                               blank=True, null=True)
     class Meta:
@@ -31,7 +33,7 @@ class Offer(models.Model):
         name = self.mobile_name
         if self.mobile:
             name = self.mobile.name
-        if name != None:
+        if name is not None:
             name = name + self.telecom_company.name
         else:
             name = self.telecom_company.name

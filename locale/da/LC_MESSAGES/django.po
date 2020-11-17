@@ -4,11 +4,11 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
-msgid "AUTHOR"
-msgstr "AUTHOR"
+msgid ""
+msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-15 22:47+0100\n"
+"POT-Creation-Date: 2020-11-17 00:07+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -31,6 +31,7 @@ msgid "Cash Price"
 msgstr "Kontantpris"
 
 #: core/models.py:22 core/models.py:139 core/models.py:169 core/models.py:228
+#: telecompanies/models.py:24
 msgid "slug"
 msgstr "slug"
 
@@ -139,6 +140,7 @@ msgid "value"
 msgstr "værdi"
 
 #: core/models.py:142 core/models.py:171 core/models.py:209
+#: telecompanies/models.py:14 templates/core/telecom_companies.html:23
 msgid "Telecom Company"
 msgstr "Teleselskab"
 
@@ -175,11 +177,11 @@ msgstr "Abonnement"
 msgid "Packages"
 msgstr "Abonnementer"
 
-#: core/models.py:204
+#: core/models.py:204 telecompanies/models.py:11
 msgid "Mobile"
 msgstr "Mobil"
 
-#: core/models.py:216
+#: core/models.py:216 telecompanies/models.py:23
 msgid "price"
 msgstr "pris"
 
@@ -211,13 +213,28 @@ msgstr "Mobilens pris"
 msgid "Mobile Prices"
 msgstr "Mobilpriser"
 
-#: mobiletilbud/settings/base.py:66
+#: mobiletilbud/settings/base.py:67
 msgid "English"
 msgstr "Engelsk"
 
-#: mobiletilbud/settings/base.py:67
+#: mobiletilbud/settings/base.py:68
 msgid "Danish"
 msgstr "Dansk"
+
+#: telecompanies/models.py:18
+msgid "Discount"
+msgstr "Rabat"
+
+#: telecompanies/models.py:21
+msgid "Offers"
+msgstr "Tilbud"
+
+msgid "Offer Url"
+msgstr "Tilbud URL"
+
+#: telecompanies/models.py:27 templates/core/telecom_companies.html:18
+msgid "Offer"
+msgstr "Tilbud"
 
 #: templates/core/mobile_brands.html:5
 msgid "Mobile Brands"
@@ -227,9 +244,17 @@ msgstr "Mobile mærker"
 msgid "Explore different Mobile Brands"
 msgstr "Tjek forskellige mobilmærker"
 
+#: templates/core/mobile_brands.html:14
+msgid "Popular Mobiles"
+msgstr "populære mobiler"
+
 #: templates/core/telecom_companies.html:10
 msgid "Check out offers from different Telecom Companies"
 msgstr "Tjek tilbud fra forskellige teleselskaber"
+
+#: templates/core/telecom_companies.html:14
+msgid "Popular Offers"
+msgstr "Tilbud"
 
 #: templates/home.html:5
 msgid "Welcome"
@@ -242,10 +267,6 @@ msgstr "Hjem"
 #: templates/left_menu.html:6 templates/main_nav.html:24
 msgid "Compare"
 msgstr "Sammenligne"
-
-#: templates/left_menu.html:7
-msgid "Offers"
-msgstr "Tilbud"
 
 #: templates/left_menu.html:8
 msgid "Set Reminders"
