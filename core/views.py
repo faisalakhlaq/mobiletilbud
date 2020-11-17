@@ -6,7 +6,7 @@ from django.views.generic import ListView
 
 
 from .models import MobileBrand, TelecomCompany
-from telecompanies.telenor_spider import ThreeSpider, TelenorSpider
+from telecompanies.spider import ThreeSpider, TelenorSpider, TeliaSpider
 from telecompanies.models import Offer
 
 class HomeView(View):
@@ -26,7 +26,7 @@ class TelecomCompaniesView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(TelecomCompaniesView, self).get_context_data(**kwargs)
-        # ThreeSpider().get_three_offers()
+        # TeliaSpider().get_telia_offers()
         offers = Offer.objects.all()
         context["offers"] = offers
         return context

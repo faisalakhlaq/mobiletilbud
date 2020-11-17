@@ -14,7 +14,7 @@ from .models import Offer
 from core.models import Mobile, TelecomCompany, MobileBrand
 
 
-def hasChild(node):
+def has_child(node):
     """Check if a given node has child nodes in it"""
     # print(type(node))
     try:
@@ -31,7 +31,7 @@ def samsung_models_spider():
     soup = BeautifulSoup(content, "html.parser")
     rows = soup.find("table", {"id": "tablepress-39"}).find("tbody", {"class", "row-hover"}).find_all("tr")
     brand = MobileBrand.objects.get(name='Samsung')
-    import pdb; pdb.set_trace()
+    # import pdb; pdb.set_trace()
     for row in rows:
         try:
             name1 = row.find("td", {"column-1"}).text.strip().split(' ', 1)[1].strip()
@@ -75,7 +75,47 @@ def save_offer(mobile_name, telecom_company_name,
 class TeliaSpider:
     def __init__(self):
         self.tilbud_url = 'https://shop.telia.dk/cgodetilbud.html'
-        
+        self.headers = {'User-agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:61.0) Gecko/20100101 Firefox/61.0'}
+
+    def get_telia_offers(self):
+        response = requests.get(self.tilbud_url, headers=self.headers)
+        content = response.content
+        soup = BeautifulSoup(content, 'html.parser')
+        wrap_div = soup.find('div', {'id': 'page'}).find('div',{'class':'wrap clear'})
+        ajax_div = wrap_div.find('div', {"class", "wide clear"}).find('div')
+        rows = ajax_div.find_all("div", {'class': 'grids'})
+        offer_divs = []
+        for row in rows:
+            for div in row.find_all('div'):
+                offer_divs.append(div.find('div', {'class': 'productbox'}))
+        for p_box in offer_divs:
+            try:
+                # p_box = od.find('div', {'class': 'productbox'})
+                rabat_div = p_box.find('div', {'class': ' tsr-tactical-flash tsr-tactical-round tsr-color-purple tsr-first'})
+                if not rabat_div: rabat_div = p_box.find_all('div')[0]
+                discount_div = rabat_div.find('span', {'class':'discountamount'})
+                discount = 0
+                if discount_div: discount = discount_div.find('b').text.strip()
+                name_and_link = p_box.find('h2').find('a', href=True)
+                mobile_name = name_and_link.text.strip()
+                offer_url = name_and_link['href']
+                table = p_box.find('table', {'class': 'product-prices'})
+                # price_tr = table.find('tbody').find_all('tr')
+                import pdb; pdb.set_trace()
+                price_tr = table.find_all('tr')
+                price = 0
+                for tr in price_tr:
+                    td = tr.find_all('td')
+                    if len(td) < 2:
+                        continue
+                    td1 = td[0]
+                    td2 = td[1]
+                    if 'Mindstepris' in td1.text.strip():
+                        price = td2.text.strip()
+                save_offer(mobile_name=mobile_name, telecom_company_name='Telia',
+                            offer_url=offer_url, discount=discount, price=price)
+            except Exception as e:
+                print(e)
 
 class ThreeSpider:
     def __init__(self):
