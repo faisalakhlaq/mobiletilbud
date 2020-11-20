@@ -16,6 +16,8 @@ INSTALLED_APPS = [
 
     'core',
     'telecompanies',
+
+     'django_celery_beat',
 ]
 
 MIDDLEWARE = [
@@ -55,7 +57,7 @@ WSGI_APPLICATION = 'mobiletilbud.wsgi.application'
 
 LANGUAGE_CODE = 'da'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Copenhagen'
 
 USE_I18N = True
 

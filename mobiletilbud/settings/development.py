@@ -19,3 +19,7 @@ try:
    from .local import *
 except:
    pass
+
+# CELERY
+CELERY_BROKER_URL = 'redis://localhost:6379'
+CELERY_TIMEZONE = 'Europe/Copenhagen'

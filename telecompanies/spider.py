@@ -1,4 +1,5 @@
 from bs4 import BeautifulSoup
+from celery import shared_task
 from django.db.models import Q
 import requests
 from selenium import webdriver
@@ -47,8 +48,8 @@ def save_offer(mobile_name, telecom_company_name,
     """Save the offer in the database"""
     # import pdb; pdb.set_trace()
     offer = Offer()
-    mobile = Mobile.objects.filter(Q(name=mobile_name) | 
-                                   Q(full_name=mobile_name))
+    mobile = Mobile.objects.filter(Q(name__iexact=mobile_name) | 
+                                   Q(full_name__iexact=mobile_name))
     if mobile: offer.mobile = mobile[0]
     telecom_company = TelecomCompany.objects.filter(
         name=telecom_company_name)
@@ -56,7 +57,7 @@ def save_offer(mobile_name, telecom_company_name,
         offer.telecom_company = telecom_company[0]
     else:
         offer.telecom_company = TelecomCompany.objects.create(
-            name='Telenor')
+            name=telecom_company_name)
     offer.mobile_name = mobile_name
     if offer_url:
         offer.offer_url = offer_url
@@ -65,8 +66,15 @@ def save_offer(mobile_name, telecom_company_name,
     if price != 0:
         offer.price = price
     # Check if the same offer exists previously then delete the old one
+    # Check if the mobile or mobile_name and telecom company are same then 
+    # delete the old offer and save the new one
     if offer.mobile:
         existing_offer = Offer.objects.filter(Q(mobile=offer.mobile),
+                                            Q(telecom_company=offer.telecom_company))
+        if existing_offer:
+            existing_offer[0].delete()
+    else:
+        existing_offer = Offer.objects.filter(Q(mobile_name__iexact=mobile_name),
                                             Q(telecom_company=offer.telecom_company))
         if existing_offer:
             existing_offer[0].delete()
@@ -78,6 +86,7 @@ class TeliaSpider:
         self.tilbud_url = 'https://shop.telia.dk/cgodetilbud.html'
         self.headers = {'User-agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:61.0) Gecko/20100101 Firefox/61.0'}
 
+    # @shared_task
     def get_telia_offers(self):
         response = requests.get(self.tilbud_url, headers=self.headers)
         content = response.content
@@ -136,8 +145,10 @@ class ThreeSpider:
                                        executable_path='/usr/local/bin/geckodriver')
         return driver
 
+    # @shared_task
     def get_three_offers(self):
         try:
+            print("_____________GETTING 3 OFFERS_______________")
             self.firefox_driver.get(self.tilbud_url)
             devices = WebDriverWait(self.firefox_driver, 20).until(
                 EC.presence_of_element_located((By.CLASS_NAME, "devices"))
@@ -151,7 +162,7 @@ class ThreeSpider:
             if not devices_li:
                 return #TODO check what to do here
             # print(devices_li)
-            self.save_tilbud_devices(devices_li)
+            self.get_tilbud_devices(devices_li)
             self.close_webdriver()
         except (TimeoutException, Exception) as e:
             print(e)
@@ -162,7 +173,7 @@ class ThreeSpider:
             self.firefox_driver.close()
             self.firefox_driver.quit()
 
-    def save_tilbud_devices(self, devices_li):
+    def get_tilbud_devices(self, devices_li):
         for li in devices_li:
             try:
                 article = li.find("article")
@@ -183,6 +194,7 @@ class TelenorSpider:
         self.headers = {'User-agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:61.0) Gecko/20100101 Firefox/61.0'}
         self.telenor_tilbud_url = 'https://www.telenor.dk/shop/mobiler/campaignoffer/'
 
+    # @shared_task
     def get_telenor_offers(self):
         response = requests.get(url=self.telenor_tilbud_url, headers=self.headers)
         content = None
@@ -216,7 +228,6 @@ class TelenorSpider:
                             offer_url=mobile_url, discount=discount)
             except Exception as e:
                 print(e)
-
 
     def get_iphone_specs(self):
         for url in self.urls:

@@ -182,8 +182,8 @@ msgid "Mobile"
 msgstr "Mobil"
 
 #: core/models.py:216 telecompanies/models.py:23
-msgid "price"
-msgstr "pris"
+msgid "Price"
+msgstr "Pris"
 
 #: core/models.py:218
 msgid "6 months price"

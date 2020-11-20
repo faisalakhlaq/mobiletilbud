@@ -4,7 +4,7 @@
   <a class="nav-link" id="v-pills-home-tab" href="{% url 'core:home' %}" role="tab" aria-controls="v-pills-home" aria-selected="true">{% translate "Home" %}</a>
   <a class="nav-link" id="v-pills-companies-tab" href="{% url 'core:telecom-companies' %}" role="tab" aria-controls="v-pills-companies" aria-selected="true">{% translate "Telecom Companies" %}</a>
   <a class="nav-link" id="v-pills-compare-tab" data-toggle="pill" href="#v-pills-compare" role="tab" aria-controls="v-pills-compare" aria-selected="false">{% translate "Compare" %}</a>
-  <a class="nav-link" id="v-pills-offers-tab" data-toggle="pill" href="#v-pills-offers" role="tab" aria-controls="v-pills-offers" aria-selected="false">{% translate "Offers" %}</a>
+  <a class="nav-link" id="v-pills-offers-tab" href="{% url 'telecompanies:offers' %}" role="tab" aria-controls="v-pills-offers" aria-selected="false">{% translate "Popular Offers" %}</a>
   <a class="nav-link" id="v-pills-set-reminder-tab" data-toggle="pill" href="#" role="tab" aria-controls="v-pills-set-reminder" aria-selected="false">{% translate "Set Reminders" %}</a>
   <a class="nav-link" id="manufacturers" href="{% url 'core:mobile-manufacturers' %}" role="tab" aria-controls="v-pills-manufacturers" aria-selected="false">{% translate "Mobile Manufacturers" %}</a>
 </div>

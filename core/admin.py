@@ -14,6 +14,8 @@ class MobileAdmin(admin.ModelAdmin):
     list_filter = [
         'brand',
     ]
+    search_fields = ['name','full_name']
+    
 admin.site.register(Mobile, MobileAdmin)
 admin.site.register(MobileBrand)
 admin.site.register(MobileCameraSpecification)

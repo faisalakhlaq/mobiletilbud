@@ -2,7 +2,6 @@ from django.db import models
 from django.db.models.signals import pre_save
 from django.utils.translation import gettext_lazy as _
 
-
 from core.models import TelecomCompany, Mobile
 from core.utils import unique_slug_generator
 
@@ -25,6 +24,10 @@ class Offer(models.Model):
                               blank=True, null=True)
     slug                    = models.SlugField(_("slug"), 
                               blank=True, null=True)
+    # auto_now_add is used because we are creating a 
+    # new field everytime there is a new offer
+    updated                 = models.DateTimeField(_("Updated"), auto_now_add=True)
+
     class Meta:
         verbose_name = _("Offer")
         verbose_name_plural = _("Offers")
@@ -34,7 +37,7 @@ class Offer(models.Model):
         if self.mobile:
             name = self.mobile.name
         if name is not None:
-            name = name + self.telecom_company.name
+            name = name + "-" + self.telecom_company.name
         else:
             name = self.telecom_company.name
         return name

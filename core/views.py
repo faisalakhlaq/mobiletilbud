@@ -13,16 +13,13 @@ class HomeView(View):
     def get(self, *args, **kwargs):
         context = {}
         return render(self.request, 'home.html', context)
-
+        # TODO get all the offers and display 10 with the 
+        # highest Discount value. Need a float discount field Offer
 
 class MobileManufacturersView(ListView):
     template_name = 'core/mobile_brands.html'
     queryset = MobileBrand.objects.all()
-    # mobiles = Mobile.objects.all()
-    # import pdb; pdb.set_trace()
-    # for m in mobiles:
-    #     m.full_name = m.brand.name + " " + m.name
-    #     m.save()
+
 
 class TelecomCompaniesView(ListView):
     template_name = 'core/telecom_companies.html'
