@@ -1,5 +1,6 @@
 from django.db import models
 from django.db.models.signals import pre_save
+from django.shortcuts import reverse
 from django.utils.translation import gettext_lazy as _
 
 from core.models import TelecomCompany, Mobile
@@ -16,6 +17,8 @@ class Offer(models.Model):
     mobile_name             = models.CharField(_("Mobile Name"), 
                               max_length=50, blank=True, null=True)
     discount                = models.CharField(_("Discount"), max_length=50,
+                              blank=True, null=True)
+    discount_offered        = models.FloatField(_("Discount Offered"), 
                               blank=True, null=True)
     # link to the company offer page
     offer_url               = models.URLField(_("Offer Url"), max_length=300,
@@ -43,7 +46,7 @@ class Offer(models.Model):
         return name
 
     def get_absolute_url(self):
-        return reverse("offer_detail", kwargs={"slug": self.slug})
+        return reverse("telecompanies:offer-detail", kwargs={"slug": self.slug})
 
 def pre_save_receiver(sender, instance, *args, **kwargs):
     if not instance.slug:

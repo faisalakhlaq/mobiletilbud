@@ -2,15 +2,29 @@
 
 {% load i18n %}
 
-{% block title %} {% translate "Mobile Brands" %} | {{ block.super }}
+{% block title %} {% trans "Mobile Brands" %} | {{ block.super }}
 {% endblock title %}
 
 {% block content %}
 <div class='mt-5 text-center justify-content-center'>
-        <h3>{% translate "Explore different Mobile Brands" %}<h3>
-        {% for obj in object_list %}
-                <button type="button" class="btn btn-outline-info">{{obj}}</button>
-        {% endfor %}
-        <h3>{% translate "Popular Mobiles" %}</h3>
+        <h3>{% trans "Explore Mobile Brands" %}<h3>
+
+        <form method='GET' action=''>
+        <input name="mobile_brand" id="mobile_brand" class="btn btn-outline-info m-1" type="submit" value='ALL' />
+                {% for obj in object_list %}
+                        <input name="mobile_brand" id="mobile_brand" class="btn btn-outline-info m-1" type="submit" value={{obj}} />
+                {% endfor %}
+        </form>
+        {% if mobile_list %}
+        <hr>
+        <h4>{% trans 'Mobiles from' %} {{mobile_brand}}</h4>
+        <b>{% translate "Select a Phone to Check Offers" %}</b>
+                <div class='selected-brand-mobile-list'>
+                        {% for mobile in mobile_list %}
+                                <a class="btn btn-outline-info m-1"  href={{ mobile.get_absolute_url }}>{{mobile}}</a>
+                                {% comment %} <button class="btn btn-outline-info" action="{{mobile.get_absolute_url}}">{{mobile}}</button> {% endcomment %}
+                        {% endfor %}
+                </div>
+        {% endif %}
 </div>
 {% endblock content %}

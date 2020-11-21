@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %} {{ mobile.name }} | {{ block.super }}
+{% endblock title %}
+
+{% block content %}
+<div class='mt-5 text-center justify-content-center'>
+<h3>{% if mobile.full_name %}{{mobile.full_name}} {% else %}
+                        {{ mobile.name }}{% endif %}<h3>
+        <div class="container-fluid">
+            <div class="card-body text-success">
+            <p class="card-text"><small>{% translate "Manufacturer" %}</small>
+            {{mobile.brand.name}}</p>
+            </div>
+            <div class="card-footer bg-transparent border-success">{% if mobile.cash_price %}
+            Price: {{mobile.cash_price}} {% endif %}</div>
+        </div>
+</div>
+</hr>
+<div class="row justify-content-center">
+    {% comment %} TODO mobile.name not being translated {% endcomment %}
+    {% translate "Offers on" %} {{mobiel.name}} 
+    {% for offer in offers %}
+    {% include 'offer/offer_snippet.html' with object=offer %}
+    {% endfor %}
+</div>
+{% endblock content %}

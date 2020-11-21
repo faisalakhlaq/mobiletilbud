@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block content %}
+<h3>Compare Offers</h3>
+<div class='content-center w-100 row'>
+<div id='first-company'>
+    Offer 1
+    <div class="col-md-1 col-sm-1">    
+        <select id="telenor_offers1" name="telenor_offers1" class="telenor_offers1">
+          <option value="" selected>Telenor</option>
+          {% for club in telenor_offers %}
+          <option value="{{ club }}">{{ club }}</option>
+          {% endfor %}
+        </select>    
+    </div>
+    <div class="col-md-1 col-sm-1">    
+        <select id="three_offers1" name="three_offers1" class="">
+          <option value="" selected>3</option>
+          {% for club in three_offers %}
+          <option value="{{ club }}">{{ club }}</option>
+          {% endfor %}
+        </select>    
+    </div>
+    <div class="col-md-1 col-sm-1">    
+        <select id="telia_offers1" name="telia_offers1" class="">
+          <option value="" selected>Telia</option>
+          {% for club in telia_offers %}
+          <option value="{{ club }}">{{ club }}</option>
+          {% endfor %}
+        </select>    
+    </div>
+</div>
+<hr>
+<div id='second-company'>
+    Offer 2
+    <div class="col-md-1 col-sm-1">    
+        <select id="telenor_offers2" name="telenor_offers2" class="">
+          <option value="" selected>Telenor</option>
+          {% for club in telenor_offers %}
+          <option value="{{ club }}">{{ club }}</option>
+          {% endfor %}
+        </select>    
+    </div>
+    <div class="col-md-1 col-sm-1">    
+        <select id="three_offers2" name="three_offers2" class="">
+          <option value="" selected>3</option>
+          {% for club in three_offers %}
+          <option value="{{ club }}">{{ club }}</option>
+          {% endfor %}
+        </select>    
+    </div>
+    <div class="col-md-1 col-sm-1">    
+        <select id="telia_offers2" name="telia_offers2" class="">
+          <option value="" selected>Telia</option>
+          {% for club in telia_offers %}
+          <option value="{{ club }}">{{ club }}</option>
+          {% endfor %}
+        </select>    
+    </div>
+</div>
+</div>
+<hr>
+<div id="offer-details" class='row'>
+    <div class='hideable_offer_snippet1'>
+    {% trans "Offer Details" %}
+    {% include 'offer/offer_snippet.html' with object=value %}
+    </div>
+
+<hr>
+
+    <div class='hideable_offer_snippet2'>
+    {% trans "Offer Details" %}
+    {% include 'offer/offer_snippet.html' %}
+    </div>
+</div>
+{% trans "Compare More" %}
+{% comment %} # if this is clicked then we open another section with two tabs {% endcomment %}
+{% endblock content %}
+
+{% block extra_scripts %}
+
+<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+<script>
+{% comment %} var telenor_offer_snippet = "{% block telenoroffer1 %}{% include 'offer/offer_snippet.html' with object=telenor_offer1.value %} {% endblock %}"; {% endcomment %}
+
+var hideable_offer_snippet1 = $('.hideable_offer_snippet1');
+var hideable_offer_snippet2 = $('.hideable_offer_snippet2');
+
+var telenor_offer1 = document.querySelector("select[name=telenor_offers1]");
+var telenor_offer2 = document.querySelector("select[name=telenor_offers2]");
+
+var three_offer1 = document.querySelector("select[name=three_offers1]");
+var three_offer2 = document.querySelector("select[name=three_offers2]");
+
+var telia_offer1 = document.querySelector("select[name=telia_offers1]");
+var telia_offer2 = document.querySelector("select[name=telia_offers2]");
+
+telenor_offer1.addEventListener('change', function() {
+    if (telenor_offer1.value != ''){
+        console.log("Telenor1 clicked:")
+        console.log(telenor_offer1.value)
+        hideable_offer_snippet1.show(value=telenor_offer1.value);
+        // hideable_offer_snippet1.append(telenor_offer_snippet);
+        // {% include 'offer/offer_snippet.html' with object=telenor_offer1.value %}
+    }
+    else{
+        console.log("Telenor1 clicked:")
+        console.log(telenor_offer1.value)
+        hideable_offer_snippet1.hide();
+    }
+})
+
+</script>
+{% endblock extra_scripts %}

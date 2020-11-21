@@ -3,11 +3,11 @@ from celery import shared_task
 from celery.utils.log import get_task_logger
 
 from telecompanies.spider import TelenorSpider, TeliaSpider, ThreeSpider
-from telecompanies.three_spider import get_three_offers
+
 logger = get_task_logger(__name__)
 
 @shared_task
-def task_save_telenor_offers():
+def task_fetch_telenor_offers():
     """
     Saves latest offers from Telenor 
     """
@@ -15,7 +15,7 @@ def task_save_telenor_offers():
     logger.info("Saved latest Telenor offers")
 
 @shared_task
-def task_save_telia_offers():
+def task_fetch_telia_offers():
     """
     Saves latest offers from Telia 
     """
@@ -23,7 +23,7 @@ def task_save_telia_offers():
     logger.info("Saved latest Telia offers")
 
 @shared_task
-def task_save_three_offers():
+def task_fetch_three_offers():
     """
     Saves latest offers from Three 
     """

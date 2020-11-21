@@ -62,7 +62,9 @@ def save_offer(mobile_name, telecom_company_name,
     if offer_url:
         offer.offer_url = offer_url
     if discount != 0:
+        # extract the float value from the string
         offer.discount = discount
+        offer.discount_offered = float(''.join(i for i in discount if i.isdigit()))
     if price != 0:
         offer.price = price
     # Check if the same offer exists previously then delete the old one

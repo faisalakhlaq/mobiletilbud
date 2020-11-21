@@ -1,5 +1,6 @@
 from django.db import models
 from django.db.models.signals import pre_save
+from django.shortcuts import reverse
 from django.utils.translation import gettext_lazy as _
 
 from .utils import unique_slug_generator
@@ -10,6 +11,10 @@ class MobileBrand(models.Model):
 
     def __str__(self):
         return self.name
+    
+    # def get_absolute_url(self):
+    #     return reverse("mobile_detail", kwargs={"slug": self.name})
+
 
 class Mobile(models.Model):
     name                        = models.CharField(_("name"), max_length=50)
@@ -29,7 +34,7 @@ class Mobile(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse("mobile_detail", kwargs={"slug": self.slug})
+        return reverse("core:mobile-detail", kwargs={"slug": self.slug})
 
 
 class MobileTechnicalSpecification(models.Model):

@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %} {{ object.mobile_name }} | {{ block.super }}
+{% endblock title %}
+
+{% block content %}
+{% comment %} <div class='mt-5 text-center justify-content-center'>
+<h3>{% if object.mobile and object.mobile.full_name %}{{object.mobile.full_name}} {% elif object.mobile_name %}
+                        {{ object.mobile_name }}{% endif %}<h3>
+        <div class="container-fluid">
+
+                        <div class="card-header bg-transparent border-success">
+                        {% trans "Discount"%}{% if object.discount_offered %}: {{object.discount_offered}}{% endif %}</div>
+                        <div class="card-body text-success">
+                        <p class="card-text"><small>{% translate "Telecom Company" %}</small>
+                        {{object.telecom_company.name}}</p>
+                        </div>
+                        <div class="card-footer bg-transparent border-success">{% if object.price %}
+                        Price: {{object.price}} {% endif %}</div>
+                        <b>Url</b> <a href={{ object.offer_url }} target=blank>
+                        {% trans 'Link to the offer on company website' %}</a>
+                </div>
+</div> {% endcomment %}
+{% include 'offer/offer_snippet.html' with object=object %}
+{% endblock content %}
