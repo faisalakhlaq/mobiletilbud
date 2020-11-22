@@ -82,7 +82,8 @@ def save_offer(mobile_name, telecom_company_name,
             existing_offer[0].delete()
     offer.save()
 
-
+# TODO tilbud_urls in the fetched tilbud are not complete. 
+# Append base_ulr with all
 class TeliaSpider:
     def __init__(self):
         self.tilbud_url = 'https://shop.telia.dk/cgodetilbud.html'

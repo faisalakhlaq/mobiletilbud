@@ -10,9 +10,13 @@ from .models import MobileBrand, TelecomCompany, Mobile
 from telecompanies.spider import ThreeSpider, TelenorSpider, TeliaSpider
 from telecompanies.models import Offer
 
+# from mobiles.utils import bulk_copy_brand_data
+
 class HomeView(View):
     def get(self, *args, **kwargs):
         context = {}
+        # bulk_copy_brand_data()
+        # HuawaiMobileSpider().fetch_mobiles()
         return render(self.request, 'home.html', context)
         # TODO get all the offers and display 10 with the 
         # highest Discount value. Need a float discount field Offer
@@ -65,6 +69,7 @@ class TelecomCompaniesView(View):
     def get_context_data(self, *args, **kwargs):
         company = self.request.GET.get("company")
         offers = Offer.objects.all()
+        # TODO get the set of related mobiles from the MobileBrand table
         if company and company.strip() and company != 'ALL':
             offers = Offer.objects.filter(telecom_company__name__iexact=company.strip())         
         context = {

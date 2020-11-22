@@ -16,8 +16,9 @@ INSTALLED_APPS = [
 
     'core',
     'telecompanies',
+    'mobiles',
 
-     'django_celery_beat',
+    'django_celery_beat',
 ]
 
 MIDDLEWARE = [
