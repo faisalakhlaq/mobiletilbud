@@ -5,36 +5,33 @@ from django.utils.translation import gettext_lazy as _
 
 from .utils import unique_slug_generator
 
-class MobileBrand(models.Model):
-    """Represents the mobile manufacturers"""
-    name            = models.CharField(_("name"), max_length=50)    
+# class MobileBrand(models.Model):
+#     """Represents the mobile manufacturers"""
+#     name            = models.CharField(_("name"), max_length=50)    
 
-    def __str__(self):
-        return self.name
+#     def __str__(self):
+#         return self.name
     
-    # def get_absolute_url(self):
-    #     return reverse("mobile_detail", kwargs={"slug": self.name})
 
+# class Mobile(models.Model):
+#     name                        = models.CharField(_("name"), max_length=50)
+#     # full name will be Brand name
+#     full_name                   = models.CharField(_("Full Name"), max_length=50, 
+#                                   blank=True, null=True)
+#     brand                       = models.ForeignKey("MobileBrand", 
+#                                   verbose_name=_("Brand"), 
+#                                   on_delete=models.SET_NULL, 
+#                                   null=True, blank=True)
+#     cash_price                  = models.FloatField(_("Cash Price"), 
+#                                   blank=True, null=True)    
+#     slug                        = models.SlugField(_("slug"), 
+#                                   blank=True, null=True)
 
-class Mobile(models.Model):
-    name                        = models.CharField(_("name"), max_length=50)
-    # full name will be Brand name
-    full_name                   = models.CharField(_("Full Name"), max_length=50, 
-                                  blank=True, null=True)
-    brand                       = models.ForeignKey("MobileBrand", 
-                                  verbose_name=_("Brand"), 
-                                  on_delete=models.SET_NULL, 
-                                  null=True, blank=True)
-    cash_price                  = models.FloatField(_("Cash Price"), 
-                                  blank=True, null=True)    
-    slug                        = models.SlugField(_("slug"), 
-                                  blank=True, null=True)
+#     def __str__(self):
+#         return self.name
 
-    def __str__(self):
-        return self.name
-
-    def get_absolute_url(self):
-        return reverse("core:mobile-detail", kwargs={"slug": self.slug})
+#     def get_absolute_url(self):
+#         return reverse("core:mobile-detail", kwargs={"slug": self.slug})
 
 
 # class MobileTechnicalSpecification(models.Model):
@@ -250,5 +247,5 @@ def pre_save_receiver(sender, instance, *args, **kwargs):
     if not instance.slug:
         instance.slug = unique_slug_generator(instance=instance)
 
-pre_save.connect(pre_save_receiver, sender=Mobile)
+# pre_save.connect(pre_save_receiver, sender=Mobile)
 pre_save.connect(pre_save_receiver, sender=TelecomCompany)

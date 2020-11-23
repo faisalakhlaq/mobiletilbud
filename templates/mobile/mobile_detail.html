@@ -6,6 +6,9 @@
 
 {% block content %}
 <div class='mt-5 text-center justify-content-center'>
+    {% if mobile.image %}
+        <img src={{ mobile.image.url }}>
+    {% endif %}
 <h3>{% if mobile.full_name %}{{mobile.full_name}} {% else %}
                         {{ mobile.name }}{% endif %}<h3>
         <div class="container-fluid">

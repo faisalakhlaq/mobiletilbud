@@ -9,6 +9,7 @@ django-admin compilemessages --ignore venv --ignore bin --ignore include --ignor
 CELERY:
 celery -A mobiletilbud beat -l info
 celery -A mobiletilbud worker -l info
+
 systemctl stop redis # First stop the redis and then start it
 redis-server
 celery -A mobiletilbud beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler

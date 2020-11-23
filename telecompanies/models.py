@@ -3,7 +3,8 @@ from django.db.models.signals import pre_save
 from django.shortcuts import reverse
 from django.utils.translation import gettext_lazy as _
 
-from core.models import TelecomCompany, Mobile
+from core.models import TelecomCompany
+from mobiles.models import Mobile
 from core.utils import unique_slug_generator
 
 class Offer(models.Model):
@@ -37,8 +38,6 @@ class Offer(models.Model):
 
     def __str__(self):
         name = self.mobile_name
-        if self.mobile:
-            name = self.mobile.name
         if name is not None:
             name = name + "-" + self.telecom_company.name
         else:

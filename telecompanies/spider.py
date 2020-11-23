@@ -12,7 +12,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
 from .models import Offer
-from core.models import Mobile, TelecomCompany, MobileBrand
+from core.models import TelecomCompany
+from mobiles.models import Mobile, MobileBrand
 
 
 def has_child(node):

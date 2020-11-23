@@ -7,6 +7,7 @@
 {% block content %}
 <div class='mt-5 text-center justify-content-center'>
 <h3>{% translate "Popular Offers" %}<h3>
+        <div><a class="btn btn-primary m-1"  href={{ obj.get_absolute_url }}>{% trans 'View All Offers' %}</a></div>
         {% for obj in object_list %}
                 <a class="btn btn-outline-info m-1"  href={{ obj.get_absolute_url }}>{{obj}}</a>
         {% endfor %}

@@ -6,44 +6,45 @@ from django.views import View
 from django.views.generic import ListView, View
 
 
-from .models import MobileBrand, TelecomCompany, Mobile
+from .models import TelecomCompany # MobileBrand, Mobile
+from mobiles.models import Mobile, MobileBrand
 from telecompanies.spider import ThreeSpider, TelenorSpider, TeliaSpider
 from telecompanies.models import Offer
 
-# from mobiles.utils import bulk_copy_brand_data
+# from mobiles.mobile_spider import DoroMobileSpider
 
 class HomeView(View):
     def get(self, *args, **kwargs):
         context = {}
-        # bulk_copy_brand_data()
-        # HuawaiMobileSpider().fetch_mobiles()
+        # DoroMobileSpider().fetch_mobiles()
+        # MotorolaMobileSpider().fetch_mobiles()
         return render(self.request, 'home.html', context)
         # TODO get all the offers and display 10 with the 
         # highest Discount value. Need a float discount field Offer
 
-class MobileDetailView(View):
-    def get(self, *args, **kwargs):
-        """Return the mobile details and offers on 
-        this mobile from different companies"""
-        template_name = 'mobile/mobile_detail.html'
-        try:
-            context = self.get_context_data()
-            return render(self.request, template_name, context)
-        except Mobile.DoesNotExist:
-            # TODO give a message about mobile not found
-            raise Http404("No MyModel matches the given query.")
+# class MobileDetailView(View):
+#     def get(self, *args, **kwargs):
+#         """Return the mobile details and offers on 
+#         this mobile from different companies"""
+#         template_name = 'mobile/mobile_detail.html'
+#         try:
+#             context = self.get_context_data()
+#             return render(self.request, template_name, context)
+#         except Mobile.DoesNotExist:
+#             # TODO give a message about mobile not found
+#             raise Http404("No MyModel matches the given query.")
     
-    def get_context_data(self, **kwargs):
-        # import pdb; pdb.set_trace()
-        slug = self.kwargs["slug"]   
-        mobile = Mobile.objects.get(slug=slug)
-        offers = Offer.objects.filter(Q(mobile=mobile) | 
-                                      Q(mobile__name__iexact=mobile.name))
-        context = {
-                'mobile': mobile,
-                'offers': offers,
-            }
-        return context
+#     def get_context_data(self, **kwargs):
+#         # import pdb; pdb.set_trace()
+#         slug = self.kwargs["slug"]   
+#         mobile = Mobile.objects.get(slug=slug)
+#         offers = Offer.objects.filter(Q(mobile=mobile) | 
+#                                       Q(mobile__name__iexact=mobile.name))
+#         context = {
+#                 'mobile': mobile,
+#                 'offers': offers,
+#             }
+#         return context
     
 
 class MobileManufacturersView(ListView):

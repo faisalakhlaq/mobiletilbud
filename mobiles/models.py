@@ -15,16 +15,15 @@ class MobileBrand(models.Model):
     # def get_absolute_url(self):
     #     return reverse("mobile_detail", kwargs={"slug": self.name})
 
-
+#TODO make sure the image is deleted on deleting the record
 class Mobile(models.Model):
-    name                    = models.CharField(_("name"), unique=True,
-                                  max_length=50)
+    name                    = models.CharField(_("name"), max_length=50)
     # full name will be Brand name + name
     full_name               = models.CharField(_("Full Name"), max_length=50, 
                                   blank=True, null=True)
     brand                   = models.ForeignKey('MobileBrand', 
                                   verbose_name=_("Brand"),
-                                  related_name=_("Mobilebrand"),
+                                  related_name=_("mobiles"),
                                   on_delete=models.SET_NULL, 
                                   null=True, blank=True)
     cash_price              = models.FloatField(_("Cash Price"), 
@@ -36,7 +35,14 @@ class Mobile(models.Model):
     # url for the mobile on a website for further details of the mobile                              
     url                     = models.URLField("Url", blank=True, null=True)
 
+    class Meta:
+        unique_together = (
+            ('name', 'brand')
+        )
+
     def __str__(self):
+        if self.full_name:
+            return self.full_name
         return self.name
     def get_absolute_url(self):
         return reverse("mobiles:mobile-detail", kwargs={"slug": self.slug})

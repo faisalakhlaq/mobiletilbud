@@ -13,13 +13,12 @@ def unique_slug_generator(instance, new_slug=None):
     This is for a Django project and it assumes your instance 
     has a model with a slug field and a name character (char) field.
     """
-    # import pdb; pdb.set_trace()
     if new_slug is not None:
         slug = new_slug
     else:
         if hasattr(instance, 'name'):
             slug = slugify(instance.name)
-        else: slug = slugify(instance.__class__)
+        else: slug = slugify(str(instance))
     if slug in DONT_USE:
         new_slug = "{slug}-{randstr}".format(
                     slug=slug,

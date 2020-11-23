@@ -24,17 +24,17 @@ app.autodiscover_tasks()
 app.conf.beat_schedule = {
     'add-everyday-midnight': {
         'task': 'telecompanies.tasks.task_fetch_three_offers',
-        'schedule': (crontab(minute='*/5')),
+        'schedule': (crontab(minute='*/10')),
         # 'schedule': crontab(minute=0, hour=0),
     },
     'add-telenor_offers': {
         'task': 'telecompanies.tasks.task_fetch_telenor_offers',
-        'schedule': (crontab(minute='*/5')),
+        'schedule': (crontab(minute='*/10')),
         # 'schedule': crontab(minute=0, hour=0),
     },
     'add-telia_offers': {
         'task': 'telecompanies.tasks.task_fetch_telia_offers',
-        'schedule': (crontab(minute='*/5')),
+        'schedule': (crontab(minute='*/10')),
         # 'schedule': crontab(minute=0, hour=0),
     },
 }
