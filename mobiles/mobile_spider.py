@@ -19,7 +19,7 @@ from selenium.common.exceptions import (
 from .models import Mobile
 from mobiles.models import MobileBrand
 
- 
+
 class AbstractMobileSpider(ABC):
  
     def __init__(self):
@@ -27,7 +27,8 @@ class AbstractMobileSpider(ABC):
         super().__init__()
     
     @abstractmethod
-    def fetch_mobiles(self):
+    def fetch_mobiles(self, brand_name_):
+        """Brand name depicts which urls to use."""
         print("Fetching mobiles")
 
     def close_webdriver(self, firefox_driver):
@@ -35,7 +36,7 @@ class AbstractMobileSpider(ABC):
             firefox_driver.close()
             firefox_driver.quit()
 
-    def save_mobile(self, name, full_name, brand_name, url=None, image=None, folder_name=None):
+    def save_mobile(self, name, full_name, brand_name, url=None, image=None):
         try:
             brand = MobileBrand.objects.get(name__iexact=brand_name)
             mobile = Mobile.objects.create(
@@ -50,10 +51,7 @@ class AbstractMobileSpider(ABC):
                 # TODO if mobile/ OR ANyName/ is not provided in the save method then 
                 # the image is saved to the parent folder i.e. media
                 # mobile.image.save('sony/'+image.filename, ContentFile(thumb_io.getvalue()), save=False)
-                if folder_name:
-                    mobile.image.save(folder_name+'/'+image.filename, ContentFile(thumb_io.getvalue()), save=False)
-                else:
-                    mobile.image.save(image.filename, ContentFile(thumb_io.getvalue()), save=False)
+                mobile.image.save(brand_name+'/'+image.filename, ContentFile(thumb_io.getvalue()), save=False)
 
             mobile.save()
             print("Saved a new mobile: ", mobile.full_name)
@@ -76,13 +74,28 @@ class AbstractMobileSpider(ABC):
 class GsmarenaMobileSpider(AbstractMobileSpider):
     """Fetches mobile data from https://www.gsmarena.com/"""
     def __init__(self):
+        self.apple_url = 'https://www.gsmarena.com/apple-phones-48.php'
+        self.apple_base_url = 'https://www.gsmarena.com/apple-phones-f-48-0-p'
+        self.samsung_url = 'https://www.gsmarena.com/samsung-phones-9.php'
+        self.samsung_base_url = 'https://www.gsmarena.com/samsung-phones-f-9-0-p'
         self.nokia_url = 'https://www.gsmarena.com/nokia-phones-1.php'
         self.nokia_base_url = 'https://www.gsmarena.com/nokia-phones-f-1-0-p'
         super().__init__()
 
-    def get_pages(self):
+    def get_pages(self, brand_name):
         pages = []
-        response = requests.get(url=self.nokia_url, headers=self.headers)
+        url = None
+        base_url = None
+        if 'samsung' in brand_name.lower():
+            url = self.samsung_url
+            base_url = self.samsung_base_url
+        elif 'nokia' in brand_name.lower():
+            url = self.nokia_url
+            base_url = self.nokia_base_url
+        elif 'apple' in brand_name.lower():
+            url = self.apple_url
+            base_url = self.apple_base_url
+        response = requests.get(url=url, headers=self.headers)
         pages.append(response.content)
         soup = BeautifulSoup(response.content, "html.parser")
         pages_div = soup.find('div', {'class', 'nav-pages'})
@@ -93,17 +106,15 @@ class GsmarenaMobileSpider(AbstractMobileSpider):
             total_pages = len(pages_div.find_all('a')) + 1
         if total_pages == 1:
             return pages
-        for i in range(total_pages):
-            if i == 0:
-                continue
-            next_page_url = self.nokia_base_url + str(i+1) + '.php'
+        for i in range(1, total_pages, 1):
+            next_page_url = base_url + str(i+1) + '.php'
             response = requests.get(url=next_page_url, headers=self.headers)
             pages.append(response.content)
         return pages
 
-    def fetch_mobiles(self):
-        # import pdb; pdb.set_trace()
-        pages = self.get_pages()
+    def fetch_mobiles(self, brand_name_):
+        import pdb; pdb.set_trace()
+        pages = self.get_pages(brand_name_)
         for page in pages:
             soup = BeautifulSoup(page, "html.parser")
             rows = soup.find('div', {'class', 'makers'}).find('ul').find_all('li')
@@ -112,14 +123,14 @@ class GsmarenaMobileSpider(AbstractMobileSpider):
                 try:
                     anker = row.find('a')
                     mobile_url = 'https://www.gsmarena.com/' + anker['href']
+                    mobile_name = anker.find('strong').find('span').text.strip()
+                    if 'apple' in brand_name_.lower() and "iphone" not in mobile_name.lower():
+                        continue
+                    m_full_name = brand_name_.lower().capitalize() + " " + mobile_name
                     img_src = anker.find('img')['src']
                     image = self.get_image(img_src)
-                    mobile_name = anker.find('strong').find('span').text.strip()
-                    # m_full_name = 'Motorola ' + mobile_name
-                    m_full_name = 'Nokia ' + mobile_name
                     self.save_mobile(name=mobile_name, full_name=m_full_name,
-                    # brand_name='Motorola', url=mobile_url, image=image)
-                    brand_name='Nokia', url=mobile_url, image=image)
+                    brand_name=brand_name_, url=mobile_url, image=image)
                 except Exception as e:
                     print('Exception occured while fetching Nokia mobile: ', e)
                     continue
@@ -132,7 +143,7 @@ class DoroMobileSpider(AbstractMobileSpider):
         ]
         super().__init__()
 
-    def fetch_mobiles(self):
+    def fetch_mobiles(self, brand_name_):
         # import pdb; pdb.set_trace()
         pages = []
         for url in self.doro_urls:
@@ -149,9 +160,9 @@ class DoroMobileSpider(AbstractMobileSpider):
                 image_url = a_tag.find('div', {'class', 'products-tile-image'}).find('img')['src']
                 image_url = 'https://www.doro.com' + image_url
                 image = self.get_image(image_url)
-                brand_name = 'Doro'
-                self.save_mobile(name=name, full_name=full_name, brand_name=brand_name,
-                                url=mobile_url, image=image, folder_name='Doro')
+                # brand_name = 'Doro'
+                self.save_mobile(name=name, full_name=full_name, brand_name=brand_name_,
+                                url=mobile_url, image=image)
 
 
 class MotorolaMobileSpider(AbstractMobileSpider):
@@ -183,7 +194,7 @@ class MotorolaMobileSpider(AbstractMobileSpider):
         ]
         super().__init__()
 
-    def fetch_mobiles(self):
+    def fetch_mobiles(self, brand_name_):
         pages = []
         for url in self.sony_urls:
             response = requests.get(url=url, headers=self.headers)
@@ -200,11 +211,9 @@ class MotorolaMobileSpider(AbstractMobileSpider):
                     img_src = anker.find('img')['src']
                     image = self.get_image(img_src)
                     mobile_name = anker.find('strong').find('span').text.strip()
-                    # m_full_name = 'Motorola ' + mobile_name
-                    m_full_name = 'Sony ' + mobile_name
+                    m_full_name = brand_name_ + " " + mobile_name
                     self.save_mobile(name=mobile_name, full_name=m_full_name,
-                    # brand_name='Motorola', url=mobile_url, image=image)
-                    brand_name='Sony', url=mobile_url, image=image)
+                    brand_name=brand_name_, url=mobile_url, image=image)
                 except Exception as e:
                     print('Exception occured while fetching Motorola mobile: ', e)
                     continue
@@ -248,7 +257,7 @@ class HuawaiMobileSpider():
             firefox_driver.close()
             firefox_driver.quit()
 
-    def fetch_mobiles(self):
+    def fetch_mobiles(self, brand_name_):
         firefox_driver = configure_driver()
         try:
             firefox_driver.get(self.url)
@@ -313,3 +322,22 @@ class HuawaiMobileSpider():
             print("Saved a new mobile: ", mobile.full_name)
         except Exception as e:
             print("Exception while saving Mobile: ", e)
+
+
+# def samsung_models_spider():
+#     headers = {'User-agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:61.0) Gecko/20100101 Firefox/61.0'}
+#     response = requests.get('https://www.phonemodelslist.com/samsung/', headers=headers)
+#     content = response.content
+#     soup = BeautifulSoup(content, "html.parser")
+#     rows = soup.find("table", {"id": "tablepress-39"}).find("tbody", {"class", "row-hover"}).find_all("tr")
+#     brand = MobileBrand.objects.get(name='Samsung')
+#     for row in rows:
+#         try:
+#             name1 = row.find("td", {"column-1"}).text.strip().split(' ', 1)[1].strip()
+#             name2 = row.find("td", {"column-2"}).text.strip().split(" ", 1)[1].strip()
+#             # print(name1)
+#             # print(name2)
+#             _ = Mobile.objects.get_or_create(name=name1, brand=brand)
+#             _ = Mobile.objects.get_or_create(name=name2, brand=brand)
+#         except:
+#             pass

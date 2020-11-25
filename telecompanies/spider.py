@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup
 from celery import shared_task
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 import requests
 from selenium import webdriver
@@ -25,32 +26,25 @@ def has_child(node):
     except:
         return False
 
-def samsung_models_spider():
-    headers = {'User-agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:61.0) Gecko/20100101 Firefox/61.0'}
-    response = requests.get('https://www.phonemodelslist.com/samsung/', headers=headers)
-    content = response.content
-
-    soup = BeautifulSoup(content, "html.parser")
-    rows = soup.find("table", {"id": "tablepress-39"}).find("tbody", {"class", "row-hover"}).find_all("tr")
-    brand = MobileBrand.objects.get(name='Samsung')
-    for row in rows:
-        try:
-            name1 = row.find("td", {"column-1"}).text.strip().split(' ', 1)[1].strip()
-            name2 = row.find("td", {"column-2"}).text.strip().split(" ", 1)[1].strip()
-            # print(name1)
-            # print(name2)
-            _ = Mobile.objects.get_or_create(name=name1, brand=brand)
-            _ = Mobile.objects.get_or_create(name=name2, brand=brand)
-        except:
-            pass
-
-def save_offer(mobile_name, telecom_company_name, 
-               offer_url=None, discount=0, price=0):
+# TODO mobile name can cause error / confusion
+# Two companies can have same mobile name. So if we
+# are getting E7 here then when we try to find mobile
+# we will get Nokia E7 or Motorola E7. SO the offer is
+# on which mobile. 
+def save_offer(mobile_name,  telecom_company_name, 
+               offer_url=None, m_full_name=None, discount=0, price=0):
     """Save the offer in the database"""
     # import pdb; pdb.set_trace()
     offer = Offer()
-    mobile = Mobile.objects.filter(Q(name__iexact=mobile_name) | 
-                                   Q(full_name__iexact=mobile_name))
+    mobile = None
+    if m_full_name:
+        try:
+            mobile = Mobile.object.get(full_name__iexact=m_full_name)
+        except ObjectDoesNotExist as e:
+            print(f'Unable to find {m_full_name} mobile by full name :', e)
+    else:
+        mobile = Mobile.objects.filter(Q(name__iexact=mobile_name) | 
+                                       Q(full_name__iexact=mobile_name))
     if mobile: offer.mobile = mobile[0]
     telecom_company = TelecomCompany.objects.filter(
         name=telecom_company_name)
@@ -213,7 +207,7 @@ class TelenorSpider:
             try:
                 offer_div = offer_.find("div")
                 offer_link = offer_div.find('a', href=True)
-                mobile_url = offer_link['href']
+                mobile_url = 'https://www.telenor.dk' + offer_link['href']
                 mobile_desc_div = offer_link.find("div", {
                     "class": "grid-row--gutter-none grid-row--bottom product-block__info padding-leader--large full-width"})
                 info_div = mobile_desc_div.find("div")

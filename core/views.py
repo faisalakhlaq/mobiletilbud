@@ -11,12 +11,14 @@ from mobiles.models import Mobile, MobileBrand
 from telecompanies.spider import ThreeSpider, TelenorSpider, TeliaSpider
 from telecompanies.models import Offer
 
-# from mobiles.mobile_spider import DoroMobileSpider
+# from mobiles.mobile_spider import GsmarenaMobileSpider
+# from mobiles.mobile_specs_spider import GadgetsMobileSpecSpider
 
 class HomeView(View):
     def get(self, *args, **kwargs):
         context = {}
-        # DoroMobileSpider().fetch_mobiles()
+        # GadgetsMobileSpecSpider().fetch_mob_specs()
+        # GsmarenaMobileSpider().fetch_mobiles('Apple')
         # MotorolaMobileSpider().fetch_mobiles()
         return render(self.request, 'home.html', context)
         # TODO get all the offers and display 10 with the 
@@ -45,7 +47,7 @@ class HomeView(View):
 #                 'offers': offers,
 #             }
 #         return context
-    
+
 
 class MobileManufacturersView(ListView):
     template_name = 'core/mobile_brands.html'

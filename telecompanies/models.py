@@ -10,7 +10,7 @@ from core.utils import unique_slug_generator
 class Offer(models.Model):
     mobile                  = models.ForeignKey(Mobile, 
                               verbose_name=_("Mobile"), 
-                              on_delete=models.CASCADE,
+                              on_delete=models.SET_NULL,
                               blank=True, null=True)
     telecom_company         = models.ForeignKey(TelecomCompany, 
                               verbose_name=_("Telecom Company"), 
