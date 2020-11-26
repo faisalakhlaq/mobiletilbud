@@ -1,11 +1,16 @@
 from django.urls import path
 
-from .views import OffersView, OfferDetailView, CompareOffersView
+from .views import (PopularOffersView, OfferDetailView, CompareOffersView, 
+TelecomCompaniesView)
 
 app_name = 'telecompanies'
 
 urlpatterns = [
-    path('offers/', OffersView.as_view(), name='offers'),
-    path('compare-offers/', CompareOffersView.as_view(), name='compare-offers'),
-    path('offer-detail/<slug>', OfferDetailView.as_view(), name='offer-detail'),   
+    path('telecom-companies', TelecomCompaniesView.as_view(), 
+    name='telecom-companies'), 
+    path('offers/', PopularOffersView.as_view(), name='offers'),
+    path('compare-offers/', CompareOffersView.as_view(), 
+    name='compare-offers'),
+    path('offer-detail/<slug>', OfferDetailView.as_view(), 
+    name='offer-detail'),   
 ]

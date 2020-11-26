@@ -5,14 +5,14 @@ from django.shortcuts import render
 from django.views import View
 from django.views.generic import ListView, View
 
-
-from .models import TelecomCompany # MobileBrand, Mobile
+from .models import TelecomCompany
 from mobiles.models import Mobile, MobileBrand
 from telecompanies.spider import ThreeSpider, TelenorSpider, TeliaSpider
 from telecompanies.models import Offer
 
 # from mobiles.mobile_spider import GsmarenaMobileSpider
 # from mobiles.mobile_specs_spider import GadgetsMobileSpecSpider
+# from telecompanies.spider import YouSeeSpider
 
 class HomeView(View):
     def get(self, *args, **kwargs):
@@ -20,34 +20,10 @@ class HomeView(View):
         # GadgetsMobileSpecSpider().fetch_mob_specs()
         # GsmarenaMobileSpider().fetch_mobiles('Apple')
         # MotorolaMobileSpider().fetch_mobiles()
+        # YouSeeSpider().get_yousee_offers()
         return render(self.request, 'home.html', context)
         # TODO get all the offers and display 10 with the 
         # highest Discount value. Need a float discount field Offer
-
-# class MobileDetailView(View):
-#     def get(self, *args, **kwargs):
-#         """Return the mobile details and offers on 
-#         this mobile from different companies"""
-#         template_name = 'mobile/mobile_detail.html'
-#         try:
-#             context = self.get_context_data()
-#             return render(self.request, template_name, context)
-#         except Mobile.DoesNotExist:
-#             # TODO give a message about mobile not found
-#             raise Http404("No MyModel matches the given query.")
-    
-#     def get_context_data(self, **kwargs):
-#         # import pdb; pdb.set_trace()
-#         slug = self.kwargs["slug"]   
-#         mobile = Mobile.objects.get(slug=slug)
-#         offers = Offer.objects.filter(Q(mobile=mobile) | 
-#                                       Q(mobile__name__iexact=mobile.name))
-#         context = {
-#                 'mobile': mobile,
-#                 'offers': offers,
-#             }
-#         return context
-
 
 class MobileManufacturersView(ListView):
     template_name = 'core/mobile_brands.html'
@@ -62,26 +38,6 @@ class MobileManufacturersView(ListView):
         context["mobile_brand"] = company 
         context["mobile_list"] = mobile_list 
         return context
-
-class TelecomCompaniesView(View):
-    def get(self, *args, **kwargs):
-        template_name = 'core/telecom_companies.html'
-        context = self.get_context_data(self, args, kwargs)
-        return render(self.request, template_name, context)
-
-    def get_context_data(self, *args, **kwargs):
-        company = self.request.GET.get("company")
-        offers = Offer.objects.all()
-        # TODO get the set of related mobiles from the MobileBrand table
-        if company and company.strip() and company != 'ALL':
-            offers = Offer.objects.filter(telecom_company__name__iexact=company.strip())         
-        context = {
-            "offers": offers,
-            "object_list": TelecomCompany.objects.all(),
-            "offer_count": offers.count()
-        }
-        return context
-
 
 def change_language(request):
     response = HttpResponseRedirect('/')

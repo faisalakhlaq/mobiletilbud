@@ -6,24 +6,40 @@
 
 {% block content %}
 <div class='mt-5 text-center justify-content-center'>
-<h3>{% translate "Popular Offers" %}<h3>
-        <div><a class="btn btn-primary m-1"  href={{ obj.get_absolute_url }}>{% trans 'View All Offers' %}</a></div>
-        {% for obj in object_list %}
+<h3>{% trans "Popular Offers" %}<h3>
+        <div class='m-5'>
+        <form method='GET' action=''>
+                <input name="offer" class="btn btn-info m-1" 
+                type="submit" value='All'/>
+                <input name="offer" class="btn btn-info m-1" 
+                type="submit" value='Popular' />
+                {% for tele_company in tele_companies %}
+                        <input name="company" class="btn btn-info m-1" 
+                        type="submit" value={{tele_company}} />
+                {% endfor %}
+        </form>
+        </div>
+        {% comment %} <div><a class="btn btn-info m-1"  href={{ obj.get_absolute_url }}>{% trans 'View All Offers' %}</a>
+        <a class="btn btn-info m-1"  href={{ obj.get_absolute_url }}>{% trans 'View Popular Offers' %}</a></div> {% endcomment %}
+        {% comment %} {% for obj in object_list %}
                 <a class="btn btn-outline-info m-1"  href={{ obj.get_absolute_url }}>{{obj}}</a>
-        {% endfor %}
-        <h3>{% trans "Popular Offers" %}</h3>
+        {% endfor %} {% endcomment %}
+        {% comment %} <h3>{% trans "Popular Offers" %}</h3> {% endcomment %}
         <div class="card-group">
         <div class="container-fluid">
         <div class="row">
-
+        {% if not object_list %}
+        <h3>{% trans "No Offers Here" %}<h3>
+        {% endif %}
         {% for offer in object_list %}
         
             <div class="col-auto">
         {% comment %} {{ forloop.counter }} {% endcomment %}
-                <div class="card border-success mb-3" style="max-width: 18rem;">
+                <div class="card border-success mb-3" style="width: 16rem; height: 25rem;">
                         <div class="card-header bg-transparent border-success">
                         {% trans "Discount"%}{% if offer.discount_offered %}: {{offer.discount_offered}}{% endif %}</div>
                         <div class="card-body text-success">
+                        <img class="w-50 p-0" src={{offer.mobile.image.url}}>
                         <h5 class="card-title">{% if offer.mobile %}
                         {{offer.mobile.name}} {% elif offer.mobile_name %}
                         {{ offer.mobile_name }}{% endif %}</h5>

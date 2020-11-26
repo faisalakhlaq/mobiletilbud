@@ -11,10 +11,13 @@
   {% endblock %}
   {% include 'bootstrap/css.html' %}
 </head>
-
-{% include 'main_nav.html'%}
-
 <body>
+<div>
+{% include 'main_nav.html'%}
+</div>
+<div class='mt-4'>
+{% include 'baner.html' %}
+</div>
 <div class='mt-5 pt-4'>
   {% if messages %}
       {% for message in messages %}
