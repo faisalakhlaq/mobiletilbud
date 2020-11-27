@@ -20,27 +20,26 @@
         <!-- Left -->
         <ul class="navbar-nav mr-auto">
           <li class="nav-item">
-              <a class="nav-link waves-effect" href=''>
-                <span class="clearfix d-none d-sm-inline-block"> {% translate "Compare" %} </span>
+              <a class="nav-link waves-effect" href={% url 'telecompanies:offers' %}>
+                <span class="clearfix d-none d-sm-inline-block"> {% translate "Popular Offers" %} </span>
               </a>
           </li>
           <li class="nav-item">
-              <a class="nav-link waves-effect" href=''>
-                <span class="clearfix d-none d-sm-inline-block"> {% translate "All" %} </span>
+              <a class="nav-link waves-effect" href={% url 'telecompanies:telecom-companies' %}>
+                <span class="clearfix d-none d-sm-inline-block"> {% translate "Telecom Companies" %} </span>
               </a>
           </li>
-
           {% comment %} <li class="nav-item active">
             <a class="nav-link waves-effect" href="{% url 'core:home' %}">Home
               <span class="sr-only">(current)</span>
             </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link waves-effect" href="{% url 'core:checkout' %}">Checkout</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link waves-effect" href="{% url 'core:items' %}">Products</a>
           </li> {% endcomment %}
+          <li class="nav-item">
+            <a class="nav-link waves-effect" href="{% url 'core:mobile-brands' %}">{% translate "Mobile Brands" %}</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link waves-effect" href="{% url 'telecompanies:compare-offers' %}">{% translate "Compare" %}</a>
+          </li>
         </ul>
 
         <!-- Right -->

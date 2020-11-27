@@ -39,13 +39,14 @@ def save_offer(mobile_name,  telecom_company_name,
     mobile = None
     if m_full_name:
         try:
-            mobile = Mobile.object.get(full_name__iexact=m_full_name)
+            mobile = Mobile.objects.get(full_name__iexact=m_full_name)
         except ObjectDoesNotExist as e:
             print(f'Unable to find {m_full_name} mobile by full name :', e)
-    else:
-        mobile = Mobile.objects.filter(Q(name__iexact=mobile_name) | 
+    if not mobile:
+        filtered_mobile = Mobile.objects.filter(Q(name__iexact=mobile_name) | 
                                        Q(full_name__iexact=mobile_name))
-    if mobile: offer.mobile = mobile[0]
+        if filtered_mobile: mobile = filtered_mobile[0]
+    if mobile: offer.mobile = mobile
     telecom_company = TelecomCompany.objects.filter(
         name=telecom_company_name)
     if telecom_company:
@@ -77,10 +78,58 @@ def save_offer(mobile_name,  telecom_company_name,
             existing_offer[0].delete()
     offer.save()
 
+class YouSeeSpider:
+    def __init__(self):
+        self.base_url = 'https://yousee.dk'
+        self.tilbud_url = 'https://yousee.dk/mobil/mobiltelefoner/?filter=tilbud'
+        self.headers = {'User-agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:61.0) Gecko/20100101 Firefox/61.0'}
+
+    # @shared_task
+    def get_yousee_offers(self):
+        try:
+            driver = ThreeSpider().configure_driver()
+            driver.get(self.tilbud_url)
+            devices = WebDriverWait(driver, 60).until(
+                EC.presence_of_element_located((By.CLASS_NAME, "component-terminal-list__terminal-list"))
+            )
+            soup = BeautifulSoup(driver.page_source, "html.parser")
+            lis = soup.find_all('li', {'class', 'component-terminal-list__terminal-list__item col-12 col-sm-6 col-lg-4 col--reduced-gutter'})
+            self.get_devices(lis)
+            self.close_webdriver(driver)
+        except (TimeoutException, Exception) as e:
+            print(e)
+            self.close_webdriver(driver)
+
+    def get_devices(self, rows):
+        for li in rows:
+                try:
+                    anker = li.find('div').find('a')
+                    offer_url = self.base_url + anker['href']
+                    info = anker.find('div', {'class', "component-terminal-card__text-container"})
+                    brand = info.find('div', {'class', 'component-terminal-card__brand'}).text.strip()
+                    mobile_name = info.find('div', {'class', 'component-terminal-card__title'}).text.strip()
+                    m_full_name = brand + " " + mobile_name
+                    section = anker.find('section', {'class', "component-terminal-card__price-container"})
+                    saving_div = section.find('div', {'class', 'component-terminal-card__price-container__savings'})
+                    discount = saving_div.find('span').text.strip()
+                    price_div = section.find('div', {'class', 'component-terminal-card__price-container__price'})
+                    price = price_div.find_all('span')[0].text.strip()
+                    save_offer(mobile_name=mobile_name, m_full_name=m_full_name, telecom_company_name='YouSee',
+                    offer_url=offer_url, discount=discount, price=price)
+                except Exception as e:
+                    print('Error-YouSee offer spider', e)
+                    continue
+    def close_webdriver(self, driver):
+        if driver:
+            driver.close()
+            driver.quit()
+
+
 # TODO tilbud_urls in the fetched tilbud are not complete. 
 # Append base_ulr with all
 class TeliaSpider:
     def __init__(self):
+        self.telia_base_url = 'https://shop.telia.dk'
         self.tilbud_url = 'https://shop.telia.dk/cgodetilbud.html'
         self.headers = {'User-agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:61.0) Gecko/20100101 Firefox/61.0'}
 
@@ -106,7 +155,7 @@ class TeliaSpider:
                 if discount_div: discount = discount_div.find('b').text.strip()
                 name_and_link = p_box.find('h2').find('a', href=True)
                 mobile_name = name_and_link.text.strip().rsplit(' ', 1)[0]
-                offer_url = name_and_link['href']
+                offer_url = self.telia_base_url + name_and_link['href']
                 table = p_box.find('table', {'class': 'product-prices'})
                 # price_tr = table.find('tbody').find_all('tr')
                 price_tr = table.find_all('tr')

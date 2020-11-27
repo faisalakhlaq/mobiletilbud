@@ -14,6 +14,8 @@ static_in_env
 static_in_env/
 include/
 include
+TODOs-quidelines-ideas
+datadump.json
 # ####################################### #
 # windows files
 Scripts

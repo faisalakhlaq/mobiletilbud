@@ -23,9 +23,43 @@
 </hr>
 <div class="row justify-content-center">
     {% comment %} TODO mobile.name not being translated {% endcomment %}
-    {% translate "Offers on" %} {{mobiel.name}} 
+    {% translate "Offers on" %} {{mobile.name}} </br>
+    {% if not offers %}
+        {% trans "Currently no offer on this mobile" %}
+    {% else %}
     {% for offer in offers %}
     {% include 'offer/offer_snippet.html' with object=offer %}
     {% endfor %}
+    {% endif %}
 </div>
-{% endblock content %}
+<div class="text-center justify-content-center">
+    {% if tech_specs %}
+        {% trans "Technical Specification" %}
+        </br>
+        <tr><b>two_g</b>  {{tech_specs.two_g}}</tr>
+        <tr><b>three_g</b>  {{tech_specs.three_g}}</tr>
+        <tr><b>four_g</b>  {{tech_specs.four_g}}</tr>
+        <tr><b>five_g</b>  {{tech_specs.five_g}}</tr>
+        <tr><b>WiFi</b>  {{tech_specs.WiFi}}</tr>
+        <tr><b>dual_sim</b>  {{tech_specs.dual_sim}}</tr>
+        <tr><b>dimensions</b>  {{tech_specs.dimensions}}</tr>
+        <tr><b>weight</b>  {{tech_specs.weight}}</tr>
+        <tr><b>screen_type</b>  {{tech_specs.screen_type}}</tr>
+        <tr><b>screen_size</b>  {{tech_specs.screen_size}}</tr>
+        <tr><b>screen_resolution</b>  {{tech_specs.screen_resolution}}</tr>
+        <tr><b>ip_certification</b>  {{tech_specs.ip_certification}}</tr>
+        <tr><b>internal_storage</b>  {{tech_specs.internal_storage}}</tr>
+        <tr><b>external_storage</b>  {{tech_specs.external_storage}}</tr>
+        <tr><b>WLAN</b>  {{tech_specs.WLAN}}</tr>
+        <tr><b>bluetooth</b>  {{tech_specs.bluetooth}}</tr>
+        <tr><b>NFC</b>  {{tech_specs.NFC}}</tr>
+        <tr><b>USB</b>  {{tech_specs.USB}}</tr>
+        <tr><b>wireless_charging</b>  {{tech_specs.wireless_charging}}</tr>
+        <tr><b>fast_charging</b>  {{tech_specs.fast_charging}}</tr>
+        <tr><b>chipset</b>  {{tech_specs.chipset}}</tr>
+        <tr><b>operating_system</b>  {{tech_specs.operating_system}}</tr>
+        <tr><b>ram</b>  {{tech_specs.ram}}</tr>
+<br>
+    {% endif %}
+</div>
+{%endblock content%}

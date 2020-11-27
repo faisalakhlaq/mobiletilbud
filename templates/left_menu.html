@@ -2,7 +2,7 @@
 
 <div class="nav flex-column nav-pills bg-light" id="v-pills-tab" role="tablist" aria-orientation="vertical">
   <a class="nav-link" id="v-pills-home-tab" href="{% url 'core:home' %}" role="tab" aria-controls="v-pills-home" aria-selected="true">{% translate "Home" %}</a>
-  <a class="nav-link" id="v-pills-companies-tab" href="{% url 'core:telecom-companies' %}" role="tab" aria-controls="v-pills-companies" aria-selected="true">{% translate "Telecom Companies" %}</a>
+  <a class="nav-link" id="v-pills-companies-tab" href="{% url 'telecompanies:telecom-companies' %}" role="tab" aria-controls="v-pills-companies" aria-selected="true">{% translate "Telecom Companies" %}</a>
   <a class="nav-link" id="v-pills-compare-tab" href="{% url 'telecompanies:compare-offers' %}" role="tab" aria-controls="v-pills-compare" aria-selected="false">{% translate "Compare" %}</a>
   <a class="nav-link" id="v-pills-offers-tab" href="{% url 'telecompanies:offers' %}" role="tab" aria-controls="v-pills-offers" aria-selected="false">{% translate "Popular Offers" %}</a>
   {% comment %} <a class="nav-link" id="v-pills-set-reminder-tab" data-toggle="pill" href="#" role="tab" aria-controls="v-pills-set-reminder" aria-selected="false">{% translate "Set Reminders" %}</a> {% endcomment %}

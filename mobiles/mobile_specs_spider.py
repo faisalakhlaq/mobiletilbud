@@ -1,9 +1,25 @@
 from bs4 import BeautifulSoup
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Q
 import requests
+import time
 from .models import (Mobile, MobileBrand, MobileTechnicalSpecification,
                      MobileCameraSpecification, MobileVariation, Variation)
+from lxml.html import fromstring
+from itertools import cycle
 
+def get_proxies():
+    """Return a list of free https proxies by scraping free-proxy website"""
+    url = 'https://free-proxy-list.net/'
+    response = requests.get(url)
+    parser = fromstring(response.text)
+    proxies = set()
+    for i in parser.xpath('//tbody/tr'):
+        if i.xpath('.//td[7][contains(text(),"yes")]'):
+            #Grabbing IP and corresponding PORT
+            proxy = ":".join([i.xpath('.//td[1]/text()')[0], i.xpath('.//td[2]/text()')[0]])
+            proxies.add(proxy)
+    return proxies
 
 # TODO use logging
 class GsmarenaMobileSpecSpider():
@@ -45,8 +61,8 @@ class GsmarenaMobileSpecSpider():
                 if len(tds) < 2: continue
                 t = tds[0]
                 i = tds[1]
-                title = t.find('a').text().strip()
-                info = i.text().strip()
+                title = t.find('a').text.strip()
+                info = i.text.strip()
                 info_dict[title] = info
             except Exception as e:
                 print('Exception while extracting mobile info for ', mobile)
@@ -54,7 +70,7 @@ class GsmarenaMobileSpecSpider():
         self.save_mobile_info(info_dict, mobile)
 
     def save_mobile_info(self, data_dict, mobile):
-        import pdb; pdb.set_trace()
+        # import pdb; pdb.set_trace()
         mob_specs = MobileTechnicalSpecification.objects.create(mobile=mobile)
         technology = data_dict.get('Technology')
         if technology and '5g' in technology:
@@ -98,40 +114,67 @@ class GsmarenaMobileSpecSpider():
 
 
 class GadgetsMobileSpecSpider:
-    def __init__(self):
+    def __init__(self, brand_name_):
         self.headers = {'User-agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:61.0) Gecko/20100101 Firefox/61.0'}
-        self.iphone12pro_url = 'https://gadgets.ndtv.com/apple-iphone-761'
-        self.mobile_name = 'iPhone'
-    
+        self.brand_name = brand_name_
+        self.proxies = get_proxies()
+
+
     def fetch_mob_specs(self):
-        response = requests.get(url=self.iphone12pro_url, headers=self.headers)
-        soup = BeautifulSoup(response.content, 'html.parser')
-        # from django.core.files import File
-        # with open('iphone12protext.txt', 'r') as fl:
-            # soup = BeautifulSoup(fl, 'html.parser')
-        # with open('iphone12protext.txt', 'w') as fl:
-        #     txtf = File(fl)
-        #     txtf.write(soup.text)
-        divs = soup.find_all('div', {'class', '_gry-bg _spctbl _ovfhide'})
-        # tables = [d.find('table') for d in divs]
-        tables = []
-        for d in divs:
-            tables.append(d.find('table'))
-        rows = []
-        for table in tables:
-            rows = rows + table.find_all('tr')
-        data_dict = {}
-        for row in rows:
-            tds = row.find_all('td')
-            if len(tds) > 1:
-                title = tds[0]
-                info = tds[1]
-                if title and info:
-                    data_dict[title.text.strip()] = info.text.strip()
-        mobile = Mobile.objects.get(name__iexact=self.mobile_name)
-        self.save_mob_specs(data_dict, mobile)
-        self.save_camera_specs(data_dict, mobile)
-        self.save_variations(data_dict, mobile)
+        brand = MobileBrand.objects.get(name__iexact=self.brand_name)
+        mobiles = Mobile.objects.filter(Q(brand=brand),Q(url__icontains='gadgets'))
+        import pdb; pdb.set_trace()
+        proxy_pool = cycle(self.proxies)
+        # check the index and change sleep time to avoid regular intervals
+        for index, mobile in enumerate(updated_urls):
+            if not mobile.url:
+                # unrequired check. All mobiles have urls to this point
+                continue
+            try:
+                proxy = next(proxy_pool)
+                print("Request # %d"%index)
+                response = requests.get(url=mobile.url, 
+                    proxies={"http": proxy, "https": proxy}, 
+                    headers=self.headers,
+                )
+                soup = BeautifulSoup(response.content, 'html.parser')
+                divs = soup.find_all('div', {'class', '_gry-bg _spctbl _ovfhide'})
+                tables = []
+                for d in divs:
+                    tables.append(d.find('table'))
+                rows = []
+                for table in tables:
+                    rows = rows + table.find_all('tr')
+                data_dict = {}
+                for row in rows:
+                    tds = row.find_all('td')
+                    if len(tds) > 1:
+                        title = tds[0]
+                        info = tds[1]
+                        if title and info:
+                            data_dict[title.text.strip()] = info.text.strip()
+                self.save_mob_specs(data_dict, mobile)
+                print('Saved specifications for: ', mobile)
+                self.save_camera_specs(data_dict, mobile)
+                print('Saved CAMERA specifications for: ', mobile)
+                self.save_variations(data_dict, mobile)
+                print('Saved VARIATIONS for: ', mobile)
+            if index % 20 == 0:
+                # after every 20 requests update the proxy list 
+                # in order to avoid dead proxies
+                # # TODO check if the proxy is dead then use 
+                # another proxy before making the request
+                self.proxies = get_proxies()
+                proxy_pool = cycle(self.proxies)
+
+            if index % 3 == 0:
+                time.sleep(30)
+            else:
+                time.sleep(20)
+            print('Went to sleep')
+            except Exception as e:
+                print(f'Exception occured while fetching specs for {mobile}', e)
+                continue
 
     def save_variations(self, data_dict, mobile):
         # mobile = Mobile.objects.get(name__iexact='iPhone 12 Pro Max')
@@ -142,7 +185,7 @@ class GadgetsMobileSpecSpider:
             for col in colors:
                 mobileVariation = MobileVariation.objects.create(variation=variation, 
                                                                 value=col.strip())
-        
+
     def save_camera_specs(self, data_dict, mobile):
         # mobile = Mobile.objects.get(name__iexact='iPhone 12 Pro Max')
         cam_specs = MobileCameraSpecification.objects.create(mobile=mobile)
@@ -226,49 +269,6 @@ class GadgetsMobileSpecSpider:
         if ram and len(ram.strip()) > 0:
             mob_specs.ram = ram
         mob_specs.save()
-        
-#????????????????????????????????????????????????????????????????/
-    # mobile                      = models.ForeignKey("Mobile", 
-    #                               on_delete=models.CASCADE)
-    # two_g                       = models.BooleanField(blank=True, null=True)
-    # three_g                     = models.BooleanField(blank=True, null=True) 
-    # four_g                      = models.BooleanField(blank=True, null=True)
-    # five_g                      = models.BooleanField(blank=True, null=True)
-    # WiFi                        = models.BooleanField(blank=True, null=True)
-    # dual_sim                    = models.BooleanField(blank=True, null=True)
-    # dimensions                  = models.CharField(_("Dimensions"), 
-    #                               max_length=50, blank=True, null=True)
-    # weight                      = models.CharField(_("Weight"), max_length=50, 
-    #                                 blank=True, null=True)
-    # screen_type                 = models.CharField(_("Screen Type"), 
-    #                               max_length=50, blank=True, null=True)
-    # screen_size                 = models.CharField(_("Screen Size"), 
-    #                               max_length=50, blank=True, null=True)
-    # screen_resolution           = models.CharField(_("Screen Resolution"), 
-    #                               max_length=50, blank=True, null=True)
-    # ip_certification            = models.CharField(_("IP Certification"), 
-    #                               max_length=50, blank=True, null=True)
-    # internal_storage            = models.CharField(_("Internal Storage"), 
-    #                               max_length=50, blank=True, null=True)
-    # external_storage            = models.CharField(_("External Storage"), 
-    #                               max_length=50, blank=True, null=True)
-    # WLAN                        = models.CharField(_("WLAN"), 
-    #                               max_length=50, blank=True, null=True)
-    # bluetooth                   = models.CharField(_("Bluetooth"), 
-    #                               max_length=50, blank=True, null=True)
-    # NFC                         = models.BooleanField(default=True)
-    # USB                         = models.CharField(_("USB"), 
-    #                               max_length=50, blank=True, null=True)
-    # wireless_charging           = models.CharField(_("Wireless Charging"), 
-    #                               max_length=50, blank=True, null=True)
-    # fast_charging               = models.CharField(_("Fast Charging"), 
-    #                               max_length=50, blank=True, null=True)
-    # chipset                     = models.CharField(_("chipset"), 
-    #                               max_length=50, blank=True, null=True)
-    # operating_system              = models.CharField(_("Control System"), 
-    #                               max_length=50, blank=True, null=True)
-    # ram                         = models.CharField(_("RAM"), 
-    #                               max_length=50, blank=True, null=True)
 
 # ////////////////////////////////////////////
 # two_g

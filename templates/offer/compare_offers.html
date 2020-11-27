@@ -66,9 +66,7 @@
     {% trans "Offer Details" %}
     {% include 'offer/offer_snippet.html' with object=value %}
     </div>
-
 <hr>
-
     <div class='hideable_offer_snippet2'>
     {% trans "Offer Details" %}
     {% include 'offer/offer_snippet.html' %}
@@ -82,7 +80,9 @@
 
 <script src="http://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script>
-{% comment %} var telenor_offer_snippet = "{% block telenoroffer1 %}{% include 'offer/offer_snippet.html' with object=telenor_offer1.value %} {% endblock %}"; {% endcomment %}
+{% comment %} var telenor_offer_snippet = "{% block telenoroffer1 %}
+{% include 'offer/offer_snippet.html' with object=telenor_offer1.value %} 
+{% endblock %}"; {% endcomment %}
 
 var hideable_offer_snippet1 = $('.hideable_offer_snippet1');
 var hideable_offer_snippet2 = $('.hideable_offer_snippet2');
@@ -98,15 +98,15 @@ var telia_offer2 = document.querySelector("select[name=telia_offers2]");
 
 telenor_offer1.addEventListener('change', function() {
     if (telenor_offer1.value != ''){
-        console.log("Telenor1 clicked:")
-        console.log(telenor_offer1.value)
+        //console.log("Telenor1 clicked:")
+        //console.log(telenor_offer1.value)
         hideable_offer_snippet1.show(value=telenor_offer1.value);
         // hideable_offer_snippet1.append(telenor_offer_snippet);
         // {% include 'offer/offer_snippet.html' with object=telenor_offer1.value %}
     }
     else{
-        console.log("Telenor1 clicked:")
-        console.log(telenor_offer1.value)
+        //console.log("Telenor1 clicked:")
+        //console.log(telenor_offer1.value)
         hideable_offer_snippet1.hide();
     }
 })

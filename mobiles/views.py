@@ -3,7 +3,8 @@ from django.views.generic import View
 from django.db.models import Q
 
 from telecompanies.models import Offer
-from .models import Mobile
+from .models import (Mobile, MobileTechnicalSpecification, 
+MobileCameraSpecification, MobileVariation, Variation)
 
 class MobileDetailView(View):
     def get(self, *args, **kwargs):
@@ -20,11 +21,19 @@ class MobileDetailView(View):
     def get_context_data(self, **kwargs):
         # import pdb; pdb.set_trace()
         slug = self.kwargs["slug"]   
-        mobile = Mobile.objects.get(slug=slug)
+        mobile = Mobile.objects.get(slug=slug)        
         offers = Offer.objects.filter(Q(mobile=mobile) | 
                                       Q(mobile__name__iexact=mobile.name))
+        specs = MobileTechnicalSpecification.objects.filter(mobile=mobile)
+        variation = mobile.variation_set.all()
+        # TODO get the variation values from MobileVariation
+        if specs: specs = specs[0]
+        cam = mobile.mobilecameraspecification_set.all()
+        if cam: cam = cam[0]
         context = {
                 'mobile': mobile,
                 'offers': offers,
+                'tech_specs': specs,
+                'camera': cam,
             }
         return context
