@@ -101,7 +101,6 @@ class YouSeeSpider:
             self.close_webdriver(driver)
 
     def get_devices(self, rows):
-        import pdb; pdb.set_trace()
         for li in rows:
                 try:
                     anker = li.find('div').find('a')

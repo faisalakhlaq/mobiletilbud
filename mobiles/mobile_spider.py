@@ -5,6 +5,7 @@ from django.core.files.base import ContentFile
 import io
 from PIL import Image
 import requests
+import time
 from selenium import webdriver
 from webdriver_manager.firefox import GeckoDriverManager
 from selenium.common.exceptions import TimeoutException
@@ -39,12 +40,21 @@ class AbstractMobileSpider(ABC):
     def save_mobile(self, name, full_name, brand_name, url=None, image=None):
         try:
             brand = MobileBrand.objects.get(name__iexact=brand_name)
-            mobile = Mobile.objects.create(
-                name=name,
-                full_name=full_name,
-                brand=brand,
-                url=url,
-            )
+            mobile = Mobile.objects.get(name__iexact=name, brand=brand)
+            # mobile = Mobile.objects.create(
+            #     name=name,
+            #     full_name=full_name,
+            #     brand=brand,
+            #     url=url,
+            # )
+            if not mobile:
+                print('Cannot find mobile: ', full_name)
+                return
+            if mobile.image:
+                # mobile is already in the database and has a image.
+                # Therefore we are not going to update it.
+                print('NO UPDATES - Mobile and image already available.')
+                return
             if image:
                 thumb_io = io.BytesIO()
                 image.save(thumb_io, image.format, quality=95)
@@ -52,9 +62,11 @@ class AbstractMobileSpider(ABC):
                 # the image is saved to the parent folder i.e. media
                 # mobile.image.save('sony/'+image.filename, ContentFile(thumb_io.getvalue()), save=False)
                 mobile.image.save(brand_name+'/'+image.filename, ContentFile(thumb_io.getvalue()), save=False)
-
             mobile.save()
-            print("Saved a new mobile: ", mobile.full_name)
+            # if created:
+            #     print("Saved a new mobile: ", mobile.full_name)
+            # else:
+            print('Updated mobile image: ', mobile.full_name)
         except Exception as e:
             print("Exception while saving Mobile: ", e)
     
@@ -71,6 +83,55 @@ class AbstractMobileSpider(ABC):
             print('Exception occured while downloading the image: ', e)
 
 
+class GadgetsndtvMobileSpider(AbstractMobileSpider):
+    def __init__(self):
+        self.huawei_url = 'https://gadgets.ndtv.com/mobiles/huawei-phones'
+        self.samsung_url = 'https://gadgets.ndtv.com/mobiles/samsung-phones'
+        super().__init__()
+    
+    def fetch_mobiles(self, brand_name_):
+        response = requests.get(url=self.samsung_url, headers=self.headers)
+        soup = BeautifulSoup(response.content, 'html.parser')
+        ul = soup.find('ul', {'class', 'clearfix margin_t20'})
+        lis = ul.find_all('li')
+        if not lis:
+            brand_details = soup.find('div', {'class', 'brand_detail'})
+            brand_list = brand_details.find('div', {'class', 'nlist brand_list'})
+            ul = brand_list.find('div', {'class', 'brand row'}).find('ul')
+            lis = ul.find_all('li')
+        brand = MobileBrand.objects.get(name__iexact=brand_name_)
+        all_mobiles = Mobile.objects.filter(brand=brand)
+        mobile_update_list = []
+        for li in lis:
+            try:
+                image_a = li.find('div', {'class', 'rvw-imgbox'}).find('a')
+                mobile_url = image_a['href']
+                m_full_name = li.find('a', {'class', 'rvw-title'}).find('strong').text.strip()
+                mobile_name = m_full_name.split(' ', 1)[1]
+                mobile = all_mobiles.filter(full_name__iexact=m_full_name)
+                if mobile:
+                    # If the mobile is found only update its url 
+                    # and continue to next iteration
+                    mobile = mobile[0]
+                    if mobile.url != mobile_url:
+                        mobile.url = mobile_url
+                        mobile_update_list.append(mobile)
+                    # mobile.save()
+                    # continue
+                # Image on this website are very small. Therefore we are not
+                # downloading images
+                # img_src = image_a.find('img')['src']
+                # image = self.get_image(img_src)
+                # self.save_mobile(name=mobile_name, full_name=m_full_name, 
+                # url=mobile_url, brand_name=brand_name_, image=None)
+            except Exception as e:
+                print(f'Exception in fetching mobiles {brand_name_} ', e)
+                continue
+        # Bulk update all the objects    
+        Mobile.objects.bulk_update(mobile_update_list, ['url'])
+        print('Updated mobiles: ', str(mobile_update_list))
+
+
 class GsmarenaMobileSpider(AbstractMobileSpider):
     """Fetches mobile data from https://www.gsmarena.com/"""
     def __init__(self):
@@ -80,6 +141,8 @@ class GsmarenaMobileSpider(AbstractMobileSpider):
         self.samsung_base_url = 'https://www.gsmarena.com/samsung-phones-f-9-0-p'
         self.nokia_url = 'https://www.gsmarena.com/nokia-phones-1.php'
         self.nokia_base_url = 'https://www.gsmarena.com/nokia-phones-f-1-0-p'
+        self.huawei_url = 'https://www.gsmarena.com/huawei-phones-58.php'
+        self.huawei_base_url = 'https://www.gsmarena.com/huawei-phones-f-58-0-p'
         super().__init__()
 
     def get_pages(self, brand_name):
@@ -95,6 +158,10 @@ class GsmarenaMobileSpider(AbstractMobileSpider):
         elif 'apple' in brand_name.lower():
             url = self.apple_url
             base_url = self.apple_base_url
+        elif 'huawei' in brand_name.lower():
+            url = self.huawei_url
+            base_url = self.huawei_base_url
+
         response = requests.get(url=url, headers=self.headers)
         pages.append(response.content)
         soup = BeautifulSoup(response.content, "html.parser")
@@ -102,7 +169,7 @@ class GsmarenaMobileSpider(AbstractMobileSpider):
         total_pages = 1
         if pages_div:
             # we are adding one to total pages because the displayed 
-            # page doesnot come in a. So we get one less page
+            # page doesnot come in the list. So we get one less page
             total_pages = len(pages_div.find_all('a')) + 1
         if total_pages == 1:
             return pages
@@ -113,17 +180,19 @@ class GsmarenaMobileSpider(AbstractMobileSpider):
         return pages
 
     def fetch_mobiles(self, brand_name_):
-        import pdb; pdb.set_trace()
+        # import pdb; pdb.set_trace()
         pages = self.get_pages(brand_name_)
         for page in pages:
             soup = BeautifulSoup(page, "html.parser")
             rows = soup.find('div', {'class', 'makers'}).find('ul').find_all('li')
-            print("GOT mobiles = ", len(rows))
+            # print("GOT mobiles = ", len(rows))
             for row in rows:
                 try:
                     anker = row.find('a')
                     mobile_url = 'https://www.gsmarena.com/' + anker['href']
                     mobile_name = anker.find('strong').find('span').text.strip()
+                    # To avoid storing apple watches and ipad we are checking if the name
+                    # contains iphone, so its a phone. Therefore store it.
                     if 'apple' in brand_name_.lower() and "iphone" not in mobile_name.lower():
                         continue
                     m_full_name = brand_name_.lower().capitalize() + " " + mobile_name
@@ -131,6 +200,8 @@ class GsmarenaMobileSpider(AbstractMobileSpider):
                     image = self.get_image(img_src)
                     self.save_mobile(name=mobile_name, full_name=m_full_name,
                     brand_name=brand_name_, url=mobile_url, image=image)
+                    # import time
+                    # time.sleep(10)
                 except Exception as e:
                     print('Exception occured while fetching Nokia mobile: ', e)
                     continue
