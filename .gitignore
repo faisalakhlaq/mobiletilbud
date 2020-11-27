@@ -15,7 +15,10 @@ static_in_env/
 include/
 include
 # ####################################### #
-
+# windows files
+Scripts
+.vscode
+.vscode/
 #'''
 #COPIED FROM:
 #https://github.com/github/gitignore/blob/master/Python.gitignore
@@ -138,6 +141,7 @@ cdn_test/
 # Environments
 bin/
 .env
+.env/
 .venv
 env/
 venv/
