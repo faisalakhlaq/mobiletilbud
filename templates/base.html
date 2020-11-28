@@ -30,10 +30,10 @@
       {% endfor %}
   {% endif %}
 </div>
-<div class="container">
+<div style="padding:2em;">
     <div class='row'>
         {% comment %} <div class='col-3'>{% include 'left_menu.html' %}</div> {% endcomment %}
-        <div class='col-9'>{% block content %}{% endblock content %}</div>
+        <div class='col-12'>{% block content %}{% endblock content %}</div>
     </div>
     <div class='row'>
         <div class='col-9 ml-auto'>{% block extra_body %}{% endblock extra_body %}</div>
