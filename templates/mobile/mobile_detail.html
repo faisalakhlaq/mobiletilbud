@@ -6,9 +6,9 @@
 
 {% block content %}
 <div class='mt-5 text-center justify-content-center'>
-    {% if mobile.image %}
-        <img src={{ mobile.image.url }}>
-    {% endif %}
+    {% comment %} {% if mobile.image %} {% endcomment %}
+        <img src={{ mobile.image.url | default:'/media/mobiles/12_lxfJKMZ.jpg' }}>
+    {% comment %} {% endif %} {% endcomment %}
 <h3>{% if mobile.full_name %}{{mobile.full_name}} {% else %}
                         {{ mobile.name }}{% endif %}<h3>
         <div class="container-fluid">
