@@ -1,13 +1,17 @@
 {% extends 'base.html' %}
 {% load i18n %}
+{% load static %}
+{% block extra_head %}
+        <link rel='stylesheet' href="{% static '/main.css'%}">
+{% endblock %}
 
 {% block title %} {% translate "Offers" %} | {{ block.super }}
 {% endblock title %}
 
 {% block content %}
-<div style="display:flex; flex-direction:column; align-items:center; 
+<div class='offer_list_container' style="display:flex; flex-direction:column; align-items:center; 
         align-self:center; justify-self:center">
-        <h1 class="" style="font-weight:bold; font-family:sans-serif; color:#000061"">
+        <h1 class="" style="font-weight:bold; font-family:sans-serif; color:#000061">
                 {% trans "POPULAR OFFERS" %}<h1>
         <div class='m-4' style="border-bottom: 0.5px solid orange; padding:0.2em; 
                 display:flex; align-items:center; justify-content:center">
@@ -50,7 +54,7 @@
                                         flex-direction:column; align-items:center; justify-content:center;
                                         font-size:1.3rem">
                                         <div>
-                                                <img class="w-50 p-0" src={{offer.mobile.image.url}}>
+                                                <img class="w-50 p-0" src={{ offer.mobile.image.url | default:'/media/mobiles/12_lxfJKMZ.jpg' }}>
                                         </div>
                                         <h5 class="card-title">{% if offer.mobile %}
                                                 {{offer.mobile.name}} {% elif offer.mobile_name %}
