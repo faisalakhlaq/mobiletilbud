@@ -1,3 +1,59 @@
 .offer_list_container{
-    background: rgb(235, 235, 235);
+    display:flex; 
+    flex-direction:column; 
+    align-items:center; 
+    align-self:center; 
+    justify-self:center
+}
+.offer-header{
+    font-weight:bold; 
+    font-family:sans-serif; 
+    color:#000061
+}
+.company-list {
+    border-bottom: 0.5px solid orange; 
+    padding:0.2em; 
+    display:flex; 
+    align-items:center; 
+    justify-content:center
+}
+.card-group {
+    justify-content:center;
+    margin: 1em;
+}
+.offer-card {
+    width: 20rem; 
+    height: 30rem;
+    margin-bottom: 0.7em;
+}
+.card-header {
+    text-align:center; 
+    font-size:1.2rem;
+    background-color: white;
+}
+.card-body {
+    display:flex;
+    flex-direction:column; 
+    align-items:center; 
+    justify-content:center;
+    font-size:1.3rem;
+}
+.mobile-image {
+    width: 8em;
+    height: 12em;
+    border: none;
+    cursor: pointer;
+}
+.mobile-image:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(142, 179, 248, 0.06), 
+    0 4px 8px rgba(142, 179, 248, 0.06);
+}
+.mob-image {
+    width: 100%;
+    height: 100%;
+}
+.card-footer {
+    text-align:center; 
+    font-size:1rem; 
 }
