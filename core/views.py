@@ -10,20 +10,15 @@ from mobiles.models import Mobile, MobileBrand
 from telecompanies.spider import ThreeSpider, TelenorSpider, TeliaSpider
 from telecompanies.models import Offer
 
-# from mobiles.mobile_spider import GadgetsndtvMobileSpider
-# from mobiles.mobile_specs_spider import GadgetsMobileSpecSpider
+from mobiles.mobile_specs_spider import GsmarenaMobileSpecSpider
 # from telecompanies.spider import YouSeeSpider
 
 class HomeView(View):
     def get(self, *args, **kwargs):
         context = {}
-        # GadgetsMobileSpecSpider('Huawei').fetch_mob_specs()
-        # GadgetsndtvMobileSpider().fetch_mobiles('Samsung')
-        # GsmarenaMobileSpider().fetch_mobiles('Huawei')
-        # MotorolaMobileSpider().fetch_mobiles()
-        # YouSeeSpider().get_yousee_offers()
+        GsmarenaMobileSpecSpider().fetch_mobile_specs('Motorola')
         return render(self.request, 'home.html', context)
-        # TODO get all the offers and display 10 with the 
+        # TODO get all the offers and display 10 with the
         # highest Discount value. Need a float discount field Offer
 
 class MobileManufacturersView(ListView):

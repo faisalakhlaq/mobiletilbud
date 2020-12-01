@@ -50,7 +50,8 @@
                                         flex-direction:column; align-items:center; justify-content:center;
                                         font-size:1.3rem">
                                         <div>
-                                                <img class="w-50 p-0" src={{offer.mobile.image.url}}>
+                                                <img class="w-50 p-0" src={{offer.mobile.image.url | 
+                                                default:'/media/mobiles/12_lxfJKMZ.jpg' }}>
                                         </div>
                                         <h5 class="card-title">{% if offer.mobile %}
                                                 {{offer.mobile.name}} {% elif offer.mobile_name %}
