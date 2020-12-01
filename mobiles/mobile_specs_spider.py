@@ -1,29 +1,125 @@
 from bs4 import BeautifulSoup
+from collections import OrderedDict
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 import requests
+import random 
 import time
 from .models import (Mobile, MobileBrand, MobileTechnicalSpecification,
                      MobileCameraSpecification, MobileVariation, Variation)
 from lxml.html import fromstring
 from itertools import cycle
 
+
+class HeaderFactory:
+    """Contains a list of headers with updated User-Agents."""
+    def __init__(self):
+        self.headers_list = [
+            {
+                'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:83.0) Gecko/20100101 Firefox/83.0',
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+                'Accept-Language': 'en-US,en;q=0.5',
+                'Referer': 'https://www.google.com/',
+                'DNT': '1',
+                'Connection': 'keep-alive',
+                'Upgrade-Insecure-Requests': '1',
+                'If-Modified-Since': 'Sun, 29 Nov 2020 21:16:58 GMT',
+                'Cache-Control': 'max-age=0',
+            },
+        # Firefox 83 Mac
+            {
+                "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:83.0) Gecko/20100101 Firefox/83.0",
+                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+                "Accept-Language": "en-US,en;q=0.5",
+                'Referer': 'https://www.google.com/',
+                "DNT": "1",
+                "Connection": "keep-alive",
+                "Upgrade-Insecure-Requests": "1"
+            },
+            # Firefox 83 Windows
+            {
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:83.0) Gecko/20100101 Firefox/83.0",
+                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+                "Accept-Language": "en-US,en;q=0.5",
+                "Accept-Encoding": "gzip, deflate, br",
+                'Referer': 'https://www.google.com/',
+                "DNT": "1",
+                "Connection": "keep-alive",
+                "Upgrade-Insecure-Requests": "1"
+            },
+            # Chrome 87 Mac
+            {
+                "Connection": "keep-alive",
+                "DNT": "1",
+                "Upgrade-Insecure-Requests": "1",
+                "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.66 Safari/537.36",
+                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+                "Sec-Fetch-Site": "none",
+                "Sec-Fetch-Mode": "navigate",
+                "Sec-Fetch-Dest": "document",
+                "Referer": "https://www.google.com/",
+                "Accept-Encoding": "gzip, deflate, br",
+                "Accept-Language": "en-GB,en-US;q=0.9,en;q=0.8"
+            },
+            # Chrome 87 Windows 
+            {
+                "Connection": "keep-alive",
+                "Upgrade-Insecure-Requests": "1",
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.66 Safari/537.36",
+                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+                "Sec-Fetch-Site": "same-origin",
+                "Sec-Fetch-Mode": "navigate",
+                "Sec-Fetch-User": "?1",
+                "Sec-Fetch-Dest": "document",
+                "Referer": "https://www.google.com/",
+                "Accept-Encoding": "gzip, deflate, br",
+                "Accept-Language": "en-US,en;q=0.9"
+            },
+        ]
+        # Create ordered dict from Headers above
+        self.ordered_headers_list = []
+        for headers in self.headers_list:
+            h = OrderedDict()
+            for header,value in headers.items():
+                h[header]=value
+            self.ordered_headers_list.append(h)
+
+    def get_header(self):
+        """Returns a random header."""
+        #Pick a random browser headers
+        return random.choice(self.headers_list)
+
 def get_proxies():
-    """Return a list of free https proxies by scraping free-proxy website"""
+    """Return 10 free https proxies by scraping free-proxy website"""
     url = 'https://free-proxy-list.net/'
     response = requests.get(url)
     parser = fromstring(response.text)
     proxies = set()
     for i in parser.xpath('//tbody/tr'):
+        if len(proxies) >= 10:
+            break
         if i.xpath('.//td[7][contains(text(),"yes")]'):
             #Grabbing IP and corresponding PORT
             proxy = ":".join([i.xpath('.//td[1]/text()')[0], i.xpath('.//td[2]/text()')[0]])
-            proxies.add(proxy)
+            # Try to get google.com with the proxy to check if this proxy is ok.
+            try:
+                print('Requesting google.com with proxy = ', proxy)
+                t = requests.get("https://www.google.com/", proxies={"http": proxy, "https": proxy}, timeout=5)
+                if t.status_code == requests.codes.ok:
+                    proxies.add(proxy)
+                    print('got a valid proxy')
+            except:
+                print('Invalid proxy = ', proxy)
+                pass
     return proxies
 
 # TODO use logging
 class GsmarenaMobileSpecSpider():
-    def fetch_data(self, brand_name):
+    def __init__(self):
+        self.headers = HeaderFactory()
+        self.proxies = get_proxies()
+
+    def fetch_mobile_specs(self, brand_name):
         """Get url links for all mobile in he given brand.
         If there is a link given for the mobile, fetch its
         data."""
@@ -31,111 +127,258 @@ class GsmarenaMobileSpecSpider():
         try:
             brand = MobileBrand.objects.get(name__icontains=brand_name)
         except ObjectDoesNotExist as e:
-            print(f'Brand with the given name {band_name} not found: ', e)    
+            print(f'Brand with the given name {band_name} not found: ', e)
             return None
-        import pdb; pdb.set_trace()
+        # import pdb; pdb.set_trace()
         mobiles = Mobile.objects.filter(brand=brand)
-        for mobile in mobiles:
-            if not mobile.url: continue
-            headers = {'User-agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:61.0) Gecko/20100101 Firefox/61.0'}
-            response = requests.get(url=mobile.url, headers=headers)
-            soup = BeautifulSoup(response.content, 'html.parser')
-            tables = soup.find_all('table')
-            rows = []
-            for table in tables:
-                new_rows = table.find_all('tr')
-                if new_rows: rows = rows + new_rows
-            self.extract_mobile_info(rows, mobile)
-    
+        proxy_pool = cycle(self.proxies)
+        for index, mobile in enumerate(mobiles):
+            try:
+                if not mobile.url or MobileTechnicalSpecification.objects.filter(mobile=mobile): continue
+                proxy = next(proxy_pool)
+                header = self.headers.get_header()
+                print(f'Remaining {len(mobiles)-index} Sending Request # {index} for mobile = {mobile} with proxy = {proxy} and headers = \n {header}')
+                response = requests.get(
+                    url=mobile.url, 
+                    proxies={"http": proxy, "https": proxy}, 
+                    headers=header,
+                )
+                soup = BeautifulSoup(response.content, 'html.parser')
+                tables = soup.find_all('table')
+                rows = []
+                for table in tables:
+                    new_rows = table.find_all('tr')
+                    if new_rows: rows = rows + new_rows
+                self.extract_mobile_info(rows, mobile)
+                if index !=0 and index % 10 == 0:
+                    # after every 10 requests update the proxy list 
+                    # in order to avoid dead proxies
+                    self.proxies = get_proxies()
+                    print('Got new proxy pool')
+                    proxy_pool = cycle(self.proxies)
+                if index % 3 == 0:
+                    time.sleep(20)
+                else:
+                    time.sleep(10)
+                print('Went to sleep')
+            except Exception as e:
+                print(f'Exception occured while fetching specs for {mobile}', e)
+                with open('to_fetch_motorola.txt', 'a') as f:
+                    f.write(str(mobile))
+                    f.write('\n')
+                continue
+
     def extract_mobile_info(self, rows, mobile):
         """Extract the data from the webpage 
         and put it in a dictionary"""
-        # isinstance(rows, list) 
+        # isinstance(rows, list)
         # import pdb; pdb.set_trace()
         if len(rows) == 0:
             return None
         info_dict = {}
+        th_title = ''
         for row in rows:
             try:
+                th = row.find('th')
+                if th: th_title = th.text.strip().lower()
                 tds = row.find_all('td')
                 if len(tds) < 2: continue
                 t = tds[0]
                 i = tds[1]
-                title = t.find('a').text.strip()
+                key = th_title + "-" + t.find('a').text.strip().lower()
                 info = i.text.strip()
-                info_dict[title] = info
+                info_dict[key] = info
             except Exception as e:
-                print('Exception while extracting mobile info for ', mobile)
+                print('Exception while extracting ', mobile)
                 print(e)
+                continue
         self.save_mobile_info(info_dict, mobile)
+        self.save_camera_specs(info_dict, mobile)
+        self.save_variations(info_dict, mobile)
 
     def save_mobile_info(self, data_dict, mobile):
         # import pdb; pdb.set_trace()
         mob_specs = MobileTechnicalSpecification.objects.create(mobile=mobile)
-        technology = data_dict.get('Technology')
-        if technology and '5g' in technology:
+        technology = data_dict.get('network-technology')
+        if technology and '5g' in technology.lower():
             mob_specs.five_g = True
-        WLAN = data_dict.get('WLAN')
+        WLAN = data_dict.get('comms-wlan')
         if WLAN:
             mob_specs.WLAN = WLAN.strip()
             if 'wi-fi' in WLAN.lower():
                 mob_specs.WiFi = True
-        sim = data_dict.get('SIM')
+        sim = data_dict.get('body-sim')
         if sim and 'dual sim' in sim.lower():
             mob_specs.dual_sim = True
-        dimensions = data_dict.get('Dimensions')
+        dimensions = data_dict.get('body-dimensions')
         if dimensions:
             mob_specs.dimensions = dimensions.strip()
-        weight = data_dict.get('Weight')
+        weight = data_dict.get('body-weight')
         if weight:
             mob_specs.weight = weight.strip()
-        screen_size = data_dict.get('Size')
+        screen_type = data_dict.get('display-type')
+        if screen_type:
+            mob_specs.screen_type = screen_type.strip()
+        screen_size = data_dict.get('display-size')
         if screen_size:
-            mob_specs.screen_size = screen_size.strip()   
-        screen_resolution = data_dict.get('Resolution')
+            mob_specs.screen_size = screen_size.strip()
+        screen_resolution = data_dict.get('display-resolution')
         if screen_resolution:
             mob_specs.screen_resolution = screen_resolution.strip()
-        internal_storage = data_dict.get('Internal')
+        internal_storage = data_dict.get('memory-internal')
         if internal_storage and len(internal_storage.strip()) > 0:
             mob_specs.internal_storage = internal_storage.strip()
-        external_storage = data_dict.get('Card slot')
+        external_storage = data_dict.get('memory-card slot')
         if external_storage and len(external_storage.strip()) > 0:
             mob_specs.external_storage = external_storage.strip()
-        bluetooth = data_dict.get('Bluetooth')
+        bluetooth = data_dict.get('comms-bluetooth')
         if bluetooth:
             mob_specs.bluetooth = bluetooth
-        nfc = data_dict.get('NFC')
+        nfc = data_dict.get('comms-nfc')
         if nfc and 'yes' in nfc.lower():
             mob_specs.NFC = True
-        usb = data_dict.get('USB')
+        usb = data_dict.get('comms-usb')
         if usb and len(usb.strip()) > 0:
             mob_specs.USB = usb.strip()
+        battery_type = data_dict.get('battery-type')
+        if battery_type and len(battery_type.strip()) > 0:
+            mob_specs.battery_type = battery_type.strip()
+        wireless_charging = data_dict.get('battery-charging')
+        if wireless_charging and 'wireless' in wireless_charging:
+            mob_specs.wireless_charging = 'JA tilgængelig'
+        fast_charging = data_dict.get('battery-charging')
+        if fast_charging:
+            mob_specs.fast_charging = fast_charging
+        chipset = data_dict.get('platform-chipset')
+        if chipset and len(chipset) > 0:
+            mob_specs.chipset = chipset
+        operating_system = data_dict.get('platform-os')
+        if operating_system and len(operating_system) > 0:
+            mob_specs.operating_system = operating_system
+        ram = data_dict.get('memory-internal')
+        if ram and len(ram.strip()) > 0:
+            try:
+                extracted_ram = ram.strip().split(',')[0].split(" ", 1)[1]
+                mob_specs.ram = extracted_ram
+            except:
+                mob_specs.ram = None
+        launch = ''
+        announced = data_dict.get('launch-announced')
+        if announced:
+            launch = 'Announced: ' + announced.strip()
+        status = data_dict.get('launch-status')
+        if status:
+            mob_specs.launch = launch  + " - Status " + status.strip()
+
         mob_specs.save()
+        print('Saved specs for ', mobile)
+
+    def save_variations(self, data_dict, mobile):
+        # import pdb; pdb.set_trace()
+
+        # Save the variations for color and memory
+        variation, _ = Variation.objects.get_or_create(name='colour', mobile=mobile)
+        color = data_dict.get('misc-colors')
+        if color:
+            colors = color.split(',')
+            for col in colors:
+                mobileVariation = MobileVariation.objects.create(variation=variation, 
+                                                                value=col.strip())
+        variation, _ = Variation.objects.get_or_create(name='memory', mobile=mobile)
+        memory = data_dict.get('memory-internal')
+        if memory:
+            memories = memory.split(',')
+            for mem in memories:
+                mobileVariation = MobileVariation.objects.create(variation=variation, 
+                                                                value=mem.strip())
+        print('Saved Variation for ', mobile)
+
+    def save_camera_specs(self, data_dict, mobile):
+        # import pdb; pdb.set_trace()
+
+        cam_specs = MobileCameraSpecification.objects.create(mobile=mobile)
+        single = data_dict.get('main camera-single')
+        features = data_dict.get('main camera-features')
+        if features: features = features.strip()
+        if single and len(single.strip()) > 0:
+            cam_specs.rear_cam_lenses = 1
+            # TODO check if the len > 255 strip [:254]
+            rear_mp = single.strip() + '- Features: ' + features
+            cam_specs.rear_cam_megapixel = rear_mp[:254]
+        elif data_dict.get('main camera-double'):
+            cam_specs.rear_cam_lenses = 2
+            # TODO check if the len > 255 strip [:254]
+            rear_mp = data_dict.get('main camera-double').strip() + '- Features: ' + features
+            cam_specs.rear_cam_megapixel = rear_mp[:254]
+        elif data_dict.get('main camera-triple'):
+            cam_specs.rear_cam_lenses = 3
+            rear_mp = data_dict.get('main camera-triple').strip() + '- Features: ' + features
+            cam_specs.rear_cam_megapixel = rear_mp[:254]
+        elif data_dict.get('main camera-quad'):
+            cam_specs.rear_cam_lenses = 4
+            # TODO check if the len > 255 strip [:254]
+            rear_mp = data_dict.get('main camera-quad').strip() + '- Features: ' + features
+            cam_specs.rear_cam_megapixel = rear_mp[:254]
+        rear_cam_video_resolution = data_dict.get('main camera-video')
+        if rear_cam_video_resolution:
+            cam_specs.rear_cam_video_resolution = rear_cam_video_resolution.strip()[:50]
+        front_single = data_dict.get('selfie camera-single')
+        front_features = data_dict.get('selfie camera-features')
+        if features: features = front_features.strip()
+        if front_single and len(front_single.strip()) > 0:
+            cam_specs.front_cam_lenses = 1
+            # TODO check if the len > 255 strip [:254]
+            front_mp = front_single.strip() + '- Features: ' + front_features
+            cam_specs.rear_cam_megapixel = front_mp[:254]
+            # cam_specs.front_cam_megapixel = front_single.strip() + '- Features: ' + front_features
+        elif data_dict.get('selfie camera-double'):
+            cam_specs.front_cam_lenses = 2
+            # TODO check if the len > 255 strip [:254]
+            front_mp = data_dict.get('selfie camera-double').strip() + '- Features: ' + front_features
+            cam_specs.rear_cam_megapixel = front_mp[:254]
+        front_cam_video_resolution = data_dict.get('selfie camera-video')
+        if front_cam_video_resolution:
+            cam_specs.front_cam_video_resolution = front_cam_video_resolution.strip()[:50]
+        cam_specs.save()
+        print('Saved Camera Specs for ', mobile)
 
 
 class GadgetsMobileSpecSpider:
     def __init__(self, brand_name_):
-        self.headers = {'User-agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:61.0) Gecko/20100101 Firefox/61.0'}
+        # self.headers = {'User-agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:61.0) Gecko/20100101 Firefox/61.0'}
+        self.headers = HeaderFactory()
         self.brand_name = brand_name_
         self.proxies = get_proxies()
 
-
-    def fetch_mob_specs(self):
+    def fetch_mobile_specs(self):
         brand = MobileBrand.objects.get(name__iexact=self.brand_name)
-        mobiles = Mobile.objects.filter(Q(brand=brand),Q(url__icontains='gadgets'))
-        import pdb; pdb.set_trace()
+        # updated_urls = Mobile.objects.filter(Q(brand=brand),Q(url__icontains='gadgets'))
+        # import pdb; pdb.set_trace()
+        # Read the file 
+        with open('to_fetch_mobile_specs.txt', 'r') as f:
+            lines = f.readlines()
         proxy_pool = cycle(self.proxies)
         # check the index and change sleep time to avoid regular intervals
-        for index, mobile in enumerate(updated_urls):
-            if not mobile.url:
-                # unrequired check. All mobiles have urls to this point
-                continue
+        for index, l in enumerate(lines):
             try:
+                name = l.strip('\n')
+                qs = Mobile.objects.filter(
+                    Q(full_name=name),
+                    Q(brand=brand),
+                    Q(url__icontains='gadgets'))
+                mobile = qs[0]
+                # we are scraping for MobileTechnicalSpecs, 
+                # if the mobile aleady has the specs then continue to the next 
+                if MobileTechnicalSpecification.objects.filter(mobile=mobile):
+                    # unrequired check. All mobiles have urls to this point
+                    continue
                 proxy = next(proxy_pool)
-                print("Request # %d"%index)
-                response = requests.get(url=mobile.url, 
+                header = self.headers.get_header()
+                print(f'Sending Request # {index} for mobile = {mobile} with proxy = {proxy} and headers = \n {header}')
+                response = requests.get(
+                    url=mobile.url, 
                     proxies={"http": proxy, "https": proxy}, 
-                    headers=self.headers,
+                    headers=header,
                 )
                 soup = BeautifulSoup(response.content, 'html.parser')
                 divs = soup.find_all('div', {'class', '_gry-bg _spctbl _ovfhide'})
@@ -159,20 +402,22 @@ class GadgetsMobileSpecSpider:
                 print('Saved CAMERA specifications for: ', mobile)
                 self.save_variations(data_dict, mobile)
                 print('Saved VARIATIONS for: ', mobile)
-            if index % 20 == 0:
-                # after every 20 requests update the proxy list 
-                # in order to avoid dead proxies
-                # # TODO check if the proxy is dead then use 
-                # another proxy before making the request
-                self.proxies = get_proxies()
-                proxy_pool = cycle(self.proxies)
-
-            if index % 3 == 0:
-                time.sleep(30)
-            else:
-                time.sleep(20)
-            print('Went to sleep')
+                if index !=0 and index % 10 == 0:
+                    # after every 10 requests update the proxy list 
+                    # in order to avoid dead proxies
+                    self.proxies = get_proxies()
+                    print('Got new proxy pool')
+                    proxy_pool = cycle(self.proxies)
+                if index % 3 == 0:
+                    time.sleep(20)
+                else:
+                    time.sleep(10)
+                print('Went to sleep')
             except Exception as e:
+                # Save the unsaved mobile in a file for later retry
+                with open('to_fetch_mobile_specs.txt', 'a') as f:
+                    f.write(str(mobile))
+                    f.write('\n')
                 print(f'Exception occured while fetching specs for {mobile}', e)
                 continue
 
@@ -271,14 +516,32 @@ class GadgetsMobileSpecSpider:
         mob_specs.save()
 
 # ////////////////////////////////////////////
+# mobile
 # two_g
 # three_g
 # four_g
-# taleVoLTE
-# screen_type TODO
+# five_g    - Network 	Technology
+# WiFi      - Comms 	WLAN
+# dual_sim  - BODY SIM
+# dimensions - BODY Dimensions
+# weight     - BODY Weight
+# screen_type - DISPLAY Type
+# screen_size - DISPLAY Size
+# screen_resolution - DISPLAY Resolution
 # ip_certification
-# wireless_charging
-# fast_charging
-# chipset
-# operating_system
-# ram
+# internal_storage  - Memory 	Internal
+# external_storage  - Memory 	Card slot
+# WLAN              - Comms 	WLAN
+# bluetooth         - Comms 	Bluetooth
+# NFC               - Comms 	NFC (BooleanField)
+# USB               - Comms 	USB
+# battery_type      - Battery 	Type
+# wireless_charging - Battery Charging (Extract) if there is wireless written then write yes
+# fast_charging     - Battery Charging
+# chipset           - Platform Chipset
+# operating_system  - Platform 	OS
+# ram               - Memory 	Internal (extract from this)
+# Launch 	Announced + Launch 	Status
+
+# Variation memory and color
+# 

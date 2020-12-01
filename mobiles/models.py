@@ -49,7 +49,8 @@ class Mobile(models.Model):
 
 class MobileTechnicalSpecification(models.Model):
     mobile                      = models.ForeignKey("Mobile", 
-                                  on_delete=models.CASCADE)
+                                  on_delete=models.CASCADE, 
+                                  related_name='technical_specs')
     two_g                       = models.BooleanField(blank=True, null=True)
     three_g                     = models.BooleanField(blank=True, null=True) 
     four_g                      = models.BooleanField(blank=True, null=True)
@@ -57,38 +58,42 @@ class MobileTechnicalSpecification(models.Model):
     WiFi                        = models.BooleanField(blank=True, null=True)
     dual_sim                    = models.BooleanField(blank=True, null=True)
     dimensions                  = models.CharField(_("Dimensions"), 
-                                  max_length=50, blank=True, null=True)
+                                  max_length=255, blank=True, null=True)
     weight                      = models.CharField(_("Weight"), 
-                                  max_length=50, blank=True, null=True)
+                                  max_length=255, blank=True, null=True)
     screen_type                 = models.CharField(_("Screen Type"), 
-                                  max_length=50, blank=True, null=True)
+                                  max_length=255, blank=True, null=True)
     screen_size                 = models.CharField(_("Screen Size"), 
-                                  max_length=50, blank=True, null=True)
+                                  max_length=255, blank=True, null=True)
     screen_resolution           = models.CharField(_("Screen Resolution"), 
-                                  max_length=50, blank=True, null=True)
+                                  max_length=255, blank=True, null=True)
     ip_certification            = models.CharField(_("IP Certification"), 
-                                  max_length=50, blank=True, null=True)
+                                  max_length=255, blank=True, null=True)
     internal_storage            = models.CharField(_("Internal Storage"), 
-                                  max_length=50, blank=True, null=True)
+                                  max_length=255, blank=True, null=True)
     external_storage            = models.CharField(_("External Storage"), 
-                                  max_length=50, blank=True, null=True)
+                                  max_length=255, blank=True, null=True)
     WLAN                        = models.CharField(_("WLAN"), 
-                                  max_length=50, blank=True, null=True)
+                                  max_length=255, blank=True, null=True)
     bluetooth                   = models.CharField(_("Bluetooth"), 
-                                  max_length=50, blank=True, null=True)
+                                  max_length=255, blank=True, null=True)
     NFC                         = models.BooleanField(default=False)
     USB                         = models.CharField(_("USB"), 
-                                  max_length=50, blank=True, null=True)
+                                  max_length=255, blank=True, null=True)
+    battery_type                = models.CharField(_("Battery Type"), 
+                                  max_length=255, blank=True, null=True)
     wireless_charging           = models.CharField(_("Wireless Charging"), 
-                                  max_length=50, blank=True, null=True)
+                                  max_length=255, blank=True, null=True)
     fast_charging               = models.CharField(_("Fast Charging"), 
-                                  max_length=50, blank=True, null=True)
+                                  max_length=255, blank=True, null=True)
     chipset                     = models.CharField(_("Chipset"), 
-                                  max_length=50, blank=True, null=True)
+                                  max_length=255, blank=True, null=True)
     operating_system            = models.CharField(_("Operating System"), 
-                                  max_length=50, blank=True, null=True)
+                                  max_length=255, blank=True, null=True)
     ram                         = models.CharField(_("RAM"), 
-                                  max_length=50, blank=True, null=True)
+                                  max_length=255, blank=True, null=True)
+    launch                      = models.CharField(_("Launch"), 
+                                  max_length=255, blank=True, null=True)
 
     def __str__(self):
         return self.mobile.name
@@ -96,23 +101,24 @@ class MobileTechnicalSpecification(models.Model):
 
 class MobileCameraSpecification(models.Model):
     mobile                      = models.ForeignKey("Mobile", 
-                                  on_delete=models.CASCADE)
+                                  on_delete=models.CASCADE,
+                                  related_name='camera_specs')
     rear_cam_lenses             = models.IntegerField(_("rear_camera_lenses"), 
                                   blank=True, null=True)
     rear_cam_megapixel          = models.CharField(_("rear_camera_megapixel"), 
                                   max_length=255, blank=True, null=True)
     back_cam_aperture           = models.CharField(_("Rear Camera Aperture"), 
-                                  max_length=30, blank=True, null=True)
+                                  max_length=50, blank=True, null=True)
     rear_cam_video_resolution   = models.CharField(_("rear_camera_video_resolution"), 
-                                  max_length=30, blank=True, null=True)
+                                  max_length=50, blank=True, null=True)
     front_cam_lenses            = models.IntegerField(_("front_camera_lenses"),
                                   blank=True, null=True)
     front_cam_megapixel         = models.CharField(_("front_camera_megapixel"), 
                                   max_length=255, blank=True, null=True)
     front_cam_aperture          = models.CharField(_("front_camera_aperture"), 
-                                  max_length=30, blank=True, null=True)
+                                  max_length=50, blank=True, null=True)
     front_cam_video_resolution  = models.CharField(_("front_camera_video_resolution"), 
-                                  max_length=30, blank=True, null=True) 
+                                  max_length=50, blank=True, null=True) 
 
     def __str__(self):
         return self.mobile.name
@@ -137,7 +143,7 @@ class MobileVariation(models.Model):
     """Store the actual values for each variation. e.g. Color of a 
     mobile can be blue, red, green. Memory can be 32, 64, 128."""
     variation   = models.ForeignKey(Variation, on_delete=models.CASCADE)
-    value       = models.CharField(_("value"), max_length=50)  # S, M, L
+    value       = models.CharField(_("value"), max_length=255)  # S, M, L
     # attachment = models.ImageField(blank=True)
 
     class Meta:

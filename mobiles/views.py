@@ -24,11 +24,12 @@ class MobileDetailView(View):
         mobile = Mobile.objects.get(slug=slug)        
         offers = Offer.objects.filter(Q(mobile=mobile) | 
                                       Q(mobile__name__iexact=mobile.name))
-        specs = MobileTechnicalSpecification.objects.filter(mobile=mobile)
-        variation = mobile.variation_set.all()
+        # specs = MobileTechnicalSpecification.objects.filter(mobile=mobile)
+        specs = mobile.technical_specs.all()
+        variation = Variation.objects.filter(mobile=mobile)
         # TODO get the variation values from MobileVariation
         if specs: specs = specs[0]
-        cam = mobile.mobilecameraspecification_set.all()
+        cam = mobile.camera_specs.all()
         if cam: cam = cam[0]
         context = {
                 'mobile': mobile,
