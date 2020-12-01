@@ -1,16 +1,18 @@
 {% extends 'base.html' %}
 {% load i18n %}
+{% load static %}
+{% block extra_head %}
+        <link rel='stylesheet' href="{% static '/main.css'%}">
+{% endblock %}
 
 {% block title %} {% translate "Offers" %} | {{ block.super }}
 {% endblock title %}
 
 {% block content %}
-<div style="display:flex; flex-direction:column; align-items:center; 
-        align-self:center; justify-self:center">
-        <h1 class="" style="font-weight:bold; font-family:sans-serif; color:#000061"">
+<div class='offer_list_container' style="">
+        <h1 class="offer-header" style="">
                 {% trans "POPULAR OFFERS" %}<h1>
-        <div class='m-4' style="border-bottom: 0.5px solid orange; padding:0.2em; 
-                display:flex; align-items:center; justify-content:center">
+        <div class='company-list'>
                 <form method='GET' action=''>
                         <input name="offer" class="btn btn-info m-1" 
                         type="submit" value='All'/>
@@ -22,54 +24,13 @@
                         {% endfor %}
                 </form>
         </div>
-                {% comment %} <div><a class="btn btn-info m-1"  href={{ obj.get_absolute_url }}>{% trans 'View All Offers' %}</a>
-                <a class="btn btn-info m-1"  href={{ obj.get_absolute_url }}>{% trans 'View Popular Offers' %}</a></div> {% endcomment %}
-                {% comment %} {% for obj in object_list %}
-                        <a class="btn btn-outline-info m-1"  href={{ obj.get_absolute_url }}>{{obj}}</a>
-                {% endfor %} {% endcomment %}
-                {% comment %} <h3>{% trans "Popular Offers" %}</h3> {% endcomment %}
-        <div class="card-group m-5" style="justify-content:center">
-                {% comment %} <div class="container-fluid"> {% endcomment %}
-                {% comment %} <div class="row"> {% endcomment %}
+        <div class="card-group" style="">
                 {% if not object_list %}
                 <h3>{% trans "No Offers Here" %}<h3>
                 {% endif %}
                 {% for offer in object_list %}
-
-                <div class="col-auto">
-                        {% comment %} {{ forloop.counter }} {% endcomment %}
-                        <div class="card border-success mb-3" style="width: 20rem; 
-                                height: 25rem;">
-                                <div class="card-header bg-dark border-success"
-                                        style="text-align:center; font-size:1.2rem;
-                                        color:white">
-                                        {% trans "Discount"%}{% if offer.discount_offered %}: 
-                                        {{offer.discount_offered}}.kr{% endif %}
-                                </div>
-                                <div class="card-body text-success" style="display:flex;
-                                        flex-direction:column; align-items:center; justify-content:center;
-                                        font-size:1.3rem">
-                                        <div>
-                                                <img class="w-50 p-0" src={{offer.mobile.image.url | 
-                                                default:'/media/mobiles/12_lxfJKMZ.jpg' }}>
-                                        </div>
-                                        <h5 class="card-title">{% if offer.mobile %}
-                                                {{offer.mobile.name}} {% elif offer.mobile_name %}
-                                                {{ offer.mobile_name }}{% endif %}
-                                        </h5>
-                                        <h5 class="card-text"><small>{% translate "Telecom Company" %}</small></h5>
-                                        <p>{{offer.telecom_company.name}}</p>
-                                </div>
-                                <div class="card-footer bg-warning border-success"
-                                        style="text-align:center; font-size:1rem; color:#000061"">
-                                        {% if offer.price %}
-                                        {{offer.price}} {% else %}{%trans "Offer" %} {% endif %}
-                                </div>
-                        </div>
-                </div>
+                {% include 'offer/offer_card_snippet.html' with offer=offer%}
                 {% endfor %}
-                {% comment %} </div {% endcomment %}
         </div>
-                {% comment %} </div> {% endcomment %}
 </div>
 {% endblock content %}

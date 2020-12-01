@@ -14,27 +14,27 @@
           <div class="mask rgba-black-strong d-flex justify-content-center align-items-center">
 
             <!-- Content -->
-            <div style="color: white" class="text-center white-text mt-5 mx-5 wow fadeIn">
-              <h1 class="mb-4">
+            <div style="color: white" class="text-center white-text mt-3 mx-5 wow fadeIn">
+              <h1 class="mb-3">
                 <strong>{% trans "Lets find you a new mobile" %}</strong>
               </h1>
-
-              <p>
+              {% comment %} <p>
                 <strong>{% trans 'A place where you find everything about your new mobile'%}</strong>
               </p>
 
-              <p class="mb-4 d-none d-md-block">
+              <p class="mb-3 d-none d-md-block">
                 <strong>{% trans 'Check out offers from different companies.' %}</strong>
                 <strong>{% trans "Compare the offers. Compare the mobiles. " %}</strong>
                 <strong>{% trans "And choose the one made exactly for you. " %}</strong>
-                <strong><br></strong>
-                <strong><br></strong>
-                <strong><br></strong>        
-                <strong><br></strong>        
-                <strong><br></strong>        
-                
+              </p> {% endcomment %}
+              <p>
+                {% trans 'A place where you find everything about your new mobile.'%}
               </p>
-
+              <p class="mb-3 d-none d-md-block">
+                {% trans 'Check out offers from different companies.' %}
+                {% trans "Compare the offers. Compare the mobiles. " %}
+                {% trans "And choose the one made exactly for you. " %}
+              </p>
               <a target="_blank" href="" class="btn btn-outline-white btn-lg">
                 <i class="fas fa-graduation-cap ml-2"></i>
               </a>
