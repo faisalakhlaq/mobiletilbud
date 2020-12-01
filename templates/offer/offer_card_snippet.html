@@ -1,0 +1,26 @@
+{% load i18n %}
+<div class="col-auto">
+    <div class="card offer-card" style="background-color:#e8f4f8">
+        <div class="card-header bg-transparent"
+            style="">
+            {% trans "Discount"%}{% if offer.discount_offered %}: 
+            {{offer.discount_offered}}.kr{% endif %}
+        </div>
+        <div class="card-body" style="">
+            <div class="mobile-image">
+                <img class="mob-image" src={{ offer.mobile.image.url | default:'/media/images/default_mobile_image.png' }}>
+            </div>
+            <h5 class="card-title m-3">{% if offer.mobile %}
+                {{offer.mobile.name}} {% elif offer.mobile_name %}
+                {{ offer.mobile_name }}{% endif %}
+            </h5>
+            <h5 class="card-text"><small>{% translate "Telecom Company" %}</small></h5>
+            <p>{{offer.telecom_company.name}}</p>
+        </div>
+        <div class="card-footer bg-transparent"
+            style="">
+            {% if offer.price %}
+            {{offer.price}} {% else %}{%trans "Offer" %} {% endif %}
+        </div>
+    </div>
+</div>
