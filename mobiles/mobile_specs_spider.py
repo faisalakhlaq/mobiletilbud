@@ -142,6 +142,7 @@ class GsmarenaMobileSpecSpider():
                     url=mobile.url, 
                     proxies={"http": proxy, "https": proxy}, 
                     headers=header,
+                    timeout=20, # timeout in 20 seconds in order to avoid hanging/freezing
                 )
                 soup = BeautifulSoup(response.content, 'html.parser')
                 tables = soup.find_all('table')
