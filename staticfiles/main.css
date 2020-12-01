@@ -8,10 +8,12 @@
 .offer-header{
     font-weight:bold; 
     font-family:sans-serif; 
-    color:#000061
+    color:#000061;
+    margin-top: -0.5em;
+    margin-bottom: 0.5em;
 }
 .company-list {
-    border-bottom: 0.5px solid orange; 
+    border-bottom: 2px solid #e8f4f8; 
     padding:0.2em; 
     display:flex; 
     align-items:center; 
