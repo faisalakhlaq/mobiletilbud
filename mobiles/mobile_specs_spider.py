@@ -1,4 +1,6 @@
+import asyncio
 from bs4 import BeautifulSoup
+from celery import shared_task
 from collections import OrderedDict
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
@@ -102,23 +104,55 @@ def get_proxies():
             #Grabbing IP and corresponding PORT
             proxy = ":".join([i.xpath('.//td[1]/text()')[0], i.xpath('.//td[2]/text()')[0]])
             # Try to get google.com with the proxy to check if this proxy is ok.
-            try:
-                print('Requesting google.com with proxy = ', proxy)
-                t = requests.get("https://www.google.com/", proxies={"http": proxy, "https": proxy}, timeout=5)
-                if t.status_code == requests.codes.ok:
-                    proxies.add(proxy)
-                    print('got a valid proxy')
-            except:
-                print('Invalid proxy = ', proxy)
-                pass
+            if valid_proxy(proxy):
+                proxies.add(proxy)
     return proxies
+
+# async def get_proxies():
+#     """Return 10 free https proxies by scraping free-proxy website"""
+#     url = 'https://free-proxy-list.net/'
+#     response = requests.get(url)
+#     parser = fromstring(response.text)
+#     proxies = set()
+#     tasks = []
+#     for i in parser.xpath('//tbody/tr'):
+#         if i.xpath('.//td[7][contains(text(),"yes")]'):
+#             #Grabbing IP and corresponding PORT
+#             proxy = ":".join([i.xpath('.//td[1]/text()')[0], i.xpath('.//td[2]/text()')[0]]) 
+#             tasks.append(check_proxy_validity(proxy))
+#         # if len(proxies) >= 10:
+#         # break
+#     responses = await asyncio.gather(*tasks, return_exceptions=True)
+#     proxies.add(responses)
+#     return proxies
+
+def valid_proxy(proxy):
+    """Check the validity of a proxy by sending 
+    get request to google using this proxy."""
+    try:
+        # print('Requesting google.com with proxy = ', proxy)
+        t = requests.get("https://www.google.com/", proxies={"http": proxy, "https": proxy}, timeout=10)
+        if t.status_code == requests.codes.ok:
+            print('got a valid proxy')
+            return True
+    except Exception as e:
+        print('Invalid proxy = ', proxy)
+        return False
 
 # TODO use logging
 class GsmarenaMobileSpecSpider():
     def __init__(self):
         self.headers = HeaderFactory()
-        self.proxies = get_proxies()
+        self.proxies = None
+        # Run main coroutine
+        # loop = asyncio.new_event_loop()
+        # asyncio.set_event_loop(loop)
+        # loop = asyncio.get_event_loop()
+        # self.proxies = loop.run_until_complete(get_proxies())
+        # self.proxies = asyncio.run(get_proxies())
+        # loop.close()
 
+    # @shared_task
     def fetch_mobile_specs(self, brand_name):
         """Get url links for all mobile in he given brand.
         If there is a link given for the mobile, fetch its
@@ -131,9 +165,12 @@ class GsmarenaMobileSpecSpider():
             return None
         # import pdb; pdb.set_trace()
         mobiles = Mobile.objects.filter(brand=brand)
+        self.proxies = get_proxies()
         proxy_pool = cycle(self.proxies)
         for index, mobile in enumerate(mobiles):
             try:
+                # TODO check if specs data is null by using
+                # MobileTechnicalSpecification.objects.filter(data__isnull=True)
                 if not mobile.url or MobileTechnicalSpecification.objects.filter(mobile=mobile): continue
                 proxy = next(proxy_pool)
                 header = self.headers.get_header()
@@ -151,7 +188,7 @@ class GsmarenaMobileSpecSpider():
                     new_rows = table.find_all('tr')
                     if new_rows: rows = rows + new_rows
                 self.extract_mobile_info(rows, mobile)
-                if index !=0 and index % 10 == 0:
+                if index !=0 and index % 20 == 0:
                     # after every 10 requests update the proxy list 
                     # in order to avoid dead proxies
                     self.proxies = get_proxies()
@@ -162,12 +199,19 @@ class GsmarenaMobileSpecSpider():
                 else:
                     time.sleep(10)
                 print('Went to sleep')
-            except Exception as e:
+            except Exception as e:                
                 print(f'Exception occured while fetching specs for {mobile}', e)
                 with open('to_fetch_motorola.txt', 'a') as f:
                     f.write(str(mobile))
                     f.write('\n')
                 continue
+                if index !=0 and index % 20 == 0:
+                    # after every 10 requests update the proxy list 
+                    # in order to avoid dead proxies
+                    self.proxies = get_proxies()
+                    print('Got new proxy pool')
+                    proxy_pool = cycle(self.proxies)
+
 
     def extract_mobile_info(self, rows, mobile):
         """Extract the data from the webpage 
@@ -276,7 +320,6 @@ class GsmarenaMobileSpecSpider():
 
     def save_variations(self, data_dict, mobile):
         # import pdb; pdb.set_trace()
-
         # Save the variations for color and memory
         variation, _ = Variation.objects.get_or_create(name='colour', mobile=mobile)
         color = data_dict.get('misc-colors')
@@ -300,43 +343,56 @@ class GsmarenaMobileSpecSpider():
         cam_specs = MobileCameraSpecification.objects.create(mobile=mobile)
         single = data_dict.get('main camera-single')
         features = data_dict.get('main camera-features')
-        if features: features = features.strip()
+        if features and len(features.strip()) > 0: 
+            features = features.strip()
         if single and len(single.strip()) > 0:
             cam_specs.rear_cam_lenses = 1
             # TODO check if the len > 255 strip [:254]
-            rear_mp = single.strip() + '- Features: ' + features
+            rear_mp = single.strip() 
+            if features:
+                rear_mp = rear_mp + '- Features: ' + features
             cam_specs.rear_cam_megapixel = rear_mp[:254]
         elif data_dict.get('main camera-double'):
             cam_specs.rear_cam_lenses = 2
             # TODO check if the len > 255 strip [:254]
-            rear_mp = data_dict.get('main camera-double').strip() + '- Features: ' + features
+            rear_mp = data_dict.get('main camera-double').strip() 
+            if features:
+                rear_mp = rear_mp + '- Features: ' + features
             cam_specs.rear_cam_megapixel = rear_mp[:254]
         elif data_dict.get('main camera-triple'):
             cam_specs.rear_cam_lenses = 3
-            rear_mp = data_dict.get('main camera-triple').strip() + '- Features: ' + features
+            rear_mp = data_dict.get('main camera-triple').strip() 
+            if features:
+                rear_mp = rear_mp + '- Features: ' + features
             cam_specs.rear_cam_megapixel = rear_mp[:254]
         elif data_dict.get('main camera-quad'):
             cam_specs.rear_cam_lenses = 4
             # TODO check if the len > 255 strip [:254]
-            rear_mp = data_dict.get('main camera-quad').strip() + '- Features: ' + features
+            rear_mp = data_dict.get('main camera-quad').strip()
+            if features:
+                rear_mp = rear_mp + '- Features: ' + features
             cam_specs.rear_cam_megapixel = rear_mp[:254]
         rear_cam_video_resolution = data_dict.get('main camera-video')
         if rear_cam_video_resolution:
             cam_specs.rear_cam_video_resolution = rear_cam_video_resolution.strip()[:50]
         front_single = data_dict.get('selfie camera-single')
         front_features = data_dict.get('selfie camera-features')
-        if features: features = front_features.strip()
+        if front_features and len(front_features.strip()) > 0: front_features = front_features.strip()
         if front_single and len(front_single.strip()) > 0:
             cam_specs.front_cam_lenses = 1
             # TODO check if the len > 255 strip [:254]
-            front_mp = front_single.strip() + '- Features: ' + front_features
-            cam_specs.rear_cam_megapixel = front_mp[:254]
+            front_mp = front_single.strip()
+            if front_features:
+                front_mp = front_mp + '- Features: ' + front_features
+            cam_specs.front_cam_megapixel = front_mp[:254]
             # cam_specs.front_cam_megapixel = front_single.strip() + '- Features: ' + front_features
         elif data_dict.get('selfie camera-double'):
             cam_specs.front_cam_lenses = 2
             # TODO check if the len > 255 strip [:254]
-            front_mp = data_dict.get('selfie camera-double').strip() + '- Features: ' + front_features
-            cam_specs.rear_cam_megapixel = front_mp[:254]
+            front_mp = data_dict.get('selfie camera-double').strip()
+            if front_features:
+                front_mp = front_mp + '- Features: ' + front_features
+            cam_specs.front_cam_megapixel = front_mp[:254]
         front_cam_video_resolution = data_dict.get('selfie camera-video')
         if front_cam_video_resolution:
             cam_specs.front_cam_video_resolution = front_cam_video_resolution.strip()[:50]

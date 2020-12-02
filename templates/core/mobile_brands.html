@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% load i18n %}
 
 {% block title %} {% trans "Mobile Brands" %} | {{ block.super }}
@@ -10,21 +10,52 @@
         <h3>{% trans "Explore Mobile Brands" %}<h3>
 
         <form method='GET' action=''>
-        <input name="mobile_brand" id="mobile_brand" class="btn btn-outline-info m-1" type="submit" value='ALL' />
-                {% for obj in object_list %}
-                        <input name="mobile_brand" id="mobile_brand" class="btn btn-outline-info m-1" type="submit" value={{obj}} />
-                {% endfor %}
+            <div><input name="mobile_brand" id="mobile_brand" class="btn btn-outline-info m-1" type="submit" value='Popular Mobiles' /></div>
+            {% for obj in object_list %}
+                    <input name="mobile_brand" id="mobile_brand" class="btn btn-outline-info m-1" type="submit" value={{obj}} />
+            {% endfor %}
         </form>
+
+        <form class='form' method='GET' action=''>
+            <input id='query' type='text' placeholder='Search..' 
+            name='query' value={{ request.GET.query}}>
+            <button id='search_btn' class='btn btn-default bg-dark text-light' type='submit'>Search</button>
+        </form>
+
         {% if mobile_list %}
         <hr>
-        <h4>{% trans 'Mobiles from' %} {{mobile_brand}}</h4>
-        <b>{% translate "Select a Phone to Check Offers" %}</b>
-                <div class='selected-brand-mobile-list'>
-                        {% for mobile in mobile_list %}
-                                <a class="btn btn-outline-info m-1"  href={{ mobile.get_absolute_url }}>{{mobile}}</a>
-                                {% comment %} <button class="btn btn-outline-info" action="{{mobile.get_absolute_url}}">{{mobile}}</button> {% endcomment %}
-                        {% endfor %}
-                </div>
+        <h4>{{mobile_brand}} {% trans '- Mobiles' %} </h4>
+        <b>{% translate "Select a Phone to Check Details and Offers" %}</b>
+            <div class='selected-brand-mobile-list'>
+                {% for mobile in mobile_list %}
+                    <a class="btn btn-outline-info m-1"  href={{ mobile.get_absolute_url }}>{{mobile}}</a>
+                    {% comment %} <button class="btn btn-outline-info" action="{{mobile.get_absolute_url}}">{{mobile}}</button> {% endcomment %}
+                {% endfor %}
+            </div>
         {% endif %}
 </div>
 {% endblock content %}
+{% block extra_scripts %}
+
+<script>
+  $(function() {
+    $( "#query" ).autocomplete({
+      source: "/mobile_search_auto_complete",
+      select: function (event, ui) { //item selected
+        AutoCompleteSelectHandler(event, ui)
+      },
+      minLength: 2,
+    });
+  });
+  function AutoCompleteSelectHandler(event, ui)
+  {
+    var selectedObj = ui.item;
+  }
+  // TODO call the below function if the user has
+  // click / choosen one option from given list
+  function SearchHandler()
+  {
+    $( "#search_btn" ).click()
+  }
+</script>
+{% endblock extra_scripts %}

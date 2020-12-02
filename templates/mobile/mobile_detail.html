@@ -8,7 +8,9 @@
 {% block content %}
 <div class='mt-5 text-center justify-content-center'>
     {% comment %} {% if mobile.image %} {% endcomment %}
-        <img src={{ mobile.image.url | default:'/media/mobiles/12_lxfJKMZ.jpg' }}>
+        {% comment %} <img class="mob-image" src={{ offer.mobile.image.url | default:'/media/images/default_mobile_image.png' }}> {% endcomment %}
+
+        <img src={{ mobile.image.url | default:'/media/images/default_mobile_image.png' }}>
     {% comment %} {% endif %} {% endcomment %}
 <h3>{% if mobile.full_name %}{{mobile.full_name}} {% else %}
                         {{ mobile.name }}{% endif %}<h3>

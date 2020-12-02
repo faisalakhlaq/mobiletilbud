@@ -16,6 +16,7 @@ include/
 include
 TODOs-quidelines-ideas
 datadump.json
+test_program.py
 # ####################################### #
 # windows files
 Scripts
