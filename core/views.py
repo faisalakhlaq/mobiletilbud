@@ -22,7 +22,8 @@ class HomeView(View):
         context = {}
         return render(self.request, 'home.html', context)
         # TODO get all the offers and display 10 with the
-        # highest Discount value. Need a float discount field Offer
+        # highest Discount value. Need a float discount field Offer.
+        # Display 10 most popular mobiles
 
 class MobileManufacturersView(ListView):
     template_name = 'core/mobile_brands.html'
@@ -46,7 +47,8 @@ def get_mobile_auto_complete(request):
     Return 5 matching names."""
     if request.is_ajax():
         query = request.GET.get('term', '')
-        mobile_list = Mobile.objects.filter(name__icontains=query.strip())[:5]
+        mobile_list = Mobile.objects.filter(Q(name__icontains=query.strip()) | 
+                                            Q(full_name__icontains=query.strip()))[:5]
         results = []
         for rs in mobile_list:
             mobile_json = {}

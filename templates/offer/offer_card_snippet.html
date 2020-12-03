@@ -1,5 +1,5 @@
 {% load i18n %}
-<div class="col-auto">
+<a class="col-auto offer_card_a" href={{ offer.get_absolute_url }}>
     <div class="card offer-card" style="background-color:#e8f4f8">
         <div class="card-header bg-transparent"
             style="">
@@ -23,4 +23,4 @@
             {{offer.price}} {% else %}{%trans "Offer" %} {% endif %}
         </div>
     </div>
-</div>
+</a>

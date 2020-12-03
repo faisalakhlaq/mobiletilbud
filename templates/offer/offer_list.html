@@ -10,27 +10,55 @@
 
 {% block content %}
 <div class='offer_list_container' style="">
-        <h1 class="offer-header" style="">
-                {% trans "POPULAR OFFERS" %}<h1>
-        <div class='company-list'>
-                <form method='GET' action=''>
-                        <input name="offer" class="btn btn-info m-1" 
-                        type="submit" value='All'/>
-                        <input name="offer" class="btn btn-info m-1" 
-                        type="submit" value='Popular' />
-                        {% for tele_company in tele_companies %}
-                                <input name="company" class="btn btn-info m-1" 
-                                type="submit" value={{tele_company}} />
-                        {% endfor %}
-                </form>
-        </div>
-        <div class="card-group" style="">
-                {% if not object_list %}
-                <h3>{% trans "No Offers Here" %}<h3>
-                {% endif %}
-                {% for offer in object_list %}
-                {% include 'offer/offer_card_snippet.html' with offer=offer%}
-                {% endfor %}
-        </div>
+    <h1 class="offer-header" style="">
+        {% trans "POPULAR OFFERS" %}<h1>
+    <div class='company-list'>
+        <form method='GET' action=''>
+            <input name="offer" class="btn btn-info m-1" 
+            type="submit" value='All'/>
+            <input name="offer" class="btn btn-info m-1" 
+            type="submit" value='Popular' />
+            {% for tele_company in tele_companies %}
+                <input name="company" class="btn btn-info m-1" 
+                type="submit" value={{tele_company}} />
+            {% endfor %}
+        </form>
+    </div>
+    <div class='search-field'><form class='form' method='GET' action=''>
+        <input id='query' type='text' placeholder='Search..' 
+        name='query' value={{ request.GET.query}}>
+        <button id='search_btn' class='btn btn-default bg-dark text-light' type='submit'>Search</button>
+    </form></div>
+    <div class="card-group" style="">
+        {% if not object_list %}
+        <h3>{% trans "No Offers Here" %}<h3>
+        {% endif %}
+        {% for offer in object_list %}
+        {% include 'offer/offer_card_snippet.html' with offer=offer%}
+        {% endfor %}
+    </div>
 </div>
 {% endblock content %}
+{% block extra_scripts %}
+<script>
+  $(function() {
+    $( "#query" ).autocomplete({
+      source: "/tilbud_search_auto_complete",
+      select: function (event, ui) { //item selected
+        AutoCompleteSelectHandler(event, ui)
+      },
+      minLength: 2,
+    });
+  });
+  function AutoCompleteSelectHandler(event, ui)
+  {
+    var selectedObj = ui.item;
+  }
+  // TODO call the below function if the user has
+  // click / choosen one option from given list
+  function SearchHandler()
+  {
+    $( "#search_btn" ).click()
+  }
+</script>
+{% endblock extra_scripts %}

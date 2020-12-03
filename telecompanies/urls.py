@@ -1,7 +1,7 @@
 from django.urls import path
 
 from .views import (PopularOffersView, OfferDetailView, CompareOffersView, 
-TelecomCompaniesView)
+TelecomCompaniesView, get_tilbud_auto_complete)
 
 app_name = 'telecompanies'
 
@@ -12,5 +12,7 @@ urlpatterns = [
     path('compare-offers/', CompareOffersView.as_view(), 
     name='compare-offers'),
     path('offer-detail/<slug>', OfferDetailView.as_view(), 
-    name='offer-detail'),   
+    name='offer-detail'),
+    path('tilbud_search_auto_complete/', get_tilbud_auto_complete, 
+    name='tilbud_search_auto_complete'),    
 ]

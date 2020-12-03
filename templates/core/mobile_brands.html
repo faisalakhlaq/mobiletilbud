@@ -15,13 +15,11 @@
                     <input name="mobile_brand" id="mobile_brand" class="btn btn-outline-info m-1" type="submit" value={{obj}} />
             {% endfor %}
         </form>
-
         <form class='form' method='GET' action=''>
             <input id='query' type='text' placeholder='Search..' 
             name='query' value={{ request.GET.query}}>
             <button id='search_btn' class='btn btn-default bg-dark text-light' type='submit'>Search</button>
         </form>
-
         {% if mobile_list %}
         <hr>
         <h4>{{mobile_brand}} {% trans '- Mobiles' %} </h4>
@@ -36,7 +34,6 @@
 </div>
 {% endblock content %}
 {% block extra_scripts %}
-
 <script>
   $(function() {
     $( "#query" ).autocomplete({

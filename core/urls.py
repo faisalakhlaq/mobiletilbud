@@ -8,6 +8,6 @@ urlpatterns = [
       path('', HomeView.as_view(), name='home'),
       path('mobile-brands/', MobileManufacturersView.as_view(), 
             name='mobile-brands'),
-      path('mobile_search_auto_complete', get_mobile_auto_complete, 
+      path('mobile_search_auto_complete/', get_mobile_auto_complete, 
             name='mobile_search_auto_complete'),
 ]

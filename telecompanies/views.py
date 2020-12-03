@@ -1,6 +1,9 @@
+from django.db.models import Q
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView, View
+from django.http import HttpResponse
 from itertools import chain
+import json
 
 from telecompanies.models import Offer, TelecomCompany
 
@@ -35,9 +38,11 @@ class PopularOffersView(ListView):
     def get_queryset(self):
         offer_type = self.request.GET.get('offer')
         company = self.request.GET.get('company')
-
+        query = self.request.GET.get('query')
         all_offers = Offer.objects.all()
-        if offer_type and offer_type != 'All':
+        if query and len(query.strip()) > 0:
+            return all_offers.filter(mobile__name__icontains=query.strip())
+        elif offer_type and offer_type == 'Popular':
             return self.get_popular_offers(all_offers)
         elif company:
             return all_offers.filter(telecom_company__name__iexact=company.strip())         
@@ -86,5 +91,27 @@ class CompareOffersView(View):
             'telenor_offers': telenor_offers,
             'telia_offers': telia_offers,
             'three_offers': three_offers,
-        } 
+        }
         return context
+
+def get_tilbud_auto_complete(request):    
+    """Search tilbud containing mobile names.
+    Return 5 matching names."""
+    data = 'fail'
+    mimetype = 'application/json'
+    if not request.is_ajax():
+        return HttpResponse(data, mimetype)
+    query = request.GET.get('term', '')
+    mobile_list = Offer.objects.select_related('mobile').filter(
+        Q(mobile__name__icontains=query.strip()) | 
+        Q(mobile__full_name__icontains=query.strip())).distinct('mobile')[:5]
+    # mobile_list = Offer.objects.filter(Q(mobile__name__icontains=query.strip()) | 
+    #                                     Q(mobile__full_name__icontains=query.strip()))[:5]
+    results = []
+    for rs in mobile_list:
+        mobile_json = {}
+        mobile_json = rs
+        mobile_json = rs.mobile.name
+        results.append(mobile_json)
+    data = json.dumps(results)
+    return HttpResponse(data, mimetype)
