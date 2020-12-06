@@ -44,7 +44,7 @@ class PopularOffersView(ListView):
         if query and len(query.strip()) > 0:
             return all_offers.filter(mobile__name__icontains=query.strip())
         elif offer_type and offer_type == 'Popular':
-            return self.get_popular_offers(offers=all_offers, offers_per_company=5)
+            return get_popular_offers(offers=all_offers, offers_per_company=5)
         elif company:
             return all_offers.filter(telecom_company__name__iexact=company.strip())         
         return all_offers

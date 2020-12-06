@@ -3,7 +3,7 @@
     flex-direction:column; 
     align-items:center; 
     align-self:center; 
-    justify-self:center;
+    justify-self:center
 }
 .offer-header{
     font-weight:bold; 
@@ -16,14 +16,15 @@
     padding:0.2em; 
     display:flex; 
     align-items:center; 
-    justify-content:center;
+    justify-content:center
 }
 .search-field{
     border-bottom: 2px solid #e8f4f8; 
     padding:0.2em; 
     display:flex; 
     align-items:center; 
-    justify-content:center;
+    justify-content:center
+
 }
 .card-group {
     justify-content:center;
@@ -33,7 +34,7 @@
     text-decoration: none !important;
 }
 .offer-card {
-    width: 10rem; 
+    width: 20rem; 
     height: 30rem;
     margin-bottom: 0.7em;
 }
