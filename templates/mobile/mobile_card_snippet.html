@@ -1,0 +1,19 @@
+{% load i18n %}
+<a class="col-auto offer_card_a" href={{ mobile.get_absolute_url }}>
+    <div class="card offer-card" style="background-color:#e8f4f8">
+        <div class="card-header bg-transparent"
+            style=""> 
+            {{mobile.full_name}}
+        </div>
+        <div class="card-body" style="">
+            <div class="mobile-image">
+                <img class="mob-image" src={{ mobile.image.url | default:'/media/images/default_mobile_image.png' }}>
+            </div>
+        </div>
+        <div class="card-footer bg-transparent"
+            style="">
+            {% if mobile.price %}
+            {% else %}{%trans "Price" %}{{mobile.price}} dkk {% endif %}
+        </div>
+    </div>
+</a>

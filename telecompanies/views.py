@@ -6,6 +6,7 @@ from itertools import chain
 import json
 
 from telecompanies.models import Offer, TelecomCompany
+from telecompanies.utils import get_popular_offers
 
 class TelecomCompaniesView(View):
     def get(self, *args, **kwargs):
@@ -43,7 +44,7 @@ class PopularOffersView(ListView):
         if query and len(query.strip()) > 0:
             return all_offers.filter(mobile__name__icontains=query.strip())
         elif offer_type and offer_type == 'Popular':
-            return self.get_popular_offers(all_offers)
+            return self.get_popular_offers(offers=all_offers, offers_per_company=5)
         elif company:
             return all_offers.filter(telecom_company__name__iexact=company.strip())         
         return all_offers
@@ -52,30 +53,6 @@ class PopularOffersView(ListView):
         context = super(PopularOffersView, self).get_context_data(**kwargs)
         context["tele_companies"] = TelecomCompany.objects.all()
         return context
-    
-    def get_popular_offers(self, all_offers):
-        """Returns highest discount offers. 
-        5 from each telecomcompany."""
-        telenor_best_offer = all_offers.filter(
-            telecom_company__name__iexact='Telenor').order_by('-discount_offered')
-        if not telenor_best_offer:
-            telenor_best_offer = all_offers.filter(telecom_company__name__iexact='Telenor')
-        if telenor_best_offer and len(telenor_best_offer) > 5:
-            telenor_best_offer = telenor_best_offer[:5]
-        three_best_offer = all_offers.filter(
-            telecom_company__name__iexact='3').order_by('-discount_offered')
-        if not three_best_offer:
-            three_best_offer = all_offers.filter(telecom_company__name__iexact='3')
-        if three_best_offer and len(three_best_offer) > 5:
-            three_best_offer = three_best_offer[:5]
-        telia_best_offer = all_offers.filter(
-            telecom_company__name__iexact='Telia').order_by('-discount_offered')[:5]
-        if not telia_best_offer:
-            telia_best_offer = all_offers.filter(telecom_company__name__iexact='Telia')
-        if telia_best_offer and len(telia_best_offer) > 5:
-            telia_best_offer = telia_best_offer[:5]
-        result_list = list(chain(telenor_best_offer, three_best_offer, telia_best_offer))
-        return result_list
 
 class CompareOffersView(View):
     def get(self, *args, **kwargs):

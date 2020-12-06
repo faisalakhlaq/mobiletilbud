@@ -7,9 +7,10 @@ from django.views.generic import ListView, View
 import json
 
 from .models import TelecomCompany
-from mobiles.models import Mobile, MobileBrand
-from telecompanies.spider import ThreeSpider, TelenorSpider, TeliaSpider
+from mobiles.models import Mobile, MobileBrand, PopularMobile
 from telecompanies.models import Offer
+from telecompanies.spider import ThreeSpider, TelenorSpider, TeliaSpider
+from telecompanies.utils import get_popular_offers
 
 # from mobiles.mobile_specs_spider import GsmarenaMobileSpecSpider
 # from mobiles.popular_mobile_spider import MobilkundenSpider
@@ -21,11 +22,20 @@ class HomeView(View):
         # MobilkundenSpider().fetch_popular_mobiles()
         # fetch_mobiles_task.delay('Motorola')
         # GsmarenaMobileSpecSpider().fetch_mobile_specs('Sony')
-        context = {}
-        return render(self.request, 'home.html', context)
-        # TODO get all the offers and display 10 with the
-        # highest Discount value. Need a float discount field Offer.
-        # Display 10 most popular mobiles
+        context = self.get_context_data(*kwargs)
+        return render(self.request, 'core/home.html', context)
+    
+    def get_context_data(self, **kwargs):
+        """Returns all the popular mobiles and one offer from 
+        each telecompany"""
+        popular_mobiles = PopularMobile.objects.all()
+        context = {
+            "popular_mobiles": popular_mobiles,
+        }
+        popular_offers = get_popular_offers(offers_per_company=2)
+        context['popular_offers'] = popular_offers
+        return context
+    
 
 class MobileManufacturersView(ListView):
     template_name = 'core/mobile_brands.html'

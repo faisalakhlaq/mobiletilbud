@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block content %}
+<class='home-container' div>
+    <div class="home-popular-mobiles" style="">
+        <h3>{% trans "Popular Mobiles" %}<h3>
+        {% for pm in popular_mobiles %}
+            {% include 'mobile/mobile_card_snippet.html' with mobile=pm.mobile %}
+        {% endfor %}
+    </div>
+    <div class="home-popular-offers" style="">
+        {% if offer_list %}{% endif %}
+        <h3>{% trans "Popular Offers" %}<h3>
+        {% for offer in popular_offers %}
+            {% include 'offer/offer_card_snippet.html' with offer=offer%}
+        {% endfor %}
+    </div>
+</div>
+{% endblock content %}
