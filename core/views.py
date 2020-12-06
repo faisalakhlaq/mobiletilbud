@@ -12,11 +12,13 @@ from telecompanies.spider import ThreeSpider, TelenorSpider, TeliaSpider
 from telecompanies.models import Offer
 
 # from mobiles.mobile_specs_spider import GsmarenaMobileSpecSpider
+# from mobiles.popular_mobile_spider import MobilkundenSpider
 # from telecompanies.spider import YouSeeSpider
 # from mobiles.tasks import fetch_mobiles_task
 
 class HomeView(View):
     def get(self, *args, **kwargs):
+        # MobilkundenSpider().fetch_popular_mobiles()
         # fetch_mobiles_task.delay('Motorola')
         # GsmarenaMobileSpecSpider().fetch_mobile_specs('Sony')
         context = {}

@@ -153,6 +153,20 @@ class MobileVariation(models.Model):
     def __str__(self):
         return self.value
 
+class PopularMobile(models.Model):
+    mobile = models.OneToOneField(
+        'Mobile',
+        on_delete=models.CASCADE,
+        primary_key=True,
+    )
+    created = models.DateTimeField(_("Created"), auto_now_add=True)
+
+    def get_absolute_url(self):
+        return self.mobile.get_absolute_url()
+    
+    def __str__(self):
+        return self.mobile.name
+
 
 def pre_save_receiver(sender, instance, *args, **kwargs):
     if not instance.slug:

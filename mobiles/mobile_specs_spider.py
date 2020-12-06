@@ -1,7 +1,5 @@
-import asyncio
 from bs4 import BeautifulSoup
 from celery import shared_task
-from collections import OrderedDict
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 import requests
@@ -9,138 +7,11 @@ import random
 import time
 from .models import (Mobile, MobileBrand, MobileTechnicalSpecification,
                      MobileCameraSpecification, MobileVariation, Variation)
-from lxml.html import fromstring
 from itertools import cycle
 
 
-class HeaderFactory:
-    """Contains a list of headers with updated User-Agents."""
-    def __init__(self):
-        self.headers_list = [
-            {
-                'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:83.0) Gecko/20100101 Firefox/83.0',
-                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-                'Accept-Language': 'en-US,en;q=0.5',
-                'Referer': 'https://www.google.com/',
-                'DNT': '1',
-                'Connection': 'keep-alive',
-                'Upgrade-Insecure-Requests': '1',
-                'If-Modified-Since': 'Sun, 29 Nov 2020 21:16:58 GMT',
-                'Cache-Control': 'max-age=0',
-            },
-        # Firefox 83 Mac
-            {
-                "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:83.0) Gecko/20100101 Firefox/83.0",
-                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
-                "Accept-Language": "en-US,en;q=0.5",
-                'Referer': 'https://www.google.com/',
-                "DNT": "1",
-                "Connection": "keep-alive",
-                "Upgrade-Insecure-Requests": "1"
-            },
-            # Firefox 83 Windows
-            {
-                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:83.0) Gecko/20100101 Firefox/83.0",
-                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
-                "Accept-Language": "en-US,en;q=0.5",
-                "Accept-Encoding": "gzip, deflate, br",
-                'Referer': 'https://www.google.com/',
-                "DNT": "1",
-                "Connection": "keep-alive",
-                "Upgrade-Insecure-Requests": "1"
-            },
-            # Chrome 87 Mac
-            {
-                "Connection": "keep-alive",
-                "DNT": "1",
-                "Upgrade-Insecure-Requests": "1",
-                "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.66 Safari/537.36",
-                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
-                "Sec-Fetch-Site": "none",
-                "Sec-Fetch-Mode": "navigate",
-                "Sec-Fetch-Dest": "document",
-                "Referer": "https://www.google.com/",
-                "Accept-Encoding": "gzip, deflate, br",
-                "Accept-Language": "en-GB,en-US;q=0.9,en;q=0.8"
-            },
-            # Chrome 87 Windows 
-            {
-                "Connection": "keep-alive",
-                "Upgrade-Insecure-Requests": "1",
-                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.66 Safari/537.36",
-                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
-                "Sec-Fetch-Site": "same-origin",
-                "Sec-Fetch-Mode": "navigate",
-                "Sec-Fetch-User": "?1",
-                "Sec-Fetch-Dest": "document",
-                "Referer": "https://www.google.com/",
-                "Accept-Encoding": "gzip, deflate, br",
-                "Accept-Language": "en-US,en;q=0.9"
-            },
-        ]
-        # Create ordered dict from Headers above
-        self.ordered_headers_list = []
-        for headers in self.headers_list:
-            h = OrderedDict()
-            for header,value in headers.items():
-                h[header]=value
-            self.ordered_headers_list.append(h)
-
-    def get_header(self):
-        """Returns a random header."""
-        #Pick a random browser headers
-        return random.choice(self.headers_list)
-
-def get_proxies():
-    """Return 10 free https proxies by scraping free-proxy website"""
-    url = 'https://free-proxy-list.net/'
-    response = requests.get(url)
-    parser = fromstring(response.text)
-    proxies = set()
-    for i in parser.xpath('//tbody/tr'):
-        if len(proxies) >= 10:
-            break
-        if i.xpath('.//td[7][contains(text(),"yes")]'):
-            #Grabbing IP and corresponding PORT
-            proxy = ":".join([i.xpath('.//td[1]/text()')[0], i.xpath('.//td[2]/text()')[0]])
-            # Try to get google.com with the proxy to check if this proxy is ok.
-            if valid_proxy(proxy):
-                proxies.add(proxy)
-    return proxies
-
-# async def get_proxies():
-#     """Return 10 free https proxies by scraping free-proxy website"""
-#     url = 'https://free-proxy-list.net/'
-#     response = requests.get(url)
-#     parser = fromstring(response.text)
-#     proxies = set()
-#     tasks = []
-#     for i in parser.xpath('//tbody/tr'):
-#         if i.xpath('.//td[7][contains(text(),"yes")]'):
-#             #Grabbing IP and corresponding PORT
-#             proxy = ":".join([i.xpath('.//td[1]/text()')[0], i.xpath('.//td[2]/text()')[0]]) 
-#             tasks.append(check_proxy_validity(proxy))
-#         # if len(proxies) >= 10:
-#         # break
-#     responses = await asyncio.gather(*tasks, return_exceptions=True)
-#     proxies.add(responses)
-#     return proxies
-
-def valid_proxy(proxy):
-    """Check the validity of a proxy by sending 
-    get request to google using this proxy."""
-    try:
-        # print('Requesting google.com with proxy = ', proxy)
-        t = requests.get("https://www.google.com/", proxies={"http": proxy, "https": proxy}, timeout=10)
-        if t.status_code == requests.codes.ok:
-            print('got a valid proxy')
-            return True
-    except Exception as e:
-        print('Invalid proxy = ', proxy)
-        return False
-
 # TODO use logging
-class GsmarenaMobileSpecSpider():
+class GsmarenaMobileSpecSpider:
     def __init__(self):
         self.headers = HeaderFactory()
         self.proxies = None
