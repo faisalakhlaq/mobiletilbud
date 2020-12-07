@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-import asyncio
+# import asyncio
 from bs4 import BeautifulSoup
 from django.db.models import Q
 import requests

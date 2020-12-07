@@ -56,7 +56,8 @@ class PopularOffersView(ListView):
         query = self.request.GET.get('query')
         all_offers = Offer.objects.all().order_by('updated')
         if query and len(query.strip()) > 0:
-            return all_offers.filter(mobile__name__icontains=query.strip())
+            return all_offers.filter(Q(mobile_name__icontains=query.strip()) |
+            Q(mobile__full_name__icontains=query.strip())).order_by('-mobile_name')
         elif offer_type and offer_type == 'Popular':
             return get_popular_offers(offers=all_offers, offers_per_company=5)
         elif company:
@@ -93,16 +94,18 @@ def get_tilbud_auto_complete(request):
     if not request.is_ajax():
         return HttpResponse(data, mimetype)
     query = request.GET.get('term', '')
-    mobile_list = Offer.objects.select_related('mobile').filter(
-        Q(mobile__name__icontains=query.strip()) | 
-        Q(mobile__full_name__icontains=query.strip())).distinct('mobile')[:5]
+    mobile_list = Offer.objects.values_list('mobile_name', flat=True).filter(
+        mobile_name__icontains=query.strip()).distinct('mobile_name')[:5]
+    # mobile_list = Offer.objects.select_related('mobile').filter(
+    #     Q(mobile__name__icontains=query.strip()) | 
+    #     Q(mobile__full_name__icontains=query.strip())).distinct('mobile')[:5]
     # mobile_list = Offer.objects.filter(Q(mobile__name__icontains=query.strip()) | 
     #                                     Q(mobile__full_name__icontains=query.strip()))[:5]
     results = []
     for rs in mobile_list:
         mobile_json = {}
         mobile_json = rs
-        mobile_json = rs.mobile.name
+        # mobile_json = rs.mobile.name
         results.append(mobile_json)
     data = json.dumps(results)
     return HttpResponse(data, mimetype)

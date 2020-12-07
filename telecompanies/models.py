@@ -15,6 +15,7 @@ class Offer(models.Model):
     telecom_company         = models.ForeignKey(TelecomCompany, 
                               verbose_name=_("Telecom Company"), 
                               on_delete=models.CASCADE)
+    # mobile name will refer to mobile full name = brand_name + mobile_name
     mobile_name             = models.CharField(_("Mobile Name"), 
                               max_length=50, blank=True, null=True)
     discount                = models.CharField(_("Discount"), max_length=50,

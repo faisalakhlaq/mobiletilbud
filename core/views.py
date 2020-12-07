@@ -11,7 +11,7 @@ import json
 from .models import TelecomCompany
 from mobiles.models import Mobile, MobileBrand, PopularMobile
 from telecompanies.models import Offer
-from telecompanies.spider import ThreeSpider, TelenorSpider, TeliaSpider
+# from telecompanies.tilbud_spider import ThreeSpider, TelenorSpider, TeliaSpider
 from telecompanies.utils import get_popular_offers
 
 # from mobiles.mobile_specs_spider import GsmarenaMobileSpecSpider
@@ -21,7 +21,7 @@ from telecompanies.utils import get_popular_offers
 
 class HomeView(View):
     def get(self, *args, **kwargs):
-        # MobilkundenSpider().fetch_popular_mobiles()
+        # TelenorSpider().get_telenor_offers()
         # fetch_mobiles_task.delay('Motorola')
         # GsmarenaMobileSpecSpider().fetch_mobile_specs('Sony')
         context = self.get_context_data(*kwargs)
@@ -47,7 +47,8 @@ class MobileManufacturersView(ListView):
         company = self.request.GET.get("brand")
         query = self.request.GET.get('query')            
         if query and len(query.strip()) > 0:
-            mobile_list = Mobile.objects.filter(name__icontains=query.strip()).order_by('-name')
+            return Mobile.objects.filter(Q(name__icontains=query.strip()) |
+            Q(full_name__icontains=query.strip())).order_by('-name')
         elif company:
             # If popular mobiles is not selected then a brand name is 
             # selected. Therefore, find the mobiles of the selected brand
@@ -65,7 +66,7 @@ class MobileManufacturersView(ListView):
             return Mobile.objects.filter(id__in = ids).order_by('-name')
     
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
+        context = super(MobileManufacturersView, self).get_context_data(**kwargs)
         company = self.request.GET.get("brand")
         query = self.request.GET.get('query')            
         if not company and not query:

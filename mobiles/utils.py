@@ -114,7 +114,7 @@ class ProxyFactory:
         try:
             t = requests.get("http://8.8.4.4", 
             proxies={"http": proxy, "https": proxy}, 
-            timeout=5)
+            timeout=10)
             if t.status_code == requests.codes.ok:
                 print('got a valid proxy')
                 return True

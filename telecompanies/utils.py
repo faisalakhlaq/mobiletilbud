@@ -2,6 +2,15 @@ from itertools import chain
 
 from telecompanies.models import Offer
 
+def has_child(node):
+    """Check if a given node has child nodes in it"""
+    # print(type(node))
+    try:
+        node.children
+        return True
+    except:
+        return False
+
 def get_popular_offers(offers=None, offers_per_company=1):
     """Returns highest discount offers. 
     number of offers_per_company for each telecomcompany."""

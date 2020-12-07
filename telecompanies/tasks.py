@@ -2,7 +2,7 @@
 from celery import shared_task
 from celery.utils.log import get_task_logger
 
-from telecompanies.spider import TelenorSpider, TeliaSpider, ThreeSpider
+from telecompanies.tilbud_spider import TelenorSpider, TeliaSpider, ThreeSpider
 
 logger = get_task_logger(__name__)
 

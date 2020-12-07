@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load i18n %}
+{% block extra_head %}
+        <link rel='stylesheet' href="{% static '/main.css'%}">
+{% endblock %}
 
 {% block title %} {% trans "Mobile Brands" %} | {{ block.super }}
 {% endblock title %}
@@ -13,11 +16,10 @@
             <div><input name="brand" id="brand" class="btn btn-outline-info m-1" type="submit" value='Popular Mobiles' /></div>
             {% for mobile_brand in mobile_brands %}
               {% if mobile_brand.image %}
-              <input 
-              style="background-image: url(' mobile_brand.image.url '); !important;
-               background-repeat: no-repeat;" 
-               name="brand" id="brand" class="btn btn-outline-info m-1" 
-               type="submit" value={{mobile_brand}}></button>
+              <button name="brand" id="brand" class="btn btn-outline-info m-1" 
+               type="submit" value={{mobile_brand}}>{{mobile_brand}}
+               <img class='brand-btn-icon' src={{mobile_brand.image.url}}/>
+               </button>
               {% else %}
               <input name="brand" id="brand" class="btn btn-outline-info m-1" type="submit" value={{mobile_brand}} />
               {% endif %}
