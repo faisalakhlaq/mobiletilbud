@@ -12,7 +12,15 @@
         <form method='GET' action=''>
             <div><input name="brand" id="brand" class="btn btn-outline-info m-1" type="submit" value='Popular Mobiles' /></div>
             {% for mobile_brand in mobile_brands %}
-                    <input name="brand" id="brand" class="btn btn-outline-info m-1" type="submit" value={{mobile_brand}} />
+              {% if mobile_brand.image %}
+              <input 
+              style="background-image: url(' mobile_brand.image.url '); !important;
+               background-repeat: no-repeat;" 
+               name="brand" id="brand" class="btn btn-outline-info m-1" 
+               type="submit" value={{mobile_brand}}></button>
+              {% else %}
+              <input name="brand" id="brand" class="btn btn-outline-info m-1" type="submit" value={{mobile_brand}} />
+              {% endif %}
             {% endfor %}
         </form>
         <form class='form' method='GET' action=''>
@@ -28,9 +36,7 @@
         <b>{% translate "Select a Phone to Check Details and Offers" %}</b>
             <div class='selected-brand-mobile-list'>
                 {% for mobile in mobile_list %}
-                {% comment %} <div class='offer_list_container'> {% endcomment %}
                     {% include 'mobile/mobile_card_snippet.html' with mobile=mobile %}
-                {% comment %} </div> {% endcomment %}
                 {% endfor %}
               </div>
         {% endif %}

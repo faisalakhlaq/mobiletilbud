@@ -30,7 +30,7 @@ class HomeView(View):
     def get_context_data(self, **kwargs):
         """Returns all the popular mobiles and one offer from 
         each telecompany"""
-        popular_mobiles = PopularMobile.objects.all()
+        popular_mobiles = PopularMobile.objects.all()[:10]
         context = {
             "popular_mobiles": popular_mobiles,
         }
