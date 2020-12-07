@@ -15,14 +15,10 @@
                 {% endfor %}
         </form>
         <h3>{% trans "Popular Offers" %}</h3>
-        {% comment %} <div class="card-group"> {% endcomment %}
         <b>Total Offers</b> {{offer_count}}
-        <div class="container-fluid">
-        <div class="row">
+        <div class="row container-fluid">
         {% for offer in offers %}
-        
             <div class="col-auto">
-        {% comment %} {{ forloop.counter }} {% endcomment %}
                 <div class="card border-success mb-3" style="max-width: 18rem;">
                         <div class="card-header bg-transparent border-success">
                         {% trans "Discount"%} {% if offer.discount %}:{{offer.discount}}{% endif %}</div>
@@ -36,10 +32,10 @@
                         <div class="card-footer bg-transparent border-success">{% if offer.price %}
                         {{offer.price}} {% else %}{%trans "Offer" %} {% endif %}</div>
                 </div>
-                </div>
+            </div>
         {% endfor %}
         </div>
-        </div>
-        {% comment %} </div> {% endcomment %}
 </div>
+{% include 'paginator_template.html' with page_obj=offers %}
+
 {% endblock content %}

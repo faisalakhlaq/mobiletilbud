@@ -6,7 +6,7 @@ def get_popular_offers(offers=None, offers_per_company=1):
     """Returns highest discount offers. 
     number of offers_per_company for each telecomcompany."""
     if not offers:
-        offers = Offer.objects.all()
+        offers = Offer.objects.all().order_by('updated')
     telenor_best_offer = offers.filter(
         telecom_company__name__iexact='Telenor').order_by('-discount_offered')
     if not telenor_best_offer:

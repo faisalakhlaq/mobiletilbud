@@ -1,7 +1,9 @@
 from django.conf import settings
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
+from django.utils.translation import gettext as _
 from django.views import View
 from django.views.generic import ListView, View
 import json
@@ -35,23 +37,49 @@ class HomeView(View):
         popular_offers = get_popular_offers(offers_per_company=2)
         context['popular_offers'] = popular_offers
         return context
-    
 
 class MobileManufacturersView(ListView):
     template_name = 'core/mobile_brands.html'
-    queryset = MobileBrand.objects.all()
+    queryset = PopularMobile.objects.all()[:5]
 
+    # TODO implement using the get_queryset
     def get_context_data(self, **kwargs):
         context = super(MobileManufacturersView, self).get_context_data(**kwargs)
-        company = self.request.GET.get("mobile_brand")
+        company = self.request.GET.get("brand")
         query = self.request.GET.get('query')            
         mobile_list = []
         if query and len(query.strip()) > 0:
-            mobile_list = Mobile.objects.filter(name__icontains=query.strip())
-        if company and company.strip() != 'Popular Mobiles':
-            mobile_list = Mobile.objects.filter(brand__name__iexact=company.strip())
-        context["mobile_brand"] = company or query
-        context["mobile_list"] = mobile_list 
+            mobile_list = Mobile.objects.filter(name__icontains=query.strip()).order_by('-name')
+        elif company:
+            # If popular mobiles is not selected then a brand name is 
+            # selected. Therefore, find the mobiles of the selected brand
+            if company.strip() != 'Popular Mobiles':
+                mobile_list = Mobile.objects.filter(brand__name__iexact=company.strip()).order_by('-name')
+            elif company.strip() == 'Popular Mobiles':
+                # get all the ids from popularmobile 
+                # table and then fetch the related mobiles
+                ids = PopularMobile.objects.values_list('mobile')
+                mobile_list = Mobile.objects.filter(id__in = ids).order_by('-name')
+        # If the page is loading without any query 
+        # then display the popular mobiles
+        if not company and not query:
+            ids = PopularMobile.objects.values_list('mobile')
+            mobile_list = Mobile.objects.filter(id__in = ids).order_by('-name')
+            query = _('Popular Mobiles')
+
+        page = self.request.GET.get('page', 1)
+        paginator = Paginator(mobile_list, 10)
+        try:
+            mobiles = paginator.page(page)
+        except PageNotAnInteger:
+            mobiles = paginator.page(1)
+        except EmptyPage:
+            mobiles = paginator.page(paginator.num_pages)
+
+        context["paginator"] = paginator
+        context['mobile_brands'] = MobileBrand.objects.all()
+        context["brand"] = company or query
+        context["mobile_list"] = mobiles
         return context
 
 def get_mobile_auto_complete(request):    

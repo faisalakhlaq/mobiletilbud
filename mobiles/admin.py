@@ -37,8 +37,8 @@ class CameraAdmin(admin.ModelAdmin):
     ]
     
 class MobileBrandAdmin(admin.ModelAdmin):
-    fields = ('id', 'name')
-    readonly_fields = ('id',)
+    fields = ('name', 'image')
+    # readonly_fields = ('id',)
 
 # TODO 
 class VariationAdmin(admin.ModelAdmin):

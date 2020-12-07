@@ -38,6 +38,7 @@
         {% endfor %}
     </div>
 </div>
+{% include 'paginator_template.html' with page_obj=page_obj %}
 {% endblock content %}
 {% block extra_scripts %}
 <script>
@@ -55,7 +56,7 @@
     var selectedObj = ui.item;
   }
   // TODO call the below function if the user has
-  // click / choosen one option from given list
+  // clicked / choosen one option from given list
   function SearchHandler()
   {
     $( "#search_btn" ).click()

@@ -9,6 +9,10 @@ from core.utils import unique_slug_generator
 class MobileBrand(models.Model):
     """Represents the mobile manufacturers"""
     name            = models.CharField(_("Name"), max_length=50)
+    # Image icon of the manufacturer
+    image           = models.ImageField(_("Image"), upload_to='mobile_brands/',
+                                blank=True, null=True)
+
     def __str__(self):
         return self.name
     

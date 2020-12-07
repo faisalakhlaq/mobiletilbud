@@ -1,3 +1,4 @@
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView, View
@@ -16,12 +17,23 @@ class TelecomCompaniesView(View):
 
     def get_context_data(self, *args, **kwargs):
         company = self.request.GET.get("company")
-        offers = Offer.objects.all()
+        offers = Offer.objects.all().order_by('updated')
         # TODO get the set of related mobiles from the MobileBrand table
         if offers and company and company != 'ALL':
-            offers = offers.filter(telecom_company__name__iexact=company.strip())         
+            offers = offers.filter(telecom_company__name__iexact=company.strip())  
+
+        page = self.request.GET.get('page', 1)
+        paginator = Paginator(offers, 10)
+        try:
+            offer_list = paginator.page(page)
+        except PageNotAnInteger:
+            offer_list = paginator.page(1)
+        except EmptyPage:
+            offer_list = paginator.page(paginator.num_pages)
+
         context = {
-            "offers": offers,
+            "paginator": paginator,
+            "offers": offer_list,
             "object_list": TelecomCompany.objects.all(),
             "offer_count": offers.count()
         }
@@ -34,13 +46,15 @@ class OfferDetailView(DetailView):
 class PopularOffersView(ListView):
     """ Return top 5 offers from each company.
     """
+    model = Offer
     template_name = 'offer/offer_list.html'
+    paginate_by = 10
 
     def get_queryset(self):
         offer_type = self.request.GET.get('offer')
         company = self.request.GET.get('company')
         query = self.request.GET.get('query')
-        all_offers = Offer.objects.all()
+        all_offers = Offer.objects.all().order_by('updated')
         if query and len(query.strip()) > 0:
             return all_offers.filter(mobile__name__icontains=query.strip())
         elif offer_type and offer_type == 'Popular':

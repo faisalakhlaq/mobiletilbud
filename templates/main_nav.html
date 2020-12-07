@@ -1,11 +1,13 @@
 {% load i18n %}
+{% load static %}
 <!-- Navbar -->
 <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light scrolling-navbar">
     <div class="container-fluid">
 
       <!-- Brand -->
       <a class="navbar-brand waves-effect" href="{% url 'core:home' %}">
-        <strong class="blue-text">Mobiltilbud</strong>
+        <img class='logo-image' src={% static 'logo.png' %}>
+        <strong class="blue-text">MobilTilbud</strong>
       </a>
 
       <!-- Collapse -->

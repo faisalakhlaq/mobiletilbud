@@ -6,13 +6,13 @@
 {% endblock title %}
 
 {% block content %}
-<div class='mt-5 text-center justify-content-center'>
-        <h3>{% trans "Explore Mobile Brands" %}<h3>
-
+<div class='offer_list_container'>
+    <h3>{% trans "Explore Mobile Brands" %}<h3>
+    <div class='company-list'>
         <form method='GET' action=''>
-            <div><input name="mobile_brand" id="mobile_brand" class="btn btn-outline-info m-1" type="submit" value='Popular Mobiles' /></div>
-            {% for obj in object_list %}
-                    <input name="mobile_brand" id="mobile_brand" class="btn btn-outline-info m-1" type="submit" value={{obj}} />
+            <div><input name="brand" id="brand" class="btn btn-outline-info m-1" type="submit" value='Popular Mobiles' /></div>
+            {% for mobile_brand in mobile_brands %}
+                    <input name="brand" id="brand" class="btn btn-outline-info m-1" type="submit" value={{mobile_brand}} />
             {% endfor %}
         </form>
         <form class='form' method='GET' action=''>
@@ -20,18 +20,27 @@
             name='query' value={{ request.GET.query}}>
             <button id='search_btn' class='btn btn-default bg-dark text-light' type='submit'>Search</button>
         </form>
+    </div>
+    <div class='card-group'>
         {% if mobile_list %}
         <hr>
-        <h4>{{mobile_brand}} {% trans '- Mobiles' %} </h4>
+        <h4>{{brand}}</h4>
         <b>{% translate "Select a Phone to Check Details and Offers" %}</b>
             <div class='selected-brand-mobile-list'>
                 {% for mobile in mobile_list %}
-                    <a class="btn btn-outline-info m-1"  href={{ mobile.get_absolute_url }}>{{mobile}}</a>
-                    {% comment %} <button class="btn btn-outline-info" action="{{mobile.get_absolute_url}}">{{mobile}}</button> {% endcomment %}
+                {% comment %} <div class='offer_list_container'> {% endcomment %}
+                    {% include 'mobile/mobile_card_snippet.html' with mobile=mobile %}
+                {% comment %} </div> {% endcomment %}
                 {% endfor %}
-            </div>
+              </div>
         {% endif %}
+    </div>
 </div>
+
+<div class="pagination">
+{% include 'paginator_template.html' with page_obj=mobile_list %}
+</div>
+
 {% endblock content %}
 {% block extra_scripts %}
 <script>
