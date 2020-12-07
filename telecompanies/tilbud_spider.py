@@ -83,6 +83,19 @@ def delete_old_offers(telecom_company):
         offers.delete()
         print(f'Offers Deleted for {telecom_company.name}')
 
+def get_response(url, tele_comp_name):
+    response = None
+    try:
+        response = requests.get(
+            url=self.telenor_tilbud_url, 
+            # proxies={"http": proxy, "https": proxy}, 
+            headers=self.headers.get_header(),
+            timeout=30, # timeout in 20 seconds in order to avoid hanging/freezing
+        )
+    except Exception as e:
+        print('Exception while Requesting Telenor offers: ', e)
+    return response
+
 class TelenorSpider:
     def __init__(self):
         self.headers = HeaderFactory()
