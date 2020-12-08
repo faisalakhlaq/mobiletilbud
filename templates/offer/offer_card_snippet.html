@@ -3,8 +3,8 @@
     <div class="card offer-card" style="background-color:#e8f4f8">
         <div class="card-header bg-transparent"
             style="">
-            {% trans "Discount"%}{% if offer.discount_offered %}: 
-            {{offer.discount_offered}}.kr{% endif %}
+            {% if offer.discount_offered %}{% trans "Discount"%}: 
+            {{ offer.discount_offered }}.kr {% elif offer.discount %}{{ offer.discount }}{% endif %}
         </div>
         <div class="card-body" style="">
             <div class="mobile-image">

@@ -11,7 +11,7 @@ import json
 from .models import TelecomCompany
 from mobiles.models import Mobile, MobileBrand, PopularMobile
 from telecompanies.models import Offer
-from telecompanies.tilbud_spider import ThreeSpider, TelenorSpider, TeliaSpider, YouSeeSpider
+# from telecompanies.tilbud_spider import ThreeSpider, TelenorSpider, TeliaSpider, YouSeeSpider
 from telecompanies.utils import get_popular_offers
 
 # from mobiles.mobile_specs_spider import GsmarenaMobileSpecSpider
@@ -21,7 +21,7 @@ from telecompanies.utils import get_popular_offers
 
 class HomeView(View):
     def get(self, *args, **kwargs):
-        # YouSeeSpider().fetch_offers()
+        # TeliaSpider().fetch_offers()
         # fetch_mobiles_task.delay('Motorola')
         # GsmarenaMobileSpecSpider().fetch_mobile_specs('Sony')
         context = self.get_context_data(*kwargs)

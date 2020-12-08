@@ -3,15 +3,16 @@ from bs4 import BeautifulSoup
 from celery import shared_task
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
+import re
 import requests
 from selenium import webdriver
-from webdriver_manager.firefox import GeckoDriverManager
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.firefox.options import Options as FirefoxOptions
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
+from webdriver_manager.firefox import GeckoDriverManager
 
 from .models import Offer
 from core.models import TelecomCompany
@@ -85,7 +86,9 @@ class AbstractTilbudSpider(ABC):
         if discount != 0:
             # extract the float value from the string
             offer.discount = discount
-            offer.discount_offered = float(''.join(i for i in discount if i.isdigit()))
+            value = (''.join(i for i in discount if i.isdigit()))
+            if value:
+                offer.discount_offered = float(value)
         if price != 0:
             offer.price = price
         # Check if the same offer exists previously then delete the old one
@@ -114,13 +117,13 @@ class AbstractTilbudSpider(ABC):
         response = None
         try:
             response = requests.get(
-                url=self.telenor_tilbud_url, 
+                url=url, 
                 # proxies={"http": proxy, "https": proxy}, 
                 headers=self.headers.get_header(),
                 timeout=30, # timeout in 20 seconds in order to avoid hanging/freezing
             )
         except Exception as e:
-            print('Exception while Requesting {tele_comp_name} offers: ', e)
+            print(f'Exception while Requesting {tele_comp_name} offers: ', e)
         return response
 
 class TelenorSpider(AbstractTilbudSpider):
@@ -153,7 +156,7 @@ class TelenorSpider(AbstractTilbudSpider):
                 if offers and len(offers) > 0:
                     break
         except Exception as e:
-            print(e)
+            print('Exception in Telenor while fetching: ', e)
         # response = requests.get(url=self.telenor_tilbud_url, headers=self.headers)
         # content = None
         # if response:
@@ -163,6 +166,7 @@ class TelenorSpider(AbstractTilbudSpider):
 
         # soup = BeautifulSoup(content, "html.parser")
         # offers = soup.find_all("div", {"data-filter_campaignoffer": "campaignoffer"})
+        # TODO make a new method from here
         # Lets check if we got some new 
         # offers and delete old ones
         telecom_company = None
@@ -264,113 +268,164 @@ class YouSeeSpider(AbstractTilbudSpider):
                 continue
 
 
-# TODO tilbud_urls in the fetched tilbud are not complete. 
-# Append base_ulr with all
-class TeliaSpider:
+class TeliaSpider(AbstractTilbudSpider):
     def __init__(self):
         self.telia_base_url = 'https://shop.telia.dk'
         self.tilbud_url = 'https://shop.telia.dk/cgodetilbud.html'
-        self.headers = {'User-agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:61.0) Gecko/20100101 Firefox/61.0'}
+        super(TeliaSpider, self).__init__()
 
     # @shared_task
-    def get_telia_offers(self):
-        response = requests.get(self.tilbud_url, headers=self.headers)
-        content = response.content
-        soup = BeautifulSoup(content, 'html.parser')
-        wrap_div = soup.find('div', {'id': 'page'}).find('div',{'class':'wrap clear'})
-        ajax_div = wrap_div.find('div', {"class", "wide clear"}).find('div')
-        rows = ajax_div.find_all("div", {'class': 'grids'})
+    def fetch_offers(self):
+        rows = None
+            # TODO use proxies
+            # proxies = ProxyFactory().get_proxies(number_of_proxies=3)
+        for i in range(3):
+            try:
+                # Make 3 tries to get the offers 
+                # in case something goes wrong
+                response = self.get_response(url=self.tilbud_url, 
+                tele_comp_name='Telia')
+                content = None
+                if response:
+                    content = response.content
+                if not content:
+                    continue
+                soup = BeautifulSoup(content, "html.parser")
+                if not soup: continue
+                wrap_div = soup.find('div', {'id': 'page'}).find('div',{'class':'wrap clear'})
+                ajax_div = wrap_div.find('div', {"class", "wide clear"}).find('div')
+                rows = ajax_div.find_all("div", {'class': 'grids'})
+                if rows and len(rows) > 0:
+                    break
+            except Exception as e:
+                print('Exception in Telia while fetching request: ', e)
+                continue
+        if not rows or not len(rows) > 0: 
+            print('No offers found for Telia')
+            return
         offer_divs = []
         for row in rows:
             for div in row.find_all('div'):
                 offer_divs.append(div.find('div', {'class': 'productbox'}))
+        tele_company = None
+        if offer_divs and len(offer_divs) > 0:
+            tele_company = TelecomCompany.objects.get(name='Telia')
+            self.delete_old_offers(tele_company)
+        # import pdb; pdb.set_trace()
         for p_box in offer_divs:
             try:
-                # p_box = od.find('div', {'class': 'productbox'})
                 rabat_div = p_box.find('div', {'class': ' tsr-tactical-flash tsr-tactical-round tsr-color-purple tsr-first'})
                 if not rabat_div: rabat_div = p_box.find_all('div')[0]
                 discount_div = rabat_div.find('span', {'class':'discountamount'})
                 discount = 0
                 if discount_div: discount = discount_div.find('b').text.strip()
                 name_and_link = p_box.find('h2').find('a', href=True)
-                mobile_name = name_and_link.text.strip().rsplit(' ', 1)[0]
+                # TODO mobile name includes the memory. Use this as mobile memory variation 
+                mobile_name = self.extract_name(name_and_link)
                 offer_url = self.telia_base_url + name_and_link['href']
                 table = p_box.find('table', {'class': 'product-prices'})
                 # price_tr = table.find('tbody').find_all('tr')
                 price_tr = table.find_all('tr')
-                price = 0
+                price = None
                 for tr in price_tr:
                     td = tr.find_all('td')
                     if len(td) < 2:
                         continue
                     td1 = td[0]
                     td2 = td[1]
-                    if 'Mindstepris' in td1.text.strip():
-                        price = td2.text.strip()
-                save_offer(mobile_name=mobile_name, telecom_company_name='Telia',
-                            offer_url=offer_url, discount=discount, price=price)
+                    if 'Mindstepris' in td1.text.strip() or 'Pris.' in td1.text.strip():
+                        if not price:
+                            price = td1.text.strip() +" "+td2.text.strip()
+                        else:
+                            price = price +" - "+ td1.text.strip() +" "+td2.text.strip()
+                self.save_offer(mobile_name=mobile_name, 
+                                telecom_company_name='Telia',
+                                offer_url=offer_url, discount=discount, 
+                                price=price, telecom_company=tele_company)
             except Exception as e:
-                print(e)
+                print('Exception in extracting Telia offer: ', e)
+                continue
 
-class ThreeSpider:
+    def extract_name(self, sequence):
+        pattern = r'\(\d+\S+\s\S+\)'
+        # Check if the mobile name (sequence) includes ram information e.g.
+        # Z40 lite(128GB RAM). Remove it by using re
+        # \( check for bracket (
+        # \d+ check for any number of digits
+        # \S+ check for any number of characters
+        # \s check for space
+        # \S+ 
+        # \) check for ending bracket )
+        sequence = sequence.text.strip()
+        found = re.search(pattern, sequence)
+        if found:
+            sequence = sequence.replace(found.group(),'')
+        mobile_name = sequence.strip().rsplit(' ', 1)[0]
+        return mobile_name        
+
+
+
+class ThreeSpider(AbstractTilbudSpider):
     def __init__(self):
         self.tilbud_url = 'https://www.3.dk/mobiler-tablets/mobiler/#Tilbud'
-        self.firefox_driver = self.configure_driver()
         self.base_url = 'https://www.3.dk'
-
-    def configure_driver(self):
-        # Add additional Options to the webdriver
-        firefox_options = FirefoxOptions()
-        # add the argument and make the browser Headless.
-        firefox_options.add_argument("--headless")
-        try:
-            driver = webdriver.Firefox(options=firefox_options,
-                                       executable_path=GeckoDriverManager().install())
-        except:
-            driver = webdriver.Firefox(options=firefox_options,
-                                       executable_path='/usr/local/bin/geckodriver')
-        return driver
+        super(ThreeSpider, self).__init__()
 
     # @shared_task
-    def get_three_offers(self):
+    def fetch_offers(self):
         try:
-            print("_____________GETTING 3 OFFERS_______________")
-            self.firefox_driver.get(self.tilbud_url)
-            devices = WebDriverWait(self.firefox_driver, 20).until(
-                EC.presence_of_element_located((By.CLASS_NAME, "devices"))
-            )
-            soup = BeautifulSoup(self.firefox_driver.page_source, "html.parser")
-            device_list = soup.find("div", {"class": "device-list"})
-            device_section = device_list.find("section", {"class": "device-list"})
-            ul_list = device_section.find("ul", {"class": "list filtering"})
-            active = ul_list.find("li", {"class": "active"})
-            devices_li = active.find("ul", {"class": "devices"}).find_all("li")
-            if not devices_li:
-                return #TODO check what to do here
-            # print(devices_li)
-            self.get_tilbud_devices(devices_li)
-            self.close_webdriver()
+            devices_li = None
+            tele_company = None
+            for i in range(3):
+                driver = self.configure_driver()
+                driver.get(self.tilbud_url)
+                devices = WebDriverWait(driver, 20).until(
+                    EC.presence_of_element_located((By.CLASS_NAME, "devices"))
+                )
+                soup = BeautifulSoup(driver.page_source, "html.parser")
+                if not soup: continue
+                device_list = soup.find("div", {"class": "device-list"})
+                device_section = device_list.find("section", {"class": "device-list"})
+                ul_list = device_section.find("ul", {"class": "list filtering"})
+                active = ul_list.find("li", {"class": "active"})
+                devices_li = active.find("ul", {"class": "devices"}).find_all("li")
+                if devices_li and len(devices_li) > 0:
+                    tele_company = TelecomCompany.objects.get(name='3')
+                    self.delete_old_offers(telecom_company=tele_company)
+                    break
+
+            self.get_tilbud_devices(devices_li=devices_li, telecom_company=tele_company)
+            self.close_webdriver(driver)
         except (TimeoutException, Exception) as e:
-            print(e)
-            self.close_webdriver()
+            print('Exception while fetching Three offers: ', e)
+            self.close_webdriver(driver)
 
-    def close_webdriver(self):
-        if self.firefox_driver:
-            self.firefox_driver.close()
-            self.firefox_driver.quit()
-
-    def get_tilbud_devices(self, devices_li):
+    def get_tilbud_devices(self, devices_li, telecom_company=None):
+        if not devices_li or not len(devices_li) > 0:
+            print('No offers found for 3')
+            return
         for li in devices_li:
             try:
                 article = li.find("article")
                 h3_mobile_name = article.find("header").find("h3")
-                mobile_name = h3_mobile_name.text.strip().split("\n")[0]
+                mobile_name = h3_mobile_name.text.strip().split("\n")[0].strip()
                 discount = h3_mobile_name.text.strip().split("\n")[1].strip()
                 shop_div = article.find("div", {"class": "shop"})
                 url = shop_div.find('a', href=True)
                 offer_url = self.base_url + url['href']
-                price = shop_div.find("p", {"class": "lowest-price"}).text.strip()
-                save_offer(mobile_name=mobile_name.strip(), telecom_company_name="3",
-                            offer_url=offer_url, discount=discount, price=price)
+                price = None
+                try:
+                    price_box = shop_div.find('div', {'class': 'price-box'})
+                    installment_price = price_box.find('span', {'class': 'installment-price'}).text.strip()
+                    suffix = price_box.find('span', {'class': 'suffix'}).text.strip()
+                    price = shop_div.find("p", {"class": "lowest-price"}).text.strip() + '\n' + \
+                    installment_price + " " + suffix
+                except:
+                    pass
+                self.save_offer(mobile_name=mobile_name, 
+                            telecom_company_name="3", offer_url=offer_url, 
+                            discount=discount, price=price, 
+                            telecom_company=telecom_company)
             except Exception as e:
-                print(e)
+                print('Exception while extracting offer details for 3: ', e)
+                continue

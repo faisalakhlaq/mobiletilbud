@@ -18,14 +18,14 @@ class Offer(models.Model):
     # mobile name will refer to mobile full name = brand_name + mobile_name
     mobile_name             = models.CharField(_("Mobile Name"), 
                               max_length=50, blank=True, null=True)
-    discount                = models.CharField(_("Discount"), max_length=50,
+    discount                = models.CharField(_("Discount"), max_length=255,
                               blank=True, null=True)
     discount_offered        = models.FloatField(_("Discount Offered"), 
                               blank=True, null=True)
     # link to the company offer page
-    offer_url               = models.URLField(_("Offer Url"), max_length=300,
+    offer_url               = models.URLField(_("Offer Url"),
                               blank=True, null=True)
-    price                   = models.CharField(_("Price"), max_length=50,
+    price                   = models.CharField(_("Price"), max_length=255,
                               blank=True, null=True)
     slug                    = models.SlugField(_("slug"), 
                               blank=True, null=True)
