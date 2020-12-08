@@ -11,7 +11,7 @@
                 <img class="mob-image" src={{ offer.mobile.image.url | default:'/media/images/default_mobile_image.png' }}>
             </div>
             <h5 class="card-title m-3">{% if offer.mobile %}
-                {{offer.mobile.name}} {% elif offer.mobile_name %}
+                {{offer.mobile.full_name}} {% elif offer.mobile_name %}
                 {{ offer.mobile_name }}{% endif %}
             </h5>
             <h5 class="card-text"><small>{% translate "Telecom Company" %}</small></h5>

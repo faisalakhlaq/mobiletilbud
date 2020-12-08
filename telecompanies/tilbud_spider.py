@@ -1,3 +1,4 @@
+from abc import ABC, abstractmethod
 from bs4 import BeautifulSoup
 from celery import shared_task
 from django.core.exceptions import ObjectDoesNotExist
@@ -17,92 +18,99 @@ from core.models import TelecomCompany
 from mobiles.models import Mobile, MobileBrand
 from mobiles.utils import HeaderFactory, ProxyFactory
 
-
-def save_offer(mobile_name, telecom_company_name, 
-               offer_url=None, m_full_name=None, 
-               discount=0, price=0, telecom_company=None):
-    """Save the offer in the database"""
-    # import pdb; pdb.set_trace()
-    offer = Offer()
-    mobile = None
-    if m_full_name:
-        try:
-            mobile = Mobile.objects.get(full_name__iexact=m_full_name)
-        except ObjectDoesNotExist as e:
-            print(f'Unable to find {m_full_name} mobile by full name :', e)
-    if not mobile:
-        filtered_mobile = Mobile.objects.filter(Q(name__iexact=mobile_name) | 
-                                       Q(full_name__iexact=mobile_name))
-        if filtered_mobile: mobile = filtered_mobile[0]
-    if mobile: offer.mobile = mobile
-    if telecom_company:
-        offer.telecom_company = telecom_company
-    else:
-        telecom_company = TelecomCompany.objects.filter(
-            name=telecom_company_name)
-        if telecom_company:
-            offer.telecom_company = telecom_company[0]
-        else:
-            offer.telecom_company = TelecomCompany.objects.create(
-                name=telecom_company_name)
-
-    # Set mobile name
-    if mobile:
-        offer.mobile_name = mobile.full_name
-    elif m_full_name:
-        offer.mobile_name = m_full_name
-    else:    
-        offer.mobile_name = mobile_name
-    if offer_url:
-        offer.offer_url = offer_url
-    if discount != 0:
-        # extract the float value from the string
-        offer.discount = discount
-        offer.discount_offered = float(''.join(i for i in discount if i.isdigit()))
-    if price != 0:
-        offer.price = price
-    # Check if the same offer exists previously then delete the old one
-    # Check if the mobile or mobile_name and telecom company are same then 
-    # delete the old offer and save the new one
-    # TODO remove this check
-    # if offer.mobile:
-    #     existing_offer = Offer.objects.filter(Q(mobile=offer.mobile),
-    #                                         Q(telecom_company=offer.telecom_company))
-    #     if existing_offer:
-    #         existing_offer[0].delete()
-    # else:
-    #     existing_offer = Offer.objects.filter(Q(mobile_name__iexact=mobile_name),
-    #                                         Q(telecom_company=offer.telecom_company))
-    #     if existing_offer:
-    #         existing_offer[0].delete()
-    offer.save()
-
-def delete_old_offers(telecom_company):
-    offers = Offer.objects.filter(telecom_company=telecom_company)
-    if offers:
-        offers.delete()
-        print(f'Offers Deleted for {telecom_company.name}')
-
-def get_response(url, tele_comp_name):
-    response = None
-    try:
-        response = requests.get(
-            url=self.telenor_tilbud_url, 
-            # proxies={"http": proxy, "https": proxy}, 
-            headers=self.headers.get_header(),
-            timeout=30, # timeout in 20 seconds in order to avoid hanging/freezing
-        )
-    except Exception as e:
-        print('Exception while Requesting Telenor offers: ', e)
-    return response
-
-class TelenorSpider:
+class AbstractTilbudSpider(ABC):
     def __init__(self):
         self.headers = HeaderFactory()
-        self.telenor_tilbud_url = 'https://www.telenor.dk/shop/mobiler/campaignoffer/'
+        super().__init__()
+    
+    def close_webdriver(self, driver):
+        if driver:
+            driver.close()
+            driver.quit()
 
-    # def get_response(self, proxy):
-    def get_response(self):
+    def configure_driver(self):
+        # Add additional Options to the webdriver
+        firefox_options = FirefoxOptions()
+        # add the argument and make the browser Headless.
+        firefox_options.add_argument("--headless")
+        try:
+            driver = webdriver.Firefox(options=firefox_options,
+                                       executable_path=GeckoDriverManager().install())
+        except:
+            driver = webdriver.Firefox(options=firefox_options,
+                                       executable_path='/usr/local/bin/geckodriver')
+        return driver
+
+    @abstractmethod
+    def fetch_offers(self):
+        print('Fetching Tilbud for ', self.__class__.__name__)
+
+    def save_offer(self, mobile_name, telecom_company_name, 
+                offer_url=None, m_full_name=None, 
+                discount=0, price=0, telecom_company=None):
+        """Save the offer in the database"""
+        # import pdb; pdb.set_trace()
+        offer = Offer()
+        mobile = None
+        if m_full_name:
+            try:
+                mobile = Mobile.objects.get(full_name__iexact=m_full_name)
+            except ObjectDoesNotExist as e:
+                print(f'Unable to find {m_full_name} mobile by full name :', e)
+        if not mobile:
+            filtered_mobile = Mobile.objects.filter(Q(name__iexact=mobile_name) | 
+                                        Q(full_name__iexact=mobile_name))
+            if filtered_mobile: mobile = filtered_mobile[0]
+        if mobile: offer.mobile = mobile
+        if telecom_company:
+            offer.telecom_company = telecom_company
+        else:
+            telecom_company = TelecomCompany.objects.filter(
+                name=telecom_company_name)
+            if telecom_company:
+                offer.telecom_company = telecom_company[0]
+            else:
+                offer.telecom_company = TelecomCompany.objects.create(
+                    name=telecom_company_name)
+
+        # Set mobile name
+        if mobile:
+            offer.mobile_name = mobile.full_name
+        elif m_full_name:
+            offer.mobile_name = m_full_name
+        else:    
+            offer.mobile_name = mobile_name
+        if offer_url:
+            offer.offer_url = offer_url
+        if discount != 0:
+            # extract the float value from the string
+            offer.discount = discount
+            offer.discount_offered = float(''.join(i for i in discount if i.isdigit()))
+        if price != 0:
+            offer.price = price
+        # Check if the same offer exists previously then delete the old one
+        # Check if the mobile or mobile_name and telecom company are same then 
+        # delete the old offer and save the new one
+        # TODO remove this check
+        # if offer.mobile:
+        #     existing_offer = Offer.objects.filter(Q(mobile=offer.mobile),
+        #                                         Q(telecom_company=offer.telecom_company))
+        #     if existing_offer:
+        #         existing_offer[0].delete()
+        # else:
+        #     existing_offer = Offer.objects.filter(Q(mobile_name__iexact=mobile_name),
+        #                                         Q(telecom_company=offer.telecom_company))
+        #     if existing_offer:
+        #         existing_offer[0].delete()
+        offer.save()
+
+    def delete_old_offers(self, telecom_company):
+        offers = Offer.objects.filter(telecom_company=telecom_company)
+        if offers:
+            offers.delete()
+            print(f'Offers Deleted for {telecom_company.name}')
+
+    def get_response(self, url, tele_comp_name):
         response = None
         try:
             response = requests.get(
@@ -112,22 +120,29 @@ class TelenorSpider:
                 timeout=30, # timeout in 20 seconds in order to avoid hanging/freezing
             )
         except Exception as e:
-            print('Exception while Requesting Telenor offers: ', e)
+            print('Exception while Requesting {tele_comp_name} offers: ', e)
         return response
 
+class TelenorSpider(AbstractTilbudSpider):
+    def __init__(self):
+        self.telenor_tilbud_url = 'https://www.telenor.dk/shop/mobiler/campaignoffer/'
+        self.base_url = 'https://www.telenor.dk'
+        super(TelenorSpider, self).__init__()
+
     # @shared_task
-    def get_telenor_offers(self):
+    def fetch_offers(self):
+        offers = None
         try:
             # proxies = ProxyFactory().get_proxies(number_of_proxies=3)
             # import pdb; pdb.set_trace()
-            offers = None
             for i in range(3):
                 # Make 3 tries to get the offers 
                 # in case something goes wrong
                 # proxy =  None
                 # if len(proxies) > 0:
                 #     proxy = proxies.pop()
-                response = self.get_response()
+                response = self.get_response(url=self.telenor_tilbud_url, 
+                tele_comp_name='Telenor')
                 content = None
                 if response:
                     content = response.content
@@ -153,82 +168,100 @@ class TelenorSpider:
         telecom_company = None
         if offers and len(offers) > 0:
             telecom_company = TelecomCompany.objects.get(name='Telenor')
-            delete_old_offers(telecom_company)
-        for offer_ in offers:
-            try:
-                offer_div = offer_.find("div")
-                offer_link = offer_div.find('a', href=True)
-                mobile_url = 'https://www.telenor.dk' + offer_link['href']
-                mobile_desc_div = offer_link.find("div", {
-                    "class": "grid-row--gutter-none grid-row--bottom product-block__info padding-leader--large full-width"})
-                info_div = mobile_desc_div.find("div")
-                #strip extra spaces and then remove first word
-                # from name which is always company name
-                full_name = info_div.find("h3").text.strip()
-                mobile_name = None
-                if full_name:
-                    mobile_name = full_name.split(' ', 1)[1]
-                price_info = info_div.find_all("p")
-                discount = 0
-                price = 0
-                if price_info and len(price_info) >= 2:
-                    price = price_info[0].text.strip()
-                    discount = price_info[1].text.strip()
-                save_offer(mobile_name=mobile_name,
-                            telecom_company_name='Telenor', 
-                            offer_url=mobile_url, m_full_name=full_name, 
-                            discount=discount, price=price,
-                            telecom_company=telecom_company)
-            except Exception as e:
-                print('Telenor Spider Exception: ', e)
-                continue
+            self.delete_old_offers(telecom_company)
+            for offer_ in offers:
+                try:
+                    offer_div = offer_.find("div")
+                    offer_link = offer_div.find('a', href=True)
+                    mobile_url = self.base_url + offer_link['href']
+                    mobile_desc_div = offer_link.find("div", {
+                        "class": "grid-row--gutter-none grid-row--bottom product-block__info padding-leader--large full-width"})
+                    info_div = mobile_desc_div.find("div")
+                    #strip extra spaces and then remove first word
+                    # from name which is always company name
+                    full_name = info_div.find("h3").text.strip()
+                    mobile_name = None
+                    if full_name:
+                        mobile_name = full_name.split(' ', 1)[1]
+                    price_info = info_div.find_all("p")
+                    discount = 0
+                    price = 0
+                    if price_info and len(price_info) >= 2:
+                        price = price_info[0].text.strip()
+                        discount = price_info[1].text.strip()
+                    self.save_offer(mobile_name=mobile_name,
+                                telecom_company_name='Telenor', 
+                                offer_url=mobile_url, m_full_name=full_name, 
+                                discount=discount, price=price,
+                                telecom_company=telecom_company)
+                except Exception as e:
+                    print('Telenor Spider Exception: ', e)
+                    continue
 
 
-class YouSeeSpider:
+class YouSeeSpider(AbstractTilbudSpider):
     def __init__(self):
         self.base_url = 'https://yousee.dk'
         self.tilbud_url = 'https://yousee.dk/mobil/mobiltelefoner/?filter=tilbud'
-        self.headers = {'User-agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:61.0) Gecko/20100101 Firefox/61.0'}
+        super(YouSeeSpider, self).__init__()
 
     # @shared_task
-    def get_yousee_offers(self):
+    def fetch_offers(self):
         try:
-            driver = ThreeSpider().configure_driver()
-            driver.get(self.tilbud_url)
-            devices = WebDriverWait(driver, 60).until(
-                EC.presence_of_element_located((By.CLASS_NAME, "component-terminal-list__terminal-list"))
-            )
-            soup = BeautifulSoup(driver.page_source, "html.parser")
-            lis = soup.find_all('li', {'class', 'component-terminal-list__terminal-list__item col-12 col-sm-6 col-lg-4 col--reduced-gutter'})
-            self.get_devices(lis)
+            lis = None
+            tele_company = None
+            for i in range(3):
+                # import pdb; pdb.set_trace()
+                driver = self.configure_driver()
+                driver.get(self.tilbud_url)
+                devices = WebDriverWait(driver, 60).until(
+                    EC.presence_of_element_located((By.CLASS_NAME, "component-terminal-list__terminal-list"))
+                )
+                soup = BeautifulSoup(driver.page_source, "html.parser")
+                if not soup: continue
+                lis = soup.find_all('li', {'class', 'component-terminal-list__terminal-list__item col-12 col-sm-6 col-lg-4 col--reduced-gutter'})
+                if lis and len(lis) > 0: 
+                    tele_company = TelecomCompany.objects.get(name='YouSee')
+                    self.delete_old_offers(telecom_company=tele_company)
+                    break
+            
+            self.get_devices(lis, telecom_company=tele_company)
             self.close_webdriver(driver)
         except (TimeoutException, Exception) as e:
-            print(e)
+            print('Exception while fetching YouSee offers: ', e)
             self.close_webdriver(driver)
 
-    def get_devices(self, rows):
+    def get_devices(self, rows, telecom_company=None):
+        if not rows or not len(rows) > 0: 
+            print('No offers found for YouSee!')
+            return
         for li in rows:
-                try:
-                    anker = li.find('div').find('a')
-                    offer_url = self.base_url + anker['href']
-                    info = anker.find('div', {'class', "component-terminal-card__text-container"})
-                    brand = info.find('div', {'class', 'component-terminal-card__brand'}).text.strip()
-                    mobile_name = info.find('div', {'class', 'component-terminal-card__title'}).text.strip()
-                    m_full_name = brand + " " + mobile_name
-                    section = anker.find('section', {'class', "component-terminal-card__price-container"})
-                    saving_div = section.find('div', {'class', 'component-terminal-card__price-container__savings'})
-                    discount = saving_div.find('span').text.strip()
-                    price_div = section.find('div', {'class', 'component-terminal-card__price-container__price'})
-                    price = price_div.find_all('span')[0].text.strip()
-                    save_offer(mobile_name=mobile_name, m_full_name=m_full_name, telecom_company_name='YouSee',
-                    offer_url=offer_url, discount=discount, price=price)
-                except Exception as e:
-                    print('Error-YouSee offer spider', e)
-                    continue
-    def close_webdriver(self, driver):
-        if driver:
-            driver.close()
-            driver.quit()
+            try:
+                anker = li.find('div').find('a')
+                offer_url = self.base_url + anker['href']
+                info = anker.find('div', {'class', "component-terminal-card__text-container"})
+                brand = info.find('div', {'class', 'component-terminal-card__brand'}).text.strip()
+                mobile_name = info.find('div', {'class', 'component-terminal-card__title'}).text.strip()
+                m_full_name = brand + " " + mobile_name
+                section = anker.find('section', {'class', "component-terminal-card__price-container"})
+                saving_div = section.find('div', {'class', 'component-terminal-card__price-container__savings'})
+                discount = saving_div.find('span').text.strip()
+                price_div = section.find('div', {'class', 'component-terminal-card__price-container__price'})
+                price_span = price_div.find_all('span')
+                if price_span:
+                    if len(price_span) >= 2:
+                        price = price_span[0].text.strip() + " " + price_span[1].text.strip()
+                    else:
+                        price = price_span[0].text.strip()
+                self.save_offer(mobile_name=mobile_name, 
+                m_full_name=m_full_name, 
+                telecom_company_name='YouSee',
+                offer_url=offer_url, 
+                discount=discount, price=price,
+                telecom_company=telecom_company)
+            except Exception as e:
+                print('Error-YouSee offer spider. Exception: ', e)
+                continue
 
 
 # TODO tilbud_urls in the fetched tilbud are not complete. 

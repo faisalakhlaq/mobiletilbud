@@ -2,7 +2,7 @@
 from celery import shared_task
 from celery.utils.log import get_task_logger
 
-from telecompanies.tilbud_spider import TelenorSpider, TeliaSpider, ThreeSpider
+from telecompanies.tilbud_spider import TelenorSpider, TeliaSpider, ThreeSpider, YouSeeSpider
 
 logger = get_task_logger(__name__)
 
@@ -11,8 +11,16 @@ def task_fetch_telenor_offers():
     """
     Saves latest offers from Telenor 
     """
-    TelenorSpider().get_telenor_offers()
+    TelenorSpider().fetch_offers()
     logger.info("Saved latest Telenor offers")
+
+@shared_task
+def task_fetch_yousee_offers():
+    """
+    Saves latest offers from YouSee 
+    """
+    YouSeeSpider().fetch_offers()
+    logger.info("Saved latest YouSee offers")
 
 @shared_task
 def task_fetch_telia_offers():

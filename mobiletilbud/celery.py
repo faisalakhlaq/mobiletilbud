@@ -19,21 +19,24 @@ app.config_from_object('django.conf:settings', namespace='CELERY')
 # Load task modules from all registered Django app configs.
 app.autodiscover_tasks()
 
-# TODO check if beat_schedule can 
-# be used even after removing 'django_celery_beat' app
 # app.conf.beat_schedule = {
 #     'add-everyday-midnight': {
 #         'task': 'telecompanies.tasks.task_fetch_three_offers',
 #         'schedule': (crontab(minute='*/10')),
 #         # 'schedule': crontab(minute=0, hour=0),
 #     },
-#     'add-telenor_offers': {
+#     'add-everyday-midnight': {
 #         'task': 'telecompanies.tasks.task_fetch_telenor_offers',
 #         'schedule': (crontab(minute='*/10')),
 #         # 'schedule': crontab(minute=0, hour=0),
 #     },
-#     'add-telia_offers': {
+#     'add-everyday-midnight': {
 #         'task': 'telecompanies.tasks.task_fetch_telia_offers',
+#         'schedule': (crontab(minute='*/10')),
+#         # 'schedule': crontab(minute=0, hour=0),
+#     },
+#     'add-everyday-midnight': {
+#         'task': 'telecompanies.tasks.task_fetch_yousee_offers',
 #         'schedule': (crontab(minute='*/10')),
 #         # 'schedule': crontab(minute=0, hour=0),
 #     },
