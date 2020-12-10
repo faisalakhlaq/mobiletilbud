@@ -7,6 +7,7 @@ from django.utils.translation import gettext as _
 from django.views import View
 from django.views.generic import ListView, View
 import json
+from urllib.parse import urlparse
 
 from .models import TelecomCompany
 from mobiles.models import Mobile, MobileBrand, PopularMobile
@@ -99,9 +100,13 @@ def change_language(request):
         language = request.POST.get('language')
         if language:
             if language != settings.LANGUAGE_CODE and [lang for lang in settings.LANGUAGES if lang[0] == language]:
-                redirect_path = f'/{language}/'
+                referer_page = urlparse(request.META.get('HTTP_REFERER')).path
+                redirect_path = f'/{language}{referer_page}'
             elif language == settings.LANGUAGE_CODE:
-                redirect_path = '/'
+                referer_page = urlparse(request.META.get('HTTP_REFERER')).path
+                if '/en' in referer_page:
+                    referer_page = referer_page.replace('/en', '')
+                redirect_path = f'{referer_page}'
             else:
                 return response
             from django.utils import translation

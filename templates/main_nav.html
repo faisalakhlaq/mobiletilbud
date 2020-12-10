@@ -46,57 +46,27 @@
 
         <!-- Right -->
         <ul class="navbar-nav nav-flex-icons">
-          {% if request.user.is_authenticated %}
-            {% comment %} <li class="nav-item"> {% endcomment %}
-              {% comment %} <a href="{% url 'core:order-summary' %}" class="nav-link waves-effect">
-                <span class="badge red z-depth-1 mr-1"> 
-                  {{ request.user|cart_item_count }} 
-                </span>
-                <i class="fas fa-shopping-cart"></i>
-                <span class="clearfix d-none d-sm-inline-block"> Cart </span>
-              </a> {% endcomment %}
-            {% comment %} </li> {% endcomment %}
-            <li class="nav-item">
-              <a class="nav-link waves-effect" href=''>
-                <span class="clearfix d-none d-sm-inline-block"> {% translate "Logout" %} </span>
-              </a>
-            </li>
-
-          {% else %}
-            <li class="nav-item">
-              <a class="nav-link waves-effect" href=''>
-                <span class="clearfix d-none d-sm-inline-block"> {% translate "Login" %} </span>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link waves-effect" href=''>
-                <span class="clearfix d-none d-sm-inline-block"> {% translate "Signup" %}</span>
-              </a>
-            </li>
-          {% endif %}
-
-            {% get_current_language as LANGUAGE_CODE %}
-            <form class="navbar-form form-inline" action="{% url 'change_language' %}" method="post">
-                {% csrf_token %}
-                {% comment %} <select name="language"> {% endcomment %}
-                <select name="language" class="form-control" onchange="this.form.submit()">
-                    {% get_available_languages as LANGUAGES %}
-                    {% for language in LANGUAGES %}
-                    <option class="nav-item dropdown" value="{{ language.0 }}" {% if language.0 == LANGUAGE_CODE %} selected{% endif %}>
-                        {% comment %} {{ language.0|language_name_local }} {% endcomment %}
-                        {% comment %} ({{ language.0 }}) {% endcomment %}
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                          <a class="dropdown-item" href="{% url 'change_language' %}">{{ language.0 }}</a>
-                          {% comment %} <a class="dropdown-item" href="{% url 'change_language' %}">{{ language.0|language_name_local }}</a> {% endcomment %}
-                        </div>
-                        {% comment %} <a class="nav-link waves-effect" href="{% url 'change_language' %}">
-                          <span>{{ language.0|language_name_local }}</span>
-                        </a>  {% endcomment %}
-                    </option>
-                    {% endfor %}
-                </select>
-            </form>
-
+          {% get_current_language as LANGUAGE_CODE %}
+          <form class="navbar-form form-inline" action="{% url 'change_language' %}" method="post">
+              {% csrf_token %}
+              {% comment %} <select name="language"> {% endcomment %}
+              <select name="language" class="form-control" onchange="this.form.submit()">
+                  {% get_available_languages as LANGUAGES %}
+                  {% for language in LANGUAGES %}
+                  <option class="nav-item dropdown" value="{{ language.0 }}" {% if language.0 == LANGUAGE_CODE %} selected{% endif %}>
+                      {% comment %} {{ language.0|language_name_local }} {% endcomment %}
+                      {% comment %} ({{ language.0 }}) {% endcomment %}
+                      <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="{% url 'change_language' %}">{{ language.0 }}</a>
+                        {% comment %} <a class="dropdown-item" href="{% url 'change_language' %}">{{ language.0|language_name_local }}</a> {% endcomment %}
+                      </div>
+                      {% comment %} <a class="nav-link waves-effect" href="{% url 'change_language' %}">
+                        <span>{{ language.0|language_name_local }}</span>
+                      </a>  {% endcomment %}
+                  </option>
+                  {% endfor %}
+              </select>
+          </form>
         </ul>
       </div>
     </div>

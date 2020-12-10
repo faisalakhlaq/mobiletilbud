@@ -6,9 +6,15 @@
             {{mobile.full_name}}
         </div>
         <div class="card-body" style="">
+            {% if mobile.image %}
             <div class="mobile-image">
-                <img class="mob-image" src={{ mobile.image.url | default:'/media/images/default_mobile_image.png' }}>
+                <img class="mob-image" src={{ mobile.image.url }}>
             </div>
+            {% else %}
+            <div class="mobile-image">
+                <img class="mob-image" src={{'/media/images/default_mobile_image.png' }}>
+            </div>
+            {% endif %}
         </div>
         <div class="card-footer bg-transparent"
             style="">
