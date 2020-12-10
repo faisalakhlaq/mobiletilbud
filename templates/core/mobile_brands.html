@@ -18,7 +18,7 @@
               {% if mobile_brand.image %}
               <button name="brand" id="brand" class="btn btn-outline-info m-1" 
                type="submit" value={{mobile_brand}}>{{mobile_brand}}
-               <img class='brand-btn-icon' src={{mobile_brand.image.url}}/>
+               <img class='brand-btn-icon' src={{mobile_brand.image.url}}>
                </button>
               {% else %}
               <input name="brand" id="brand" class="btn btn-outline-info m-1" type="submit" value={{mobile_brand}} />
@@ -26,9 +26,9 @@
             {% endfor %}
         </form>
         <form class='form' method='GET' action=''>
-            <input id='query' type='text' placeholder='Search..' 
+            <input id='query' type='text' placeholder='{% trans 'Search..'%}' 
             name='query' value={{ request.GET.query}}>
-            <button id='search_btn' class='btn btn-default bg-dark text-light' type='submit'>Search</button>
+            <button id='search_btn' class='btn btn-default bg-dark text-light' type='submit'>{% trans 'Search..'%}</button>
         </form>
     </div>
     <div class='card-group'>

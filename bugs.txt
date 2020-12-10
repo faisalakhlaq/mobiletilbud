@@ -1,2 +1,0 @@
-If mobile image is not available then we get a valueerror on 
-MobileDetail Page

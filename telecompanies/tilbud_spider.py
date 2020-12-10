@@ -91,20 +91,6 @@ class AbstractTilbudSpider(ABC):
                 offer.discount_offered = float(value)
         if price != 0:
             offer.price = price
-        # Check if the same offer exists previously then delete the old one
-        # Check if the mobile or mobile_name and telecom company are same then 
-        # delete the old offer and save the new one
-        # TODO remove this check
-        # if offer.mobile:
-        #     existing_offer = Offer.objects.filter(Q(mobile=offer.mobile),
-        #                                         Q(telecom_company=offer.telecom_company))
-        #     if existing_offer:
-        #         existing_offer[0].delete()
-        # else:
-        #     existing_offer = Offer.objects.filter(Q(mobile_name__iexact=mobile_name),
-        #                                         Q(telecom_company=offer.telecom_company))
-        #     if existing_offer:
-        #         existing_offer[0].delete()
         offer.save()
 
     def delete_old_offers(self, telecom_company):
