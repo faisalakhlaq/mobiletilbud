@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block content %}
+<div class="col-xs-4 text-center error-400">
+    <h4>{% trans 'Oops! 403 Forbidden'%}</h4>
+    <p>{% trans 'Sorry! You are not authorized for this operation.'%}</p>
+</div>
+{% endblock content %}

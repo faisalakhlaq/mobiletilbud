@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block content %}
+<div class="col-xs-4 text-center error-400">
+    <h4>{% trans 'Oops! 500 Internal Server Error'%}</h4>
+    <p>{% trans 'Sorry something bad happened on our end. We will look into it.'%}</p>
+</div>
+{% endblock content %}
