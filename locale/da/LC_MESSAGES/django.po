@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-10 12:37+0100\n"
+"POT-Creation-Date: 2020-12-10 14:19+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -212,7 +212,7 @@ msgstr "Rabat"
 msgid "Offer Url"
 msgstr "Tilbud URL"
 
-#: telecompanies/models.py:28 templates/mobile/mobile_card_snippet.html:16
+#: telecompanies/models.py:28 templates/mobile/mobile_card_snippet.html:22
 msgid "Price"
 msgstr "Pris"
 
@@ -275,6 +275,34 @@ msgstr "Klik på en mobil og se tilbud"
 #: templates/core/telecom_companies.html:10
 msgid "Check out offers from different Telecom Companies"
 msgstr "Tjek tilbud fra forskellige teleselskaber"
+
+#: templates/error_pages/400.html:6
+msgid "Oops! 400 Bad Request"
+msgstr "Oops! 400. Det er sket en fejl "
+
+#: templates/error_pages/403.html:6
+msgid "Oops! 403 Forbidden"
+msgstr "Oops! 403. Forbudt"
+
+#: templates/error_pages/403.html:7
+msgid "Sorry! You are not authorized for this operation."
+msgstr "Undskyld! Du er ikke autoriseret til denne handling. "
+
+#: templates/error_pages/404.html:6
+msgid "Oops! A 404 occurred."
+msgstr "Oops! 404. Det er sket en fejl."
+
+#: templates/error_pages/404.html:8
+msgid "Means the page you are looking for, is not born yet or maybe died unfortunately!"
+msgstr "Betyder den side, du leder efter, ikke er født endnu eller måske desværre døde"
+
+#: templates/error_pages/500.html:6
+msgid "Oops! 500 Internal Server Error"
+msgstr "Oops! 500 Intern serverfejl"
+
+#: templates/error_pages/500.html:7
+msgid "Sorry something bad happened on our end. We will look into it."
+msgstr "Beklager, der skete noget fejl i vores ende. Vi vil undersøge det."
 
 #: templates/home.html:5
 msgid "Welcome"

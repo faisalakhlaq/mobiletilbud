@@ -114,3 +114,20 @@ def change_language(request):
             response = HttpResponseRedirect(redirect_path)
             response.set_cookie(settings.LANGUAGE_COOKIE_NAME, language)
     return response
+
+# Error page handlers
+def handler500(request):
+        data = {}
+        return render(request,'error_pages/500.html', data)
+
+def handler404(request, exception):
+        data = {}
+        return render(request,'error_pages/404.html', data)
+
+def handler403(request, exception):
+        data = {}
+        return render(request,'error_pages/403.html', data)
+
+def handler400(request, exception):
+        data = {}
+        return render(request,'error_pages/400.html', data)
