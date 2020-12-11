@@ -35,6 +35,6 @@ class MobileDetailView(View):
                 'mobile': mobile,
                 'offers': offers,
                 'tech_specs': specs,
-                'camera': cam,
+                'camera_specs': cam,
             }
         return context
