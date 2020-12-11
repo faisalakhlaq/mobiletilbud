@@ -2,15 +2,6 @@ from itertools import chain
 
 from telecompanies.models import Offer
 
-def has_child(node):
-    """Check if a given node has child nodes in it"""
-    # print(type(node))
-    try:
-        node.children
-        return True
-    except:
-        return False
-
 def get_popular_offers(offers=None, offers_per_company=1):
     """Returns highest discount offers. 
     number of offers_per_company for each telecomcompany."""
@@ -34,5 +25,16 @@ def get_popular_offers(offers=None, offers_per_company=1):
         telia_best_offer = offers.filter(telecom_company__name__iexact='Telia')
     if telia_best_offer and len(telia_best_offer) > offers_per_company:
         telia_best_offer = telia_best_offer[:offers_per_company]
-    result_list = list(chain(telenor_best_offer, three_best_offer, telia_best_offer))
+    
+    yousee_best_offer = offers.filter(
+        telecom_company__name__iexact='YouSee').order_by('-discount_offered')[:5]
+    if not yousee_best_offer:
+        yousee_best_offer = offers.filter(telecom_company__name__iexact='YouSee')
+    if yousee_best_offer and len(yousee_best_offer) > offers_per_company:
+        yousee_best_offer = yousee_best_offer[:offers_per_company]
+
+    result_list = list(chain(telenor_best_offer, 
+                        three_best_offer, 
+                        telia_best_offer,
+                        yousee_best_offer,))
     return result_list

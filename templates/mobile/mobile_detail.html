@@ -7,11 +7,11 @@
 
 {% block content %}
 <div class='mt-5 text-center justify-content-center'>
-    {% comment %} {% if mobile.image %} {% endcomment %}
-        {% comment %} <img class="mob-image" src={{ offer.mobile.image.url | default:'/media/images/default_mobile_image.png' }}> {% endcomment %}
-
-        <img src={{ mobile.image.url | default:'/media/images/default_mobile_image.png' }}>
-    {% comment %} {% endif %} {% endcomment %}
+    {% if mobile.image %}
+        <img src={{ mobile.image.url }} > 
+    {% else %}
+        <img src={{ '/media/images/default_mobile_image.png' }}>
+    {% endif %}
 <h3>{% if mobile.full_name %}{{mobile.full_name}} {% else %}
                         {{ mobile.name }}{% endif %}<h3>
         <div class="container-fluid">
@@ -25,11 +25,10 @@
 </div>
 </hr>
 <div class="row justify-content-center">
-    {% comment %} TODO mobile.name not being translated {% endcomment %}
-    {% translate "Offers on" %} {{mobile.name}} </br>
     {% if not offers %}
         {% trans "Currently no offer on this mobile" %}
     {% else %}
+        {% translate "Offers on" %} {{mobile.name}} </br>
     {% for offer in offers %}
     {% include 'offer/offer_snippet.html' with object=offer %}
     {% endfor %}
@@ -39,30 +38,76 @@
     {% if tech_specs %}
         {% trans "Technical Specification" %}
         </br>
-        <tr><b>two_g</b>  {{tech_specs.two_g}}</tr>
-        <tr><b>three_g</b>  {{tech_specs.three_g}}</tr>
-        <tr><b>four_g</b>  {{tech_specs.four_g}}</tr>
-        <tr><b>five_g</b>  {{tech_specs.five_g}}</tr>
-        <tr><b>WiFi</b>  {{tech_specs.WiFi}}</tr>
-        <tr><b>dual_sim</b>  {{tech_specs.dual_sim}}</tr>
-        <tr><b>dimensions</b>  {{tech_specs.dimensions}}</tr>
-        <tr><b>weight</b>  {{tech_specs.weight}}</tr>
-        <tr><b>screen_type</b>  {{tech_specs.screen_type}}</tr>
-        <tr><b>screen_size</b>  {{tech_specs.screen_size}}</tr>
-        <tr><b>screen_resolution</b>  {{tech_specs.screen_resolution}}</tr>
-        <tr><b>ip_certification</b>  {{tech_specs.ip_certification}}</tr>
-        <tr><b>internal_storage</b>  {{tech_specs.internal_storage}}</tr>
-        <tr><b>external_storage</b>  {{tech_specs.external_storage}}</tr>
-        <tr><b>WLAN</b>  {{tech_specs.WLAN}}</tr>
-        <tr><b>bluetooth</b>  {{tech_specs.bluetooth}}</tr>
-        <tr><b>NFC</b>  {{tech_specs.NFC}}</tr>
-        <tr><b>USB</b>  {{tech_specs.USB}}</tr>
-        <tr><b>wireless_charging</b>  {{tech_specs.wireless_charging}}</tr>
-        <tr><b>fast_charging</b>  {{tech_specs.fast_charging}}</tr>
-        <tr><b>chipset</b>  {{tech_specs.chipset}}</tr>
-        <tr><b>operating_system</b>  {{tech_specs.operating_system}}</tr>
-        <tr><b>ram</b>  {{tech_specs.ram}}</tr>
-<br>
+        {% if tech_specs.two_g %}
+            <tr><b>two_g</b>  {{tech_specs.two_g}}</tr>
+        {% endif %}
+        {% if tech_specs.three_g %}
+            <tr><b>three_g</b>  {{tech_specs.three_g}}</tr>
+        {% endif %}
+        {% if tech_specs.four_g %}
+            <tr><b>four_g</b>  {{tech_specs.four_g}}</tr>
+        {% endif %}
+        {% if tech_specs.five_g %}
+            <tr><b>five_g</b>  {{tech_specs.five_g}}</tr>
+        {% endif %}
+        {% if tech_specs.WiFi %}
+            <tr><b>WiFi</b>  {{tech_specs.WiFi}}</tr>
+        {% endif %}
+        {% if tech_specs.dual_sim %}
+            <tr><b>dual_sim</b>  {{tech_specs.dual_sim}}</tr>
+        {% endif %}
+        {% if tech_specs.dimensions %}
+            <tr><b>dimensions</b>  {{tech_specs.dimensions}}</tr>
+        {% endif %}
+        {% if tech_specs.weight %}
+            <tr><b>weight</b>  {{tech_specs.weight}}</tr>
+        {% endif %}
+        {% if tech_specs.screen_type %}
+            <tr><b>screen_type</b>  {{tech_specs.screen_type}}</tr>
+        {% endif %}
+        {% if tech_specs.screen_size %}
+            <tr><b>screen_size</b>  {{tech_specs.screen_size}}</tr>
+        {% endif %}
+        {% if tech_specs.screen_resolution %}
+            <tr><b>screen_resolution</b>  {{tech_specs.screen_resolution}}</tr>
+        {% endif %}
+        {% if tech_specs.ip_certification %}
+            <tr><b>ip_certification</b>  {{tech_specs.ip_certification}}</tr>
+        {% endif %}
+        {% if tech_specs.internal_storage %}
+            <tr><b>internal_storage</b>  {{tech_specs.internal_storage}}</tr>
+        {% endif %}
+        {% if tech_specs.external_storage %}
+            <tr><b>external_storage</b>  {{tech_specs.external_storage}}</tr>
+        {% endif %}
+        {% if tech_specs.WLAN %}
+            <tr><b>WLAN</b>  {{tech_specs.WLAN}}</tr>
+        {% endif %}
+        {% if tech_specs.bluetooth %}
+            <tr><b>bluetooth</b>  {{tech_specs.bluetooth}}</tr>
+        {% endif %}
+        {% if tech_specs.NFC %}
+            <tr><b>NFC</b>  {{tech_specs.NFC}}</tr>
+        {% endif %}
+        {% if tech_specs.USB %}
+            <tr><b>USB</b>  {{tech_specs.USB}}</tr>
+        {% endif %}
+        {% if tech_specs.wireless_charging %}
+            <tr><b>wireless_charging</b>  {{tech_specs.wireless_charging}}</tr>
+        {% endif %}
+        {% if tech_specs.fast_charging %}
+            <tr><b>fast_charging</b>  {{tech_specs.fast_charging}}</tr>
+        {% endif %}
+        {% if tech_specs.chipset %}
+            <tr><b>chipset</b>  {{tech_specs.chipset}}</tr>
+        {% endif %}
+        {% if tech_specs.operating_system %}
+            <tr><b>operating_system</b>  {{tech_specs.operating_system}}</tr>
+        {% endif %}
+        {% if tech_specs.ram %}
+            <tr><b>ram</b>  {{tech_specs.ram}}</tr>
+        {% endif %}
+        <br>
     {% endif %}
 </div>
 {%endblock content%}

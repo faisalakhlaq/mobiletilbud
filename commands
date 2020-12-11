@@ -13,3 +13,6 @@ celery -A mobiletilbud worker -l info
 systemctl stop redis # First stop the redis and then start it
 redis-server
 celery -A mobiletilbud beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
+
+GIT
+git -c user.name=faisalakhlaq -c user.email=faisalakhlaq@aol.com stash create

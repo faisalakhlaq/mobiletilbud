@@ -1,8 +1,12 @@
 {% extends 'base.html' %}
 {% load i18n %}
+{% load static %}
+{% block extra_head %}
+        <link rel='stylesheet' href="{% static '/home_page.css'%}">
+{% endblock %}
 
 {% block content %}
-<class='home-container' div>
+<div class='home-container' div>
     <div class="home-popular-mobiles" style="">
         <h3>{% trans "Popular Mobiles" %}<h3>
         {% for pm in popular_mobiles %}
