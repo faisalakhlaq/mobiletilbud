@@ -1,11 +1,15 @@
 {% load i18n %}
-<a class="col-auto offer_card_a" href={{ mobile.get_absolute_url }}>
-    <div class="card offer-card" style="background-color:#e8f4f8">
-        <div class="card-header bg-transparent"
-            style=""> 
+{% load static %}
+{% block extra_head %}
+        <link rel='stylesheet' href="{% static '/mobile_card_snippet.css'%}">
+{% endblock %}
+
+<a class="col-auto mobile_card_a" href={{ mobile.get_absolute_url }}>
+    <div class="card mobile-card">
+        <div class="card-header"> 
             {{mobile.full_name}}
         </div>
-        <div class="card-body" style="">
+        <div class="card-body">
             {% if mobile.image %}
             <div class="mobile-image">
                 <img class="mob-image" src={{ mobile.image.url }}>
@@ -16,11 +20,11 @@
             </div>
             {% endif %}
         </div>
-        <div class="card-footer bg-transparent"
+        {% comment %} <div class="card-footer bg-transparent"
             style="">
             {% if mobile.price %}
                 {%trans "Price" %}{{mobile.price}} DKK 
             {% endif %}
-        </div>
+        </div> {% endcomment %}
     </div>
 </a>

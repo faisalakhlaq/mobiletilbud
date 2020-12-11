@@ -95,7 +95,7 @@ def get_tilbud_auto_complete(request):
         return HttpResponse(data, mimetype)
     query = request.GET.get('term', '')
     mobile_list = Offer.objects.values_list('mobile_name', flat=True).filter(
-        mobile_name__icontains=query.strip()).distinct('mobile_name')[:5]
+        mobile_name__icontains=query.strip()).distinct()[:5]
     # mobile_list = Offer.objects.select_related('mobile').filter(
     #     Q(mobile__name__icontains=query.strip()) | 
     #     Q(mobile__full_name__icontains=query.strip())).distinct('mobile')[:5]

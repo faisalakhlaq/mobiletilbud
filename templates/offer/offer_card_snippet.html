@@ -1,4 +1,9 @@
 {% load i18n %}
+{% load static %}
+{% block extra_head %}
+        <link rel='stylesheet' href="{% static '/offer_card_snippet.css'%}">
+{% endblock %}
+
 <a class="col-auto offer_card_a" href={{ offer.get_absolute_url }}>
     <div class="card offer-card" style="background-color:#e8f4f8">
         <div class="card-header bg-transparent"

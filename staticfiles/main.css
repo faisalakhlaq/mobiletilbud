@@ -33,7 +33,7 @@
 .offer_card_a{
     text-decoration: none !important;
 }
-.offer-card {
+/* .offer-card {
     width: 20rem; 
     height: 30rem;
     margin-bottom: 0.7em;
@@ -68,8 +68,7 @@
 .card-footer {
     text-align:center; 
     font-size:1rem; 
-}
-.brand-btn-icon{
-    max-width: 1.5em;
-    max-height: 1.5em;
+} */
+.mobile-list-container{
+    align-items: center;
 }

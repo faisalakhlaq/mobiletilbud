@@ -7,13 +7,15 @@
 
 {% block content %}
 <div class='home-container' div>
-    <div class="home-popular-mobiles" style="">
-        <h3>{% trans "Popular Mobiles" %}<h3>
-        {% for pm in popular_mobiles %}
-            {% include 'mobile/mobile_card_snippet.html' with mobile=pm.mobile %}
-        {% endfor %}
+    <div class="home-popular-mobiles">
+        <h3>{% trans "Popular Mobiles" %}</h3>
+        <div class="popular-mobiles-list">
+            {% for pm in popular_mobiles %}
+                {% include 'mobile/mobile_card_snippet.html' with mobile=pm.mobile %}
+            {% endfor %}
+        </div>
     </div>
-    <div class="home-popular-offers" style="">
+    <div class="home-popular-offers">
         {% if offer_list %}{% endif %}
         <h3>{% trans "Popular Offers" %}<h3>
         {% for offer in popular_offers %}
