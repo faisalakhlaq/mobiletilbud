@@ -23,7 +23,6 @@ kombu==5.0.2
 lxml==4.6.2
 MarkupSafe==1.1.1
 multidict==5.1.0
-mysqlclient==2.0.1
 Pillow==8.0.1
 prompt-toolkit==3.0.8
 psycopg2==2.8.6

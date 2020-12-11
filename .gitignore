@@ -1,4 +1,5 @@
 # ####################################### #
+mobiletilbud,db
 wsgi.py
 local.py
 quidelines-ideas

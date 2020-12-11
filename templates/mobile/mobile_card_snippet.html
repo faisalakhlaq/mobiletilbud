@@ -6,9 +6,9 @@
 
 <a class="col-auto mobile_card_a" href={{ mobile.get_absolute_url }}>
     <div class="card mobile-card">
-        <div class="card-header"> 
+        {% comment %} <div class="card-header"> 
             {{mobile.full_name}}
-        </div>
+        </div> {% endcomment %}
         <div class="card-body">
             {% if mobile.image %}
             <div class="mobile-image">
@@ -19,6 +19,9 @@
                 <img class="mob-image" src={{'/media/images/default_mobile_image.png' }}>
             </div>
             {% endif %}
+        <div class="card-header"> 
+            {{mobile.full_name}}
+        </div>
         </div>
         {% comment %} <div class="card-footer bg-transparent"
             style="">
