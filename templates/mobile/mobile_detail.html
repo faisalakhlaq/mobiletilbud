@@ -17,8 +17,17 @@
                         {{ mobile.name }}{% endif %}<h3>
         <div class="container-fluid">
             <div class="card-body text-success">
-            <p class="card-text"><small>{% translate "Manufacturer" %}</small>
-            {{mobile.brand.name}}</p>
+                <p class="card-text"><small>
+                {% translate "Manufacturer" %}</small>
+                {{mobile.brand.name}}</p>
+                {% if colours %}
+                Colours: 
+                    {% for colour in colours %}{{colour.value}}, {% endfor %}
+                {% endif %}
+                {% if memory %}
+                Memory: 
+                    {% for mem in memory %}{{mem.value}}, {% endfor %}
+                {% endif %}
             </div>
             <div class="card-footer bg-transparent border-success">{% if mobile.cash_price %}
             Price: {{mobile.cash_price}} {% endif %}</div>
