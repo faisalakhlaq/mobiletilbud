@@ -31,10 +31,16 @@ class MobileDetailView(View):
         if specs: specs = specs[0]
         cam = mobile.camera_specs.all()
         if cam: cam = cam[0]
+        colours = MobileVariation.objects.filter(variation__mobile=mobile,
+                                            variation__name='colour')
+        memory = MobileVariation.objects.filter(variation__mobile=mobile, 
+                                            variation__name='memory')
         context = {
                 'mobile': mobile,
                 'offers': offers,
                 'tech_specs': specs,
-                'camera': cam,
+                'camera_specs': cam,
+                'colours': colours,
+                'memory': memory,
             }
         return context

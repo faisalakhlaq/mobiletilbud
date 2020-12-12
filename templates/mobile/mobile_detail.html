@@ -1,10 +1,11 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load i18n %}
-
+{% block extra_head %}
+        <link rel='stylesheet' href="{% static '/mobile_detail.css'%}">
+{% endblock %}
 {% block title %} {{ mobile.name }} | {{ block.super }}
 {% endblock title %}
-
 {% block content %}
 <div class='mt-5 text-center justify-content-center'>
     {% if mobile.image %}
@@ -16,8 +17,17 @@
                         {{ mobile.name }}{% endif %}<h3>
         <div class="container-fluid">
             <div class="card-body text-success">
-            <p class="card-text"><small>{% translate "Manufacturer" %}</small>
-            {{mobile.brand.name}}</p>
+                <p class="card-text"><small>
+                {% translate "Manufacturer" %}</small>
+                {{mobile.brand.name}}</p>
+                {% if colours %}
+                Colours: 
+                    {% for colour in colours %}{{colour.value}}, {% endfor %}
+                {% endif %}
+                {% if memory %}
+                Memory: 
+                    {% for mem in memory %}{{mem.value}}, {% endfor %}
+                {% endif %}
             </div>
             <div class="card-footer bg-transparent border-success">{% if mobile.cash_price %}
             Price: {{mobile.cash_price}} {% endif %}</div>
@@ -34,57 +44,61 @@
     {% endfor %}
     {% endif %}
 </div>
-<div class="text-center justify-content-center">
+<button id="view_mob_specs_btn">{% trans 'Technical Specification'%}</button>
+<div id="mobile_tech_specs" class="mobile-tech-specs">
     {% if tech_specs %}
         {% trans "Technical Specification" %}
         </br>
+        {% if tech_specs.launch %}
+            <tr><b>Launch</b>  {{tech_specs.launch}}</tr>
+        {% endif %}
         {% if tech_specs.two_g %}
-            <tr><b>two_g</b>  {{tech_specs.two_g}}</tr>
+            <tr><b>2G</b>  {{tech_specs.two_g}}</tr>
         {% endif %}
         {% if tech_specs.three_g %}
-            <tr><b>three_g</b>  {{tech_specs.three_g}}</tr>
+            <tr><b>3G</b>  {{tech_specs.three_g}}</tr>
         {% endif %}
         {% if tech_specs.four_g %}
-            <tr><b>four_g</b>  {{tech_specs.four_g}}</tr>
+            <tr><b>4G</b>  {{tech_specs.four_g}}</tr>
         {% endif %}
         {% if tech_specs.five_g %}
-            <tr><b>five_g</b>  {{tech_specs.five_g}}</tr>
+            <tr><b>5G</b>  {{tech_specs.five_g}}</tr>
         {% endif %}
         {% if tech_specs.WiFi %}
             <tr><b>WiFi</b>  {{tech_specs.WiFi}}</tr>
         {% endif %}
         {% if tech_specs.dual_sim %}
-            <tr><b>dual_sim</b>  {{tech_specs.dual_sim}}</tr>
+            <tr><b>Dual Sim</b>  {{tech_specs.dual_sim}}</tr>
         {% endif %}
         {% if tech_specs.dimensions %}
-            <tr><b>dimensions</b>  {{tech_specs.dimensions}}</tr>
+            <tr><b>Dimensions</b>  {{tech_specs.dimensions}}</tr>
         {% endif %}
         {% if tech_specs.weight %}
-            <tr><b>weight</b>  {{tech_specs.weight}}</tr>
+            <tr><b>Weight</b>  {{tech_specs.weight}}</tr>
         {% endif %}
         {% if tech_specs.screen_type %}
-            <tr><b>screen_type</b>  {{tech_specs.screen_type}}</tr>
+            <tr><b>Screen Type</b>  {{tech_specs.screen_type}}</tr>
         {% endif %}
         {% if tech_specs.screen_size %}
-            <tr><b>screen_size</b>  {{tech_specs.screen_size}}</tr>
+            <tr><b>Screen Size</b>  {{tech_specs.screen_size}}</tr>
         {% endif %}
         {% if tech_specs.screen_resolution %}
-            <tr><b>screen_resolution</b>  {{tech_specs.screen_resolution}}</tr>
+            <tr><b>Screen Resolution</b>  {{tech_specs.screen_resolution}}</tr>
         {% endif %}
         {% if tech_specs.ip_certification %}
-            <tr><b>ip_certification</b>  {{tech_specs.ip_certification}}</tr>
+            <tr><b>IP Certification</b>  {{tech_specs.ip_certification}}</tr>
         {% endif %}
         {% if tech_specs.internal_storage %}
-            <tr><b>internal_storage</b>  {{tech_specs.internal_storage}}</tr>
+            <tr><b>Internal Storage</b>  {{tech_specs.internal_storage}}</tr>
         {% endif %}
         {% if tech_specs.external_storage %}
-            <tr><b>external_storage</b>  {{tech_specs.external_storage}}</tr>
+            <tr><b>External Storage</b>  {{tech_specs.external_storage}}</tr>
         {% endif %}
         {% if tech_specs.WLAN %}
             <tr><b>WLAN</b>  {{tech_specs.WLAN}}</tr>
         {% endif %}
         {% if tech_specs.bluetooth %}
-            <tr><b>bluetooth</b>  {{tech_specs.bluetooth}}</tr>
+            <tr><b>Bluetooth</b>  {{tech_specs.bluetooth}}</tr>
         {% endif %}
         {% if tech_specs.NFC %}
             <tr><b>NFC</b>  {{tech_specs.NFC}}</tr>
@@ -92,22 +106,82 @@
         {% if tech_specs.USB %}
             <tr><b>USB</b>  {{tech_specs.USB}}</tr>
         {% endif %}
+        {% if tech_specs.battery_type %}
+            <tr><b>Battery Type</b>  {{tech_specs.battery_type}}</tr>
+        {% endif %}
         {% if tech_specs.wireless_charging %}
-            <tr><b>wireless_charging</b>  {{tech_specs.wireless_charging}}</tr>
+            <tr><b>Wireless Charging</b>  {{tech_specs.wireless_charging}}</tr>
         {% endif %}
         {% if tech_specs.fast_charging %}
-            <tr><b>fast_charging</b>  {{tech_specs.fast_charging}}</tr>
+            <tr><b>Fast Charging</b>  {{tech_specs.fast_charging}}</tr>
         {% endif %}
         {% if tech_specs.chipset %}
-            <tr><b>chipset</b>  {{tech_specs.chipset}}</tr>
+            <tr><b>Chipset</b>  {{tech_specs.chipset}}</tr>
         {% endif %}
         {% if tech_specs.operating_system %}
-            <tr><b>operating_system</b>  {{tech_specs.operating_system}}</tr>
+            <tr><b>Operating System</b>  {{tech_specs.operating_system}}</tr>
         {% endif %}
         {% if tech_specs.ram %}
-            <tr><b>ram</b>  {{tech_specs.ram}}</tr>
+            <tr><b>RAM</b>  {{tech_specs.ram}}</tr>
         {% endif %}
         <br>
     {% endif %}
 </div>
+<button id="mobile_cam_btn">{% trans 'Camera Specification'%}</button>
+<div id="mobile_cam_specs" class="mobile-cam-specs">
+{% if camera_specs %}
+    {% if camera_specs.rear_cam_lenses %}
+        <tr><b>Rear Camera Lenses</b>  
+        {{camera_specs.rear_cam_lenses}}</tr>
+    {% endif %}
+    {% if camera_specs.rear_cam_megapixel %}
+        <tr><b>Rear Camera Megapixel</b>  
+        {{camera_specs.rear_cam_megapixel}}</tr>
+    {% endif %}
+    {% if camera_specs.back_cam_aperture %}
+        <tr><b>Rear Camera Aperture</b>  
+        {{camera_specs.back_cam_aperture}}</tr>
+    {% endif %}
+    {% if camera_specs.rear_cam_video_resolution %}
+        <tr><b>Rear Camera Resolution</b>  
+        {{camera_specs.rear_cam_video_resolution}}</tr>
+    {% endif %}    
+    {% if camera_specs.front_cam_lenses %}
+        <tr><b>Front Camera Lenses</b>  
+        {{camera_specs.front_cam_lenses}}</tr>
+    {% endif %}    
+    {% if camera_specs.front_cam_megapixel %}
+        <tr><b>Front Camera Megapixel</b>  
+        {{camera_specs.front_cam_megapixel}}</tr>
+    {% endif %}
+    {% if camera_specs.front_cam_aperture %}
+        <tr><b>Front Camera Aperture</b>  
+        {{camera_specs.front_cam_aperture}}</tr>
+    {% endif %}
+    {% if camera_specs.front_cam_video_resolution %}
+        <tr><b>Front Camera Video Resolution</b>  
+        {{camera_specs.front_cam_video_resolution}}</tr>
+    {% endif %}
+{% endif %}
+</div>
 {%endblock content%}
+{% block extra_scripts %}
+<script>
+var specs_btn = $("#view_mob_specs_btn");
+var tech_specs_div = $('#mobile_tech_specs');
+var cam_btn = $("#mobile_cam_btn");
+var cam_specs_div = $("#mobile_cam_specs");
+specs_btn.click(function() {
+    tech_specs_div.toggle();
+});
+cam_btn.click(function() {
+    cam_specs_div.toggle();
+});
+// Hide the camera and technical specs on page load
+$(function() {
+    // Handler for .ready() called. 
+    tech_specs_div.hide()
+    cam_specs_div.hide()
+});
+</script>
+{% endblock extra_scripts %}
