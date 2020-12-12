@@ -1,5 +1,4 @@
 from django.conf import settings
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
@@ -19,12 +18,14 @@ from telecompanies.utils import get_popular_offers
 # from mobiles.popular_mobile_spider import MobilkundenSpider
 # from telecompanies.spider import YouSeeSpider
 # from mobiles.tasks import fetch_mobiles_task
+# from mobiles.utils import update_launch_date
 
 class HomeView(View):
     def get(self, *args, **kwargs):
+        # update_launch_date('Motorola')
         # TeliaSpider().fetch_offers()
         # fetch_mobiles_task.delay('Motorola')
-        # GsmarenaMobileSpecSpider().fetch_mobile_specs('Sony')
+        # GsmarenaMobileSpecSpider().fetch_mobile_specs('Apple')
         context = self.get_context_data(*kwargs)
         return render(self.request, 'core/home.html', context)
     
@@ -54,7 +55,7 @@ class MobileManufacturersView(ListView):
             # If popular mobiles is not selected then a brand name is 
             # selected. Therefore, find the mobiles of the selected brand
             if company.strip() != 'Popular Mobiles':
-                return Mobile.objects.filter(brand__name__iexact=company.strip()).order_by('-name')
+                return Mobile.objects.filter(brand__name__iexact=company.strip()).order_by('-launch_date')
             elif company.strip() == 'Popular Mobiles':
                 # get all the ids from popularmobile 
                 # table and then fetch the related mobiles

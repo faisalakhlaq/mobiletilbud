@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup
 from celery import shared_task
+from dateutil import parser
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 import requests
@@ -7,8 +8,8 @@ import random
 import time
 from .models import (Mobile, MobileBrand, MobileTechnicalSpecification,
                      MobileCameraSpecification, MobileVariation, Variation)
+from .utils import HeaderFactory, ProxyFactory, update_mobile_launch_date
 from itertools import cycle
-
 
 class ElgigantenSpider:
     def __init__(self):
@@ -57,35 +58,37 @@ class GsmarenaMobileSpecSpider:
             return None
         # import pdb; pdb.set_trace()
         mobiles = Mobile.objects.filter(brand=brand)
-        self.proxies = get_proxies()
-        proxy_pool = cycle(self.proxies)
+        # self.proxies = ProxyFactory().get_proxies(5)
+        # proxy_pool = cycle(self.proxies)
         for index, mobile in enumerate(mobiles):
             try:
                 # TODO check if specs data is null by using
                 # MobileTechnicalSpecification.objects.filter(data__isnull=True)
-                if not mobile.url or MobileTechnicalSpecification.objects.filter(mobile=mobile): continue
-                proxy = next(proxy_pool)
+                if not mobile.url: continue
+                #  or MobileTechnicalSpecification.objects.filter(mobile=mobile): continue
+                # proxy = next(proxy_pool)
                 header = self.headers.get_header()
-                print(f'Remaining {len(mobiles)-index} Sending Request # {index} for mobile = {mobile} with proxy = {proxy} and headers = \n {header}')
+                print(f'Remaining {len(mobiles)-index} Sending Request # {index} for mobile = {mobile} with proxy =  and headers = \n {header}')
                 response = requests.get(
                     url=mobile.url, 
-                    proxies={"http": proxy, "https": proxy}, 
+                    # proxies={"http": proxy, "https": proxy}, 
                     headers=header,
                     timeout=20, # timeout in 20 seconds in order to avoid hanging/freezing
                 )
                 soup = BeautifulSoup(response.content, 'html.parser')
                 tables = soup.find_all('table')
                 rows = []
+                # import pdb; pdb.set_trace()
                 for table in tables:
                     new_rows = table.find_all('tr')
                     if new_rows: rows = rows + new_rows
                 self.extract_mobile_info(rows, mobile)
-                if index !=0 and index % 20 == 0:
-                    # after every 10 requests update the proxy list 
+                # if index !=0 and index % 20 == 0:
+                    # after every 20 requests update the proxy list 
                     # in order to avoid dead proxies
-                    self.proxies = get_proxies()
-                    print('Got new proxy pool')
-                    proxy_pool = cycle(self.proxies)
+                    # self.proxies = ProxyFactory().get_proxies(5)
+                    # print('Got new proxy pool')
+                    # proxy_pool = cycle(self.proxies)
                 if index % 3 == 0:
                     time.sleep(20)
                 else:
@@ -97,12 +100,12 @@ class GsmarenaMobileSpecSpider:
                     f.write(str(mobile))
                     f.write('\n')
                 continue
-                if index !=0 and index % 20 == 0:
-                    # after every 10 requests update the proxy list 
+                # if index !=0 and index % 20 == 0:
+                    # after every 20 requests update the proxy list 
                     # in order to avoid dead proxies
-                    self.proxies = get_proxies()
-                    print('Got new proxy pool')
-                    proxy_pool = cycle(self.proxies)
+                    # self.proxies = ProxyFactory().get_proxies(5)
+                    # print('Got new proxy pool')
+                    # proxy_pool = cycle(self.proxies)
 
 
     def extract_mobile_info(self, rows, mobile):
@@ -111,6 +114,7 @@ class GsmarenaMobileSpecSpider:
         # isinstance(rows, list)
         # import pdb; pdb.set_trace()
         if len(rows) == 0:
+            print(f'Got not data for {mobile.name}')
             return None
         info_dict = {}
         th_title = ''
@@ -135,6 +139,7 @@ class GsmarenaMobileSpecSpider:
 
     def save_mobile_info(self, data_dict, mobile):
         # import pdb; pdb.set_trace()
+        old_specs = MobileTechnicalSpecification.objects.filter(mobile=mobile)
         mob_specs = MobileTechnicalSpecification.objects.create(mobile=mobile)
         technology = data_dict.get('network-technology')
         if technology and '5g' in technology.lower():
@@ -203,10 +208,21 @@ class GsmarenaMobileSpecSpider:
         announced = data_dict.get('launch-announced')
         if announced:
             launch = 'Announced: ' + announced.strip()
+            try:
+                dt = parser.parse(announced.strip())
+                mobile.launch_date = dt
+                mobile.save()
+            except:
+                print('Unable to save launch date for: ', mobile)
+                update_mobile_launch_date(launch_date=announced.strip(), mobile=mobile)
+
         status = data_dict.get('launch-status')
         if status:
-            mob_specs.launch = launch  + " - Status " + status.strip()
+            launch = launch  + " - Status " + status.strip()
+        if launch:
+            mob_specs.launch = launch
 
+        old_specs.delete()
         mob_specs.save()
         print('Saved specs for ', mobile)
 
@@ -218,20 +234,27 @@ class GsmarenaMobileSpecSpider:
         if color:
             colors = color.split(',')
             for col in colors:
-                mobileVariation = MobileVariation.objects.create(variation=variation, 
+                try:
+                    mobileVariation = MobileVariation.objects.create(variation=variation, 
                                                                 value=col.strip())
+                except:
+                    # MobileVariation already exists. So continue
+                    continue
         variation, _ = Variation.objects.get_or_create(name='memory', mobile=mobile)
         memory = data_dict.get('memory-internal')
         if memory:
             memories = memory.split(',')
             for mem in memories:
-                mobileVariation = MobileVariation.objects.create(variation=variation, 
+                try:
+                    mobileVariation = MobileVariation.objects.create(variation=variation, 
                                                                 value=mem.strip())
+                except:
+                    continue
         print('Saved Variation for ', mobile)
 
     def save_camera_specs(self, data_dict, mobile):
         # import pdb; pdb.set_trace()
-
+        old_cam_specs = MobileCameraSpecification.objects.filter(mobile=mobile)
         cam_specs = MobileCameraSpecification.objects.create(mobile=mobile)
         single = data_dict.get('main camera-single')
         features = data_dict.get('main camera-features')
@@ -239,14 +262,12 @@ class GsmarenaMobileSpecSpider:
             features = features.strip()
         if single and len(single.strip()) > 0:
             cam_specs.rear_cam_lenses = 1
-            # TODO check if the len > 255 strip [:254]
             rear_mp = single.strip() 
             if features:
                 rear_mp = rear_mp + '- Features: ' + features
             cam_specs.rear_cam_megapixel = rear_mp[:254]
         elif data_dict.get('main camera-double'):
             cam_specs.rear_cam_lenses = 2
-            # TODO check if the len > 255 strip [:254]
             rear_mp = data_dict.get('main camera-double').strip() 
             if features:
                 rear_mp = rear_mp + '- Features: ' + features
@@ -259,7 +280,6 @@ class GsmarenaMobileSpecSpider:
             cam_specs.rear_cam_megapixel = rear_mp[:254]
         elif data_dict.get('main camera-quad'):
             cam_specs.rear_cam_lenses = 4
-            # TODO check if the len > 255 strip [:254]
             rear_mp = data_dict.get('main camera-quad').strip()
             if features:
                 rear_mp = rear_mp + '- Features: ' + features
@@ -272,15 +292,12 @@ class GsmarenaMobileSpecSpider:
         if front_features and len(front_features.strip()) > 0: front_features = front_features.strip()
         if front_single and len(front_single.strip()) > 0:
             cam_specs.front_cam_lenses = 1
-            # TODO check if the len > 255 strip [:254]
             front_mp = front_single.strip()
             if front_features:
                 front_mp = front_mp + '- Features: ' + front_features
             cam_specs.front_cam_megapixel = front_mp[:254]
-            # cam_specs.front_cam_megapixel = front_single.strip() + '- Features: ' + front_features
         elif data_dict.get('selfie camera-double'):
             cam_specs.front_cam_lenses = 2
-            # TODO check if the len > 255 strip [:254]
             front_mp = data_dict.get('selfie camera-double').strip()
             if front_features:
                 front_mp = front_mp + '- Features: ' + front_features
@@ -288,6 +305,7 @@ class GsmarenaMobileSpecSpider:
         front_cam_video_resolution = data_dict.get('selfie camera-video')
         if front_cam_video_resolution:
             cam_specs.front_cam_video_resolution = front_cam_video_resolution.strip()[:50]
+        old_cam_specs.delete()
         cam_specs.save()
         print('Saved Camera Specs for ', mobile)
 
@@ -297,7 +315,7 @@ class GadgetsMobileSpecSpider:
         # self.headers = {'User-agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:61.0) Gecko/20100101 Firefox/61.0'}
         self.headers = HeaderFactory()
         self.brand_name = brand_name_
-        self.proxies = get_proxies()
+        self.proxies = ProxyFactory().get_proxies(5)
 
     def fetch_mobile_specs(self):
         brand = MobileBrand.objects.get(name__iexact=self.brand_name)
@@ -354,7 +372,7 @@ class GadgetsMobileSpecSpider:
                 if index !=0 and index % 10 == 0:
                     # after every 10 requests update the proxy list 
                     # in order to avoid dead proxies
-                    self.proxies = get_proxies()
+                    self.proxies = ProxyFactory().get_proxies(5)
                     print('Got new proxy pool')
                     proxy_pool = cycle(self.proxies)
                 if index % 3 == 0:

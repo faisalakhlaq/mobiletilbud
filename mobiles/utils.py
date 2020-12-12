@@ -6,7 +6,39 @@ import random
 import requests
 
 from .models import MobileBrand as new_brand
-# from core.models import MobileBrand as core_brand
+from mobiles.models import Mobile
+from dateutil import parser
+
+def update_launch_date(brand_name):
+    'Update the Mobile launch date where None'
+    mobiles = Mobile.objects.filter(brand__name=brand_name).filter(launch_date=None)
+    # import pdb; pdb.set_trace()
+    for ph in mobiles:
+        try:
+            specs = ph.technical_specs.all()
+            launch = None
+            if specs:
+                launch = [0].launch
+                launch = launch.split(' ',2)[1]
+                dt = parser.parse(launch.strip())
+                ph.launch_date = dt
+                ph.save()
+        except Exception as e:
+            print('unable to update date for ', ph)
+            print('Launch Date: ', launch)
+            print('Exception: ', e)
+
+def update_mobile_launch_date(mobile, launch_date):
+    'Update the Mobile launch date where None'
+    try:
+        # import pdb; pdb.set_trace()
+        launch = mobile.technical_specs.all()[0].launch
+        launch = launch.split(' ',2)[1]
+        dt = parser.parse(launch.strip())
+        mobile.launch_date = dt
+        mobile.save()
+    except:
+        print('Unable to update launch date for ', mobile)
 
 def bulk_copy_table_data():
     queryset = core_mobile.objects.all().values('name', 'full_name', 'brand', 'cash_price', 'slug')
@@ -114,7 +146,7 @@ class ProxyFactory:
         try:
             t = requests.get("http://8.8.4.4", 
             proxies={"http": proxy, "https": proxy}, 
-            timeout=10)
+            timeout=20)
             if t.status_code == requests.codes.ok:
                 print('got a valid proxy')
                 return True

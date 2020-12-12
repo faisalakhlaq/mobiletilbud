@@ -38,6 +38,10 @@ class Mobile(models.Model):
                                   blank=True, null=True)
     # url for the mobile on a website for further details of the mobile                              
     url                     = models.URLField("Url", blank=True, null=True)
+    launch_date             = models.DateField(_("Launch Date"), 
+                                  auto_now=False, auto_now_add=False,
+                                  blank=True, null=True)
+
 
     class Meta:
         unique_together = (
