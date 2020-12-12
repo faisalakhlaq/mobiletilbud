@@ -10,6 +10,27 @@ from .models import (Mobile, MobileBrand, MobileTechnicalSpecification,
 from itertools import cycle
 
 
+class ElgigantenSpider:
+    def __init__(self):
+        self.apple_url = 'https://www.elgiganten.dk/catalog/mobil-gps/dk_mobiltelefoner/mobiltelefoner?SearchParameter=%26%40QueryTerm%3D*%26ContextCategoryUUID%3Dr_KsGQV5iqQAAAFDhNY2st58%26discontinued%3D0%26ManufacturerName%3DApple%26online%3D1%26%40Sort.ViewCount%3D1%26%40Sort.ProductListPrice%3D0&PageSize=12&ProductElementCount=&searchResultTab=Products&CategoryName=dk_mobiltelefoner&CategoryDomainName=store-elgigantenDK-ProductCatalog#filter-sidebar'
+        self.headers = HeaderFactory()
+
+    def fetch_price(self):
+        response = requests.get(
+            url=self.apple_url, 
+            headers=header,
+            timeout=20, # timeout in 20 seconds in order to avoid hanging/freezing
+        )
+        soup = BeautifulSoup(response.content, 'html.parser')
+        main = soup.find('main', {'class', 'master-main row'})
+        search_products = main.find('div', {'class', 'searchProductsInfo'})
+        if not search_products:
+            search_products = soup.find('div', {'class', 'searchProductsInfo'})
+        if not search_products: 
+            print('No products found')
+            return
+
+
 # TODO use logging
 class GsmarenaMobileSpecSpider:
     def __init__(self):
