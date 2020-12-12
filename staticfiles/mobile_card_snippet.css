@@ -2,10 +2,13 @@
     width: 10rem;
     height: 20rem;
     margin-bottom: 0.7rem;
+    background-color: rgb(239, 239, 255);
 }
 .card-header {
     text-align:center;
-    font-size:.8rem;
+    font-size:.7rem;
+    font-weight: bold;
+    color: rgb(66, 66, 247);;
 }
 .card-header:hover {
     transform: scale(1.05);

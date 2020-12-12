@@ -27,7 +27,7 @@
     <div class='search-field'><form class='form' method='GET' action=''>
         <input id='query' type='text' placeholder='{% trans 'Search..'%}' 
         name='query' value={{ request.GET.query}}>
-        <button id='search_btn' class='btn btn-default bg-dark text-light' type='submit'>{% trans 'Search..'%}</button>
+        <button id='search_btn' class='btn btn-default bg-info text-light' type='submit'>{% trans 'Search..'%}</button>
     </form></div>
     <div class="card-group" style="">
         {% if not object_list %}
