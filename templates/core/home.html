@@ -6,9 +6,9 @@
 {% endblock %}
 
 {% block content %}
-<div class='home-container' div>
+<div class='home-container'>
     <div class="home-popular-mobiles">
-        <h3>{% trans "Popular Mobiles" %}</h3>
+        <h3 class="popular-heading"><span>{% trans "Popular Mobiles" %}</span></h3>
         <div class="popular-mobiles-list">
             {% for pm in popular_mobiles %}
                 {% include 'mobile/mobile_card_snippet.html' with mobile=pm.mobile %}
@@ -17,10 +17,12 @@
     </div>
     <div class="home-popular-offers">
         {% if offer_list %}{% endif %}
-        <h3>{% trans "Popular Offers" %}<h3>
+        <h3 class="popular-heading"><span>{% trans "Popular Offers" %}</span><h3>
+        <div class="popular-offer-list">
         {% for offer in popular_offers %}
             {% include 'offer/offer_card_snippet.html' with offer=offer%}
         {% endfor %}
+        </div>
     </div>
 </div>
 {% endblock content %}

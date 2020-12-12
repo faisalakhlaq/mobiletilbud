@@ -6,7 +6,7 @@
 
 <a class="col-auto offer_card_a" href={{ offer.get_absolute_url }}>
     <div class="card offer-card">
-        <div class="offer-card-header bg-transparent"
+        <div class="offer-card-header"
             style="">
             {% if offer.discount_offered %}{% trans "Discount"%}: 
             {{ offer.discount_offered }}.kr {% elif offer.discount %}{{ offer.discount }}{% endif %}
@@ -15,12 +15,12 @@
             <div class="offer-mobile-image">
                 <img class="offer-mob-image" src={{ offer.mobile.image.url | default:'/media/images/default_mobile_image.png' }}>
             </div>
-            <h5 class="offer-card-title m-3">{% if offer.mobile %}
+            <h5 class="offer-card-title">{% if offer.mobile %}
                 {{offer.mobile.full_name}} {% elif offer.mobile_name %}
                 {{ offer.mobile_name }}{% endif %}
             </h5>
             <h5 class="offer-card-text"><small>{% translate "Telecom Company" %}</small></h5>
-            <p>{{offer.telecom_company.name}}</p>
+            <p class="offer-card-para">{{offer.telecom_company.name}}</p>
         </div>
         <div class="offer-card-footer bg-transparent"
             style="">
