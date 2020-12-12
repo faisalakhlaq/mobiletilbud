@@ -2,8 +2,11 @@
     display:flex; 
     flex-direction:column; 
     align-items:center; 
-    align-self:center; 
-    justify-self:center
+   /*  align-self:center; */
+    justify-self:center 
+}
+.brands-header {
+    /* text-align: center; */
 }
 .brand-btn-icon{
     max-width: 1.5em;
