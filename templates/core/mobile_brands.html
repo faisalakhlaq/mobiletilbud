@@ -13,8 +13,8 @@
     <h3 class="brands-header">{% trans "Explore Mobile Brands" %}<h3>
     <div class='company-list'>
         <form method='GET' action=''>
-            <input name="brand" id="brand" class="btn btn-outline-info m-1" 
-              type="submit" value='Popular Mobiles' />
+        <button name="brand" id="brand" class="btn btn-outline-info m-1"
+         type="submit" value='Popular' />{% trans 'Popular Mobiles' %}</button>
             {% for mobile_brand in mobile_brands %}
               {% if mobile_brand.image %}
               <button name="brand" id="brand" class="btn btn-outline-info m-1" 
@@ -35,7 +35,6 @@
     <div class='mobile-list-container'>
         {% if mobile_list %}
         <hr>
-        {% comment %} <h3 class="section-header">{{brand}}</h3> {% endcomment %}
         <b class="header-span">{% translate "Select a Phone to Check Details and Offers" %}</b>
             <div class='selected-brand-mobile-list'>
                 {% for mobile in mobile_list %}
@@ -51,13 +50,10 @@
   </div>
 </div>
 
-{% comment %} <div class="pagination">
-  {% include 'paginator_template.html' with page_obj=page_obj %}
-</div> {% endcomment %}
-
 {% endblock content %}
 {% block extra_scripts %}
 <script>
+$("[id='brand'][value={{brand}}]").css('background-color', '#007AD0').css('color','#fff');
   $(function() {
     $( "#query" ).autocomplete({
       source: "/mobile_search_auto_complete",

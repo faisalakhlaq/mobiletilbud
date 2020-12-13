@@ -22,6 +22,10 @@ from telecompanies.utils import get_popular_offers
 class HomeView(View):
     def get(self, *args, **kwargs):
         # update_launch_date('Sony')
+        # ThreeSpider().fetch_offers() 
+        # TelenorSpider().fetch_offers()
+        # TeliaSpider().fetch_offers()
+        # YouSeeSpider().fetch_offers()
         # TeliaSpider().fetch_offers()
         # fetch_mobiles_task.delay('Motorola')
         # GsmarenaMobileSpecSpider().fetch_mobile_specs('Huawei')
@@ -43,7 +47,7 @@ class HomeView(View):
 class MobileManufacturersView(ListView):
     model = Mobile
     template_name = 'core/mobile_brands.html'
-    paginate_by = 10
+    paginate_by = 20
 
     def get_queryset(self):
         company = self.request.GET.get("brand")
@@ -54,11 +58,11 @@ class MobileManufacturersView(ListView):
         elif company:
             # If popular mobiles is not selected then a brand name is 
             # selected. Therefore, find the mobiles of the selected brand
-            if company.strip() != 'Popular Mobiles':
+            if company.strip() != 'Popular':
                 # Order by date and send the ones will null value at the end
                 # return Mobile.objects.filter(brand__name__iexact=company.strip()).order_by('-launch_date')
                 return Mobile.objects.filter(brand__name__iexact=company.strip()).order_by(F('launch_date').desc(nulls_last=True))
-            elif company.strip() == 'Popular Mobiles':
+            elif company.strip() == 'Popular':
                 # get all the ids from popularmobile 
                 # table and then fetch the related mobiles
                 ids = PopularMobile.objects.values_list('mobile')
@@ -74,7 +78,7 @@ class MobileManufacturersView(ListView):
         company = self.request.GET.get("brand")
         query = self.request.GET.get('query')            
         if not company and not query:
-            query = _('Popular Mobiles')
+            query = _('Popular')
         context['mobile_brands'] = MobileBrand.objects.all()
         context["brand"] = company or query
         return context

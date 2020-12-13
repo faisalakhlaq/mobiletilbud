@@ -13,25 +13,26 @@
     {% else %}
         <img src={{ '/media/images/default_mobile_image.png' }}>
     {% endif %}
-<h3>{% if mobile.full_name %}{{mobile.full_name}} {% else %}
+    <h3>{% if mobile.full_name %}{{mobile.full_name}} {% else %}
                         {{ mobile.name }}{% endif %}<h3>
-        <div class="container-fluid">
-            <div class="card-body text-success">
-                <p class="card-text"><small>
-                {% translate "Manufacturer" %}</small>
-                {{mobile.brand.name}}</p>
-                {% if colours %}
-                Colours: 
-                    {% for colour in colours %}{{colour.value}}, {% endfor %}
-                {% endif %}
-                {% if memory %}
-                Memory: 
-                    {% for mem in memory %}{{mem.value}}, {% endfor %}
-                {% endif %}
-            </div>
-            <div class="card-footer bg-transparent border-success">{% if mobile.cash_price %}
-            Price: {{mobile.cash_price}} {% endif %}</div>
+    <h5>{% if mobile.cash_price %}
+    {%trans 'Price From: ' %} {{mobile.cash_price}} DKK 
+    {% endif %}<h5>
+    <div class="container-fluid">
+        <div class="card-body text-success">
+            <p class="card-text"><small>
+            {% translate "Manufacturer" %}</small>
+            {{mobile.brand.name}}</p>
+            {% if colours %}
+            Colours: 
+                {% for colour in colours %}{{colour.value}}, {% endfor %}
+            {% endif %}
+            {% if memory %}
+            Memory: 
+                {% for mem in memory %}{{mem.value}}, {% endfor %}
+            {% endif %}
         </div>
+    </div>
 </div>
 </hr>
 <div class="row justify-content-center">

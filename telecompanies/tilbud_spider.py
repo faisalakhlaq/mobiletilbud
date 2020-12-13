@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from bs4 import BeautifulSoup
-from celery import shared_task
+# from celery import shared_task
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 import re

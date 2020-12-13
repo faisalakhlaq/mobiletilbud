@@ -13,6 +13,10 @@
     align-items: center;
     margin: 1em 0 1em 0;
 }
+.brand-btn-icon{
+    max-width: 1.5em;
+    max-height: 1.5em;
+}
 .auto-search {
     margin-top: 1.5em;
     display: flex;
