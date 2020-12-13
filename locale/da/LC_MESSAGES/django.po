@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-13 13:14+0100\n"
+"POT-Creation-Date: 2020-12-13 17:31+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -41,10 +41,6 @@ msgstr "Teleselskaber"
 #: core/models.py:31
 msgid "Country Name"
 msgstr "Landenavn"
-
-#: core/views.py:81
-msgid "Popular"
-msgstr "Populære"
 
 #: mobiles/models.py:13 mobiles/models.py:37
 msgid "Image"
@@ -275,14 +271,13 @@ msgstr "Mobile Mærker"
 msgid "Explore Mobile Brands"
 msgstr "Tjek forskellige mobilmærker"
 
-#: templates/core/mobile_brands.html:30 templates/core/mobile_brands.html:32
-#: templates/offer/offer_list.html:28 templates/offer/offer_list.html:31
+#: templates/core/mobile_brands.html:33
+msgid "Search Mobile.."
+msgstr "Søg Mobil.."
+
+#: templates/core/mobile_brands.html:35 templates/offer/offer_list.html:32
 msgid "Search.."
 msgstr "Søg.."
-
-#: templates/core/mobile_brands.html:38
-msgid "Select a Phone to Check Details and Offers"
-msgstr "Klik på en mobil og se tilbud"
 
 #: templates/core/telecom_companies.html:10
 msgid "Check out offers from different Telecom Companies"
@@ -371,7 +366,19 @@ msgstr "Sammenligne mere"
 msgid "POPULAR OFFERS"
 msgstr "POPULÆRE TILBUD"
 
-#: templates/offer/offer_list.html:35
+#: templates/offer/offer_list.html:18
+msgid "All"
+msgstr "Alle"
+
+#: templates/offer/offer_list.html:20
+msgid "Popular"
+msgstr "Populære"
+
+#: templates/offer/offer_list.html:29
+msgid "Search offer by mobile name.."
+msgstr "Søg tilbud efter mobilnavn"
+
+#: templates/offer/offer_list.html:36
 msgid "No Offers Here"
 msgstr "Ingen tilbud her"
 
@@ -391,6 +398,9 @@ msgstr "Først"
 msgid "Last"
 msgstr "Sidst"
 
+#~ msgid "Select a Phone to Check Details and Offers"
+#~ msgstr "Klik på en mobil og se tilbud"
+
 #~ msgid "Welcome"
 #~ msgstr "Velkommen"
 
@@ -399,9 +409,6 @@ msgstr "Sidst"
 
 #~ msgid "Mobiles from"
 #~ msgstr "Mobiler fra"
-
-#~ msgid "All"
-#~ msgstr "Alle"
 
 #~ msgid "Logout"
 #~ msgstr "Log ud"

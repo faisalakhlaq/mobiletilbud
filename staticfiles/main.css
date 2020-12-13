@@ -12,7 +12,7 @@
     margin-top: -0.3em;
     margin-bottom: 0.1em;
 }
-.company-list {
+.offers-company-list {
     padding:0.2em; 
     display:flex; 
     align-items:center; 
@@ -34,7 +34,7 @@
     background-color:  #008CBA;; /* Green */
     color: white;
 }
-.search-field{
+.offer-search-field{
     border-bottom: 2px solid #e8f4f8; 
     padding:0.2em; 
     padding-bottom: 0.8em;
@@ -42,12 +42,12 @@
     align-items:center; 
     justify-content:center
 }
-.search-field > input,
+.offer-search-field > input,
 input::-webkit-input-placeholder {
     font-size: 1rem;
     padding: 0.3rem;
 }
-.search-field input {
+.offer-search-field input {
     height: 1.9em;
     font-size: 1.2rem;
 }

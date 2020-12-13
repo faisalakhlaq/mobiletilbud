@@ -11,67 +11,64 @@
 {% block content %}
 <div class='mobile_list_container'>
     <h3 class="brands-header">{% trans "Explore Mobile Brands" %}<h3>
-    <div class='company-list'>
+    <div class='mb-company-list'>
         <form method='GET' action=''>
         <button name="brand" id="brand" class="mb-btn"
          type="submit" value='Popular'/>{% trans 'Popular Mobiles' %}</button>
-            {% for mobile_brand in mobile_brands %}
-              {% if mobile_brand.image %}
-              <button name="brand" id="brand" class="mb-btn" 
-               type="submit" value={{mobile_brand}}>{{mobile_brand}}
-               <img class='brand-btn-icon' src={{mobile_brand.image.url}}>
-               </button>
-              {% else %}
-              <input name="brand" id="brand" class="mb-btn" type="submit" value={{mobile_brand}} />
-              {% endif %}
-            {% endfor %}
-        </form>
-        <form class='auto-search' method='GET' action=''>
-            <input id='query' type='text' placeholder='{% trans 'Search..'%}' 
-            name='query' value={{ request.GET.query}}>
-            <button id='search-btn' class='mb-btn' type='submit'>{% trans 'Search..'%}</button>
+        {% for mobile_brand in mobile_brands %}
+          {% if mobile_brand.image %}
+          <button name="brand" id="brand" class="mb-btn" 
+          type="submit" value={{mobile_brand}}>{{mobile_brand}}
+            <img class='brand-btn-icon' src={{mobile_brand.image.url}}>
+          </button>
+          {% else %}
+            <input name="brand" id="brand" class="mb-btn" type="submit" 
+            value={{mobile_brand}} />
+          {% endif %}
+        {% endfor %}
         </form>
     </div>
-    <div class='mobile-list-container'>
-        {% if mobile_list %}
-        <hr>
-        <b class="header-span">{% translate "Select a Phone to Check Details and Offers" %}</b>
-            <div class='selected-brand-mobile-list'>
-                {% for mobile in mobile_list %}
-                    <div class='col-auto mobile-brand-card'>
-                      {% include 'mobile/mobile_card_snippet.html' with mobile=mobile %}
-                    </div>
-                {% endfor %}
-              </div>
-        {% endif %}
+    <div class='mb-search-field'>
+      <form class='form' method='GET' action=''>
+          <input id='query' type='text' placeholder='{% trans 'Search Mobile..'%}' 
+          name='query' value={{ request.GET.query}}>
+          <button id='search-btn' class='mb-btn' type='submit'>{% trans 'Search..'%}</button>
+      </form>
     </div>
-  <div class="pagination-section">
-    {% include 'paginator_template.html' with page_obj=page_obj %}
-  </div>
+    <div class='selected-brand-mobile-list'>
+      {% if mobile_list %}
+          {% for mobile in mobile_list %}
+            {% include 'mobile/mobile_card_snippet.html' with mobile=mobile %}
+          {% endfor %}
+      {% endif %}
+    </div>
+</div>
+<div class="pagination-section">
+  {% include 'paginator_template.html' with page_obj=page_obj %}
 </div>
 
 {% endblock content %}
 {% block extra_scripts %}
 <script>
 $("[id='brand'][value={{brand}}]").css('background-color', '#007AD0').css('color','#fff');
-  $(function() {
-    $( "#query" ).autocomplete({
-      source: "/mobile_search_auto_complete",
-      select: function (event, ui) { //item selected
-        AutoCompleteSelectHandler(event, ui)
-      },
-      minLength: 2,
-    });
+$(function() {
+  $( "#query" ).autocomplete({
+    source: "/mobile_search_auto_complete",
+    select: function (event, ui) { //item selected
+      AutoCompleteSelectHandler(event, ui)
+    },
+    minLength: 2,
   });
-  function AutoCompleteSelectHandler(event, ui)
-  {
-    var selectedObj = ui.item;
-  }
-  // TODO call the below function if the user has
-  // click / choosen one option from given list
-  function SearchHandler()
-  {
-    $( "#search_btn" ).click()
-  }
+});
+function AutoCompleteSelectHandler(event, ui)
+{
+  var selectedObj = ui.item;
+}
+// TODO call the below function if the user has
+// click / choosen one option from given list
+function SearchHandler()
+{
+  $( "#search_btn" ).click()
+}
 </script>
 {% endblock extra_scripts %}

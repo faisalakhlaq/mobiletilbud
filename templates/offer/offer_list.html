@@ -12,21 +12,21 @@
 <div class='offer_list_container'>
     <h3 class="offer-header">
         {% trans "POPULAR OFFERS" %}<h3>
-    <div class='company-list'>
+    <div class='offers-company-list'>
         <form method='GET' action=''>
-            <button name="offer" class="tele-comp-btn" 
+            <button id='company' name="company" class="tele-comp-btn" 
             type="submit" value='All'/>{% trans 'All' %}</button>
-            <button name="offer" class="tele-comp-btn" 
+            <button id='company' name="company" class="tele-comp-btn" 
             type="submit" value='Popular'/>{% trans 'Popular' %}</button>
             {% for tele_company in tele_companies %}
-                <button name="company" class="tele-comp-btn" 
+                <button id='company' name="company" class="tele-comp-btn" 
                 type="submit" value={{tele_company}} />
                 {{ tele_company }}</button>
             {% endfor %}
         </form>
     </div>
-    <div class='search-field'><form class='form' method='GET' action=''>
-        <input id='query' type='text' placeholder='{% trans 'Search..'%}' 
+    <div class='offer-search-field'><form class='form' method='GET' action=''>
+        <input id='query' type='text' placeholder='{% trans 'Search offer by mobile name..'%}' 
         name='query' value={{ request.GET.query}}>
         <button id='search_btn' class='tele-comp-btn' 
         type='submit'>{% trans 'Search..'%}</button>
@@ -44,24 +44,25 @@
 {% endblock content %}
 {% block extra_scripts %}
 <script>
-  $(function() {
-    $( "#query" ).autocomplete({
-      source: "/tilbud_search_auto_complete",
-      select: function (event, ui) { //item selected
-        AutoCompleteSelectHandler(event, ui)
-      },
-      minLength: 2,
-    });
+$("[id='company'][value={{company}}]").css('background-color', '#007AD0').css('color','#fff');
+$(function() {
+  $( "#query" ).autocomplete({
+    source: "/tilbud_search_auto_complete",
+    select: function (event, ui) { //item selected
+      AutoCompleteSelectHandler(event, ui)
+    },
+    minLength: 2,
   });
-  function AutoCompleteSelectHandler(event, ui)
-  {
-    var selectedObj = ui.item;
-  }
-  // TODO call the below function if the user has
-  // clicked / choosen one option from given list
-  function SearchHandler()
-  {
-    $( "#search_btn" ).click()
-  }
+});
+function AutoCompleteSelectHandler(event, ui)
+{
+  var selectedObj = ui.item;
+}
+// TODO call the below function if the user has
+// clicked / choosen one option from given list
+function SearchHandler()
+{
+  $( "#search_btn" ).click()
+}
 </script>
 {% endblock extra_scripts %}

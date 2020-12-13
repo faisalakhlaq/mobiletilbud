@@ -51,23 +51,32 @@ class PopularOffersView(ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        offer_type = self.request.GET.get('offer')
         company = self.request.GET.get('company')
         query = self.request.GET.get('query')
         all_offers = Offer.objects.all().order_by('updated')
         if query and len(query.strip()) > 0:
             return all_offers.filter(Q(mobile_name__icontains=query.strip()) |
             Q(mobile__full_name__icontains=query.strip())).order_by('-mobile_name')
-        elif offer_type and offer_type == 'Popular':
-            return get_popular_offers(offers=all_offers, offers_per_company=5)
+        # elif offer_type and offer_type == 'Popular':
         elif company:
-            return all_offers.filter(telecom_company__name__iexact=company.strip())         
-        return all_offers
+            if company == 'Popular':
+                return get_popular_offers(offers=all_offers, offers_per_company=5)
+            elif company == 'All':
+                return all_offers
+            else:
+                return all_offers.filter(telecom_company__name__iexact=company.strip())         
+        return get_popular_offers(offers=all_offers, offers_per_company=5)
 
     def get_context_data(self, **kwargs):
         context = super(PopularOffersView, self).get_context_data(**kwargs)
+        company = self.request.GET.get('company')
+        query = self.request.GET.get('query')
+        if not company and not query:
+            query = 'Popular'
         context["tele_companies"] = TelecomCompany.objects.all()
+        context["company"] = company or query
         return context
+
 
 class CompareOffersView(View):
     def get(self, *args, **kwargs):

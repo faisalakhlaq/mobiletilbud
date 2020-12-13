@@ -78,7 +78,7 @@ class MobileManufacturersView(ListView):
         company = self.request.GET.get("brand")
         query = self.request.GET.get('query')            
         if not company and not query:
-            query = _('Popular')
+            query = 'Popular'
         context['mobile_brands'] = MobileBrand.objects.all()
         context["brand"] = company or query
         return context
