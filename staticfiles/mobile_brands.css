@@ -1,4 +1,9 @@
 .brands-header {
+    font-weight:bold; 
+    font-family:sans-serif; 
+    color:#000061;
+    margin-top: -0.3em;
+    margin-bottom: 0.1em;
     text-transform: uppercase;
 }
 .mobile_list_container {

@@ -1,7 +1,10 @@
 .popular-heading {
-    font-family: sans-serif;
+    font-weight:bold; 
+    font-family:sans-serif; 
+    color:#000061;
+    margin-top: -0.3em;
+    text-transform: uppercase;
     text-align: center;
-    font-weight: bold;
     margin-bottom: 2em;
 }
 .popular-heading span {

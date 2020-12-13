@@ -1,11 +1,14 @@
+{% load i18n %}
 {% if page_obj.has_other_pages %}
     {% load proper_paginate %}
     {% load url_replace %}
     <ul class="pagination pagination-sm justify-content-center">
         {% if page_obj.number == 1 %}
-            <li class="page-item disabled"><span>⇤</span></li>
+            <li class="page-item disabled"><span>{% trans 'First' %}</span></li>
+            {% comment %} <li class="page-item disabled"><span>⇤</span></li> {% endcomment %}
         {% else %}
-            <li class="page-item"><a class="page-link" href="?{% url_replace request 'page' 1 %}">⇤</a></li>
+            {% comment %} <li class="page-item"><a class="page-link" href="?{% url_replace request 'page' 1 %}">⇤</a></li> {% endcomment %}
+            <li class="page-item"><a class="page-link" href="?{% url_replace request 'page' 1 %}">{% trans 'First' %}</a></li>
         {% endif %}
         {% if page_obj.has_previous %}
             <li class="page-item"><a class="page-link" href="?{% url_replace request 'page' page_obj.previous_page_number %}">&laquo;</a></li>
@@ -25,9 +28,11 @@
             <li class="page-item disabled"><span>&raquo;</span></li>
         {% endif %}
         {% if page_obj.number == paginator.num_pages %}
-            <li class="page-item disabled"><span>⇥</span></li>
+            <li class="page-item disabled"><span>{% trans 'Last' %}</span></li>
+            {% comment %} <li class="page-item disabled"><span>⇥</span></li> {% endcomment %}
         {% else %}
-            <li class="page-item"><a class="page-link" href="?{% url_replace request 'page' paginator.num_pages %}">⇥</a></li>
+            <li class="page-item"><a class="page-link" href="?{% url_replace request 'page' paginator.num_pages %}">{% trans 'Last' %}</a></li>
+            {% comment %} <li class="page-item"><a class="page-link" href="?{% url_replace request 'page' paginator.num_pages %}">⇥</a></li> {% endcomment %}
         {% endif %}
     </ul>
 {% endif %}

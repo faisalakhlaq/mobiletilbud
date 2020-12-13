@@ -23,3 +23,5 @@ For an app
 ./manage.py dumpdata core > admin.json
 For a specific table
 ./manage.py dumpdata admin.logentry > logentry.json
+Load Data
+/manage.py loaddata db.json

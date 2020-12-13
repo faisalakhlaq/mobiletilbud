@@ -6,9 +6,7 @@
 
 <a class="col-auto mobile_card_a" href={{ mobile.get_absolute_url }}>
     <div class="card mobile-card">
-        {% comment %} <div class="card-header"> 
-            {{mobile.full_name}}
-        </div> {% endcomment %}
+    
         <div class="card-body">
             {% if mobile.image %}
             <div class="mobile-image">
@@ -19,15 +17,12 @@
                 <img class="mob-image" src={{'/media/images/default_mobile_image.png' }}>
             </div>
             {% endif %}
-        <div class="card-header"> 
-            {{mobile.full_name}}
+        <div class="mobile-card-info"> 
+            <p>{{mobile.full_name}}</p>
+            <p>{% if mobile.cash_price %}
+                {%trans 'Price From: ' %}{{mobile.cash_price}}
+            {% endif %}</p>
         </div>
         </div>
-        {% comment %} <div class="card-footer bg-transparent"
-            style="">
-            {% if mobile.price %}
-                {%trans "Price" %}{{mobile.price}} DKK 
-            {% endif %}
-        </div> {% endcomment %}
     </div>
 </a>

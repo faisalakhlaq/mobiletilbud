@@ -2,7 +2,7 @@ from bs4 import BeautifulSoup
 from celery import shared_task
 from dateutil import parser
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Q
+from django.db.models import Q, F
 import requests
 import random 
 import time
@@ -126,7 +126,8 @@ class GsmarenaMobileSpecSpider:
             print(f'Brand with the given name {band_name} not found: ', e)
             return None
         # import pdb; pdb.set_trace()
-        mobiles = Mobile.objects.filter(brand=brand)
+        # mobiles = Mobile.objects.filter(brand=brand)
+        mobiles = Mobile.objects.filter(brand=brand).order_by(F('launch_date').desc(nulls_last=True))
         # self.proxies = ProxyFactory().get_proxies(5)
         # proxy_pool = cycle(self.proxies)
         for index, mobile in enumerate(mobiles):
@@ -296,14 +297,17 @@ class GsmarenaMobileSpecSpider:
         print('Saved specs for ', mobile)
 
     def save_variations(self, data_dict, mobile):
-        # import pdb; pdb.set_trace()
-        # Save the variations for color and memory
+        # Save the variations for color and memory. 
         variation, _ = Variation.objects.get_or_create(name='colour', mobile=mobile)
         color = data_dict.get('misc-colors')
         if color:
             colors = color.split(',')
             for col in colors:
                 try:
+                    # Avoid creating the save variation with lower / upper case value
+                    mv = MobileVariation.objects.filter(variation=variation, 
+                                                                value__iexact=col.strip())
+                    if mv and len(mv) > 0: continue
                     mobileVariation = MobileVariation.objects.create(variation=variation, 
                                                                 value=col.strip())
                 except:
@@ -315,6 +319,9 @@ class GsmarenaMobileSpecSpider:
             memories = memory.split(',')
             for mem in memories:
                 try:
+                    mv = MobileVariation.objects.filter(variation=variation, 
+                                                                value__iexact=mem.strip())
+                    if mv and len(mv) > 0: continue
                     mobileVariation = MobileVariation.objects.create(variation=variation, 
                                                                 value=mem.strip())
                 except:
