@@ -2,6 +2,7 @@ import asyncio
 from abc import ABC, abstractmethod
 from bs4 import BeautifulSoup
 from django.core.files.base import ContentFile
+from django.db.models import Q
 import io
 from itertools import cycle
 from PIL import Image
@@ -19,13 +20,14 @@ from selenium.common.exceptions import (
     ElementNotVisibleException
 )
 from mobiles.models import MobileBrand, Mobile
-from mobiles.mobile_specs_spider import HeaderFactory, get_proxies
+from mobiles.mobile_specs_spider import HeaderFactory, ProxyFactory
 
 
 class AbstractMobileSpider(ABC):
  
     def __init__(self):
-        self.headers = {'User-agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:61.0) Gecko/20100101 Firefox/61.0'}
+        # self.headers = {'User-agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:61.0) Gecko/20100101 Firefox/61.0'}
+        self.headers = HeaderFactory()
         super().__init__()
     
     @abstractmethod
@@ -77,7 +79,7 @@ class AbstractMobileSpider(ABC):
         try:
             # img_src = img['src']
             if img_src and len(img_src.strip()) > 5:
-                response = requests.get(img_src, stream=True).content
+                response = requests.get(img_src, stream=True, timeout=30).content
                 image_file = io.BytesIO(response)
                 image = Image.open(image_file)
                 return image
@@ -101,7 +103,8 @@ class GadgetsndtvMobileSpider(AbstractMobileSpider):
             response = requests.get(
                 url=self.samsung_url, 
                 proxies={"http": proxy, "https": proxy},
-                headers=self.headers,)
+                headers=self.headers.get_header(),
+                timeout=20,)
         soup = BeautifulSoup(response.content, 'html.parser')
         ul = soup.find('ul', {'class', 'clearfix margin_t20'})
         lis = ul.find_all('li')
@@ -177,7 +180,9 @@ class GsmarenaMobileSpider(AbstractMobileSpider):
             url = self.huawei_url
             base_url = self.huawei_base_url
 
-        response = requests.get(url=url, headers=self.headers)
+        response = requests.get(url=url, 
+                                headers=self.headers.get_header(), 
+                                timeout=20,)
         pages.append(response.content)
         soup = BeautifulSoup(response.content, "html.parser")
         pages_div = soup.find('div', {'class', 'nav-pages'})
@@ -190,10 +195,45 @@ class GsmarenaMobileSpider(AbstractMobileSpider):
             return pages
         for i in range(1, total_pages, 1):
             next_page_url = base_url + str(i+1) + '.php'
-            response = requests.get(url=next_page_url, headers=self.headers)
+            response = requests.get(url=next_page_url, 
+                                    headers=self.headers.get_header(),
+                                    timeout=20,)
             pages.append(response.content)
+            print('Downloaded page number', i)
+            time.sleep(20)
         return pages
 
+    def update_mobile_url(self, brand_name_):
+        pages = self.get_pages(brand_name_)
+        for page in pages:
+            soup = BeautifulSoup(page, "html.parser")
+            rows = soup.find('div', {'class', 'makers'}).find('ul').find_all('li')
+            # print("GOT mobiles = ", len(rows))
+            for row in rows:
+                try:
+                    anker = row.find('a')
+                    mobile_url = 'https://www.gsmarena.com/' + anker['href']
+                    mobile_name = anker.find('strong').find('span').text.strip()
+                    # To avoid storing apple watches and ipad we are checking if the name
+                    # contains iphone, so its a phone. Therefore store it.
+                    if 'apple' in brand_name_.lower() and "iphone" not in mobile_name.lower():
+                        continue
+                    m_full_name = brand_name_.lower().capitalize() + " " + mobile_name
+                    filtered_mobiles = Mobile.objects.filter(Q(brand__name__iexact=brand_name_),
+                                                    Q(name__iexact=mobile_name))
+                    mobile = None
+                    if filtered_mobiles and len(filtered_mobiles) > 0:
+                        mobile = filtered_mobiles[0]
+                    else:
+                        print('Found no mobile with name: ', mobile_name)
+                    if mobile and not 'gsmarena' in mobile.url:
+                        mobile.url = mobile_url
+                        mobile.save()
+                        print("Saved mobile url for: ", mobile)
+                except Exception as e:
+                    print('Exception occured while fetching mobile: ', e)
+                    continue
+        
     def fetch_mobiles(self, brand_name_):
         # import pdb; pdb.set_trace()
         pages = self.get_pages(brand_name_)
@@ -218,7 +258,7 @@ class GsmarenaMobileSpider(AbstractMobileSpider):
                     # import time
                     # time.sleep(10)
                 except Exception as e:
-                    print('Exception occured while fetching Nokia mobile: ', e)
+                    print('Exception occured while fetching mobile: ', e)
                     continue
 
 class DoroMobileSpider(AbstractMobileSpider):
@@ -233,7 +273,7 @@ class DoroMobileSpider(AbstractMobileSpider):
         # import pdb; pdb.set_trace()
         pages = []
         for url in self.doro_urls:
-            response = requests.get(url=url, headers=self.headers)
+            response = requests.get(url=url, headers=self.headers.get_header())
             pages.append(response.content)
         for page in pages:
             soup = BeautifulSoup(page, 'html.parser')
@@ -283,7 +323,7 @@ class MotorolaMobileSpider(AbstractMobileSpider):
     def fetch_mobiles(self, brand_name_):
         pages = []
         for url in self.sony_urls:
-            response = requests.get(url=url, headers=self.headers)
+            response = requests.get(url=url, headers=self.headers.get_header())
             pages.append(response.content)
 
         for page in pages:

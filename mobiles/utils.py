@@ -11,18 +11,19 @@ from dateutil import parser
 
 def update_launch_date(brand_name):
     'Update the Mobile launch date where None'
-    mobiles = Mobile.objects.filter(brand__name=brand_name).filter(launch_date=None)
     # import pdb; pdb.set_trace()
+    mobiles = Mobile.objects.filter(brand__name=brand_name) .filter(launch_date=None)
     for ph in mobiles:
         try:
             specs = ph.technical_specs.all()
             launch = None
             if specs:
-                launch = [0].launch
-                launch = launch.split(' ',2)[1]
-                dt = parser.parse(launch.strip())
-                ph.launch_date = dt
-                ph.save()
+                launch = specs[0].launch
+                launch = launch.split(' ',1)[1]
+                update_mobile_launch_date(mobile=ph, launch_date=launch)
+                # dt = parser.parse(launch.strip())
+                # ph.launch_date = dt
+                # ph.save()
         except Exception as e:
             print('unable to update date for ', ph)
             print('Launch Date: ', launch)
@@ -30,15 +31,27 @@ def update_launch_date(brand_name):
 
 def update_mobile_launch_date(mobile, launch_date):
     'Update the Mobile launch date where None'
+    launch = None
     try:
-        # import pdb; pdb.set_trace()
-        launch = mobile.technical_specs.all()[0].launch
-        launch = launch.split(' ',2)[1]
-        dt = parser.parse(launch.strip())
-        mobile.launch_date = dt
-        mobile.save()
+        l1 = launch_date.split(' ',1)[0]
+        if l1: 
+            launch = parser.parse(l1.strip())
+        l2 = launch_date.split(' ')[1]
+        if l2:
+            launch = parser.parse(str(l1+l2))
+        if launch:
+            mobile.launch_date = launch
+            mobile.save()
+            print(f'Saved {mobile} launch Date:', launch)
     except:
-        print('Unable to update launch date for ', mobile)
+        if launch:
+            mobile.launch_date = launch
+            mobile.save()
+            print(f'Saved {mobile} launch Date:', launch)
+        else:
+            print('Unable to update launch date for ', mobile)
+            print('Launch Date Provided: ', launch_date)
+
 
 def bulk_copy_table_data():
     queryset = core_mobile.objects.all().values('name', 'full_name', 'brand', 'cash_price', 'slug')

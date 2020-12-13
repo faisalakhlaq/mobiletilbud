@@ -11,6 +11,75 @@ from .models import (Mobile, MobileBrand, MobileTechnicalSpecification,
 from .utils import HeaderFactory, ProxyFactory, update_mobile_launch_date
 from itertools import cycle
 
+
+class PricePusher:
+    def __init__(self):
+        self.headers = HeaderFactory()
+        self.urls = {
+            'Apple': 'https://pricepusher.dk/mobil/Apple-tilbud-priser-uden-mobilabonnement',
+            'Samsung': 'https://pricepusher.dk/mobil/Samsung-tilbud-priser-uden-mobilabonnement',
+            'Motorola': 'https://pricepusher.dk/mobil/Motorola-tilbud-priser-uden-mobilabonnement',
+            'Nokia': 'https://pricepusher.dk/mobil/Nokia-tilbud-priser-uden-mobilabonnement',
+            'Sony': 'https://pricepusher.dk/mobil/Sony-tilbud-priser-uden-mobilabonnement',
+            'Huawei': 'https://pricepusher.dk/mobil/Huawei-tilbud-priser-uden-mobilabonnement',
+            'OnePlus': 'https://pricepusher.dk/mobil/OnePlus-tilbud-priser-uden-mobilabonnement',
+            'Doro': 'https://pricepusher.dk/mobil/Doro-tilbud-priser-uden-mobilabonnement',
+        }
+
+    def fetch_all_brand_price(self):
+        for k,v in self.urls.items():
+            try:
+                self.fetch_price(_brand_name=k, _url=v)
+                print('Going to sleep for 2 minutes')
+                time.sleep(120)
+            except Exception as e:
+                print('Exception while fetching prices for ', k)
+                print('Going to sleep for 2 minutes')
+                time.sleep(120)
+                continue
+
+    def fetch_brand_price(self, _brand_name):
+        url = self.urls[_brand_name]
+        self.fetch_price(_brand_name=_brand_name, _url=url)
+
+    def fetch_price(self, _brand_name, _url):
+        response = requests.get(
+        url=_url, 
+        headers=self.headers.get_header(),
+        timeout=20, # timeout in 20 seconds in order to avoid hanging/freezing
+        )
+        soup = BeautifulSoup(response.content, 'html.parser')
+        section = soup.find('section', {'class', 'product-row product-row-4-each'})
+        rows = section.find_all('div', {'class', 'row'})
+        mobile_divs = []
+        for row in rows:
+            res = row.find_all('div')
+            if res:
+                mobile_divs += res
+        import pdb; pdb.set_trace()
+        for mobile_detail in mobile_divs:
+            try:
+                name = mobile_detail.find('h4').text.strip()
+                mobile = Mobile.objects.filter(Q(full_name__iexact=name), 
+                                               Q(brand__name__iexact=_brand_name))
+                # If this mobile is not in out database then discard and go to next mobile
+                if not mobile: continue
+                else: mobile = mobile[0]
+                dl = mobile_detail.find('dl')
+                data = dl.find_all('b')
+                if len(data) == 2 and 'kr' in data[0].text:
+                    price = data[0].text
+                    price = (''.join(i for i in price if i.isdigit()))
+                    mobile.cash_price = float(price)
+                    mobile.save()
+                    print('Updated price for ', mobile)
+            except AttributeError as e:
+                # Divs inside the mobile div are also fetched and they have no name or price field
+                continue
+            except Exception as e:
+                print('Exception while getting mobile price. ', e)
+                continue
+
 class ElgigantenSpider:
     def __init__(self):
         self.apple_url = 'https://www.elgiganten.dk/catalog/mobil-gps/dk_mobiltelefoner/mobiltelefoner?SearchParameter=%26%40QueryTerm%3D*%26ContextCategoryUUID%3Dr_KsGQV5iqQAAAFDhNY2st58%26discontinued%3D0%26ManufacturerName%3DApple%26online%3D1%26%40Sort.ViewCount%3D1%26%40Sort.ProductListPrice%3D0&PageSize=12&ProductElementCount=&searchResultTab=Products&CategoryName=dk_mobiltelefoner&CategoryDomainName=store-elgigantenDK-ProductCatalog#filter-sidebar'

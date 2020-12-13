@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.db.models import Q
+from django.db.models import Q, F
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.utils.translation import gettext as _
@@ -15,17 +15,17 @@ from telecompanies.models import Offer
 from telecompanies.utils import get_popular_offers
 
 # from mobiles.mobile_specs_spider import GsmarenaMobileSpecSpider
-# from mobiles.popular_mobile_spider import MobilkundenSpider
 # from telecompanies.spider import YouSeeSpider
-# from mobiles.tasks import fetch_mobiles_task
 # from mobiles.utils import update_launch_date
+# from mobiles.mobile_spider import GsmarenaMobileSpider
 
 class HomeView(View):
     def get(self, *args, **kwargs):
-        # update_launch_date('Motorola')
+        # update_launch_date('Sony')
         # TeliaSpider().fetch_offers()
         # fetch_mobiles_task.delay('Motorola')
-        # GsmarenaMobileSpecSpider().fetch_mobile_specs('Apple')
+        # GsmarenaMobileSpecSpider().fetch_mobile_specs('Huawei')
+        # GsmarenaMobileSpider().update_mobile_url(brand_name_='Huawei')
         context = self.get_context_data(*kwargs)
         return render(self.request, 'core/home.html', context)
     
@@ -55,7 +55,9 @@ class MobileManufacturersView(ListView):
             # If popular mobiles is not selected then a brand name is 
             # selected. Therefore, find the mobiles of the selected brand
             if company.strip() != 'Popular Mobiles':
-                return Mobile.objects.filter(brand__name__iexact=company.strip()).order_by('-launch_date')
+                # Order by date and send the ones will null value at the end
+                # return Mobile.objects.filter(brand__name__iexact=company.strip()).order_by('-launch_date')
+                return Mobile.objects.filter(brand__name__iexact=company.strip()).order_by(F('launch_date').desc(nulls_last=True))
             elif company.strip() == 'Popular Mobiles':
                 # get all the ids from popularmobile 
                 # table and then fetch the related mobiles

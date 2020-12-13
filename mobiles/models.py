@@ -102,7 +102,8 @@ class MobileTechnicalSpecification(models.Model):
                                   max_length=255, blank=True, null=True)
     launch                      = models.CharField(_("Launch"), 
                                   max_length=255, blank=True, null=True)
-
+    status                      = models.CharField(_("Status"), 
+                                  max_length=255, blank=True, null=True)
     def __str__(self):
         return self.mobile.name
 
