@@ -14,20 +14,21 @@
         {% trans "POPULAR OFFERS" %}<h3>
     <div class='company-list'>
         <form method='GET' action=''>
-            <input name="offer" class="btn btn-info m-1" 
-            type="submit" value='All'/>
-            <input name="offer" class="btn btn-info m-1" 
-            type="submit" value='Popular' />
+            <button name="offer" class="tele-comp-btn" 
+            type="submit" value='All'/>{% trans 'All' %}</button>
+            <button name="offer" class="tele-comp-btn" 
+            type="submit" value='Popular'/>{% trans 'Popular' %}</button>
             {% for tele_company in tele_companies %}
-                <input name="company" class="btn btn-info m-1" 
+                <button name="company" class="tele-comp-btn" 
                 type="submit" value={{tele_company}} />
+                {{ tele_company }}</button>
             {% endfor %}
         </form>
     </div>
     <div class='search-field'><form class='form' method='GET' action=''>
         <input id='query' type='text' placeholder='{% trans 'Search..'%}' 
         name='query' value={{ request.GET.query}}>
-        <button id='search_btn' class='btn btn-default bg-info text-light' 
+        <button id='search_btn' class='tele-comp-btn' 
         type='submit'>{% trans 'Search..'%}</button>
     </form></div>
     <div class="card-group">

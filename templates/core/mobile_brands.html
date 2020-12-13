@@ -13,23 +13,23 @@
     <h3 class="brands-header">{% trans "Explore Mobile Brands" %}<h3>
     <div class='company-list'>
         <form method='GET' action=''>
-        <button name="brand" id="brand" class="btn btn-outline-info m-1"
-         type="submit" value='Popular' />{% trans 'Popular Mobiles' %}</button>
+        <button name="brand" id="brand" class="mb-btn"
+         type="submit" value='Popular'/>{% trans 'Popular Mobiles' %}</button>
             {% for mobile_brand in mobile_brands %}
               {% if mobile_brand.image %}
-              <button name="brand" id="brand" class="btn btn-outline-info m-1" 
+              <button name="brand" id="brand" class="mb-btn" 
                type="submit" value={{mobile_brand}}>{{mobile_brand}}
                <img class='brand-btn-icon' src={{mobile_brand.image.url}}>
                </button>
               {% else %}
-              <input name="brand" id="brand" class="btn btn-outline-info m-1" type="submit" value={{mobile_brand}} />
+              <input name="brand" id="brand" class="mb-btn" type="submit" value={{mobile_brand}} />
               {% endif %}
             {% endfor %}
         </form>
         <form class='auto-search' method='GET' action=''>
             <input id='query' type='text' placeholder='{% trans 'Search..'%}' 
             name='query' value={{ request.GET.query}}>
-            <button id='search-btn' class='btn btn-default text-light' type='submit'>{% trans 'Search..'%}</button>
+            <button id='search-btn' class='mb-btn' type='submit'>{% trans 'Search..'%}</button>
         </form>
     </div>
     <div class='mobile-list-container'>

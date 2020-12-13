@@ -18,6 +18,22 @@
     align-items:center; 
     justify-content:center
 }
+.tele-comp-btn{
+    color: #1a1a1a;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;  
+    border: .1px solid #767676;
+    border-radius: 3px;
+    margin: 0.2rem;
+    padding: 0.5rem;
+    font-size: 1rem;
+}
+.tele-comp-btn:hover {
+    background-color:  #008CBA;; /* Green */
+    color: white;
+}
 .search-field{
     border-bottom: 2px solid #e8f4f8; 
     padding:0.2em; 

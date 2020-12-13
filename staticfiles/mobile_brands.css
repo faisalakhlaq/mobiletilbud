@@ -18,9 +18,25 @@
     align-items: center;
     margin: 1em 0 1em 0;
 }
+.mb-btn{
+    color: #1a1a1a;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;  
+    border: .1px solid #767676;
+    border-radius: 3px;
+    margin: 0.2rem;
+    padding: 0.5rem;
+    font-size: 1rem;
+}
+.mb-btn:hover {
+    background-color:  #008CBA;; /* Green */
+    color: white;
+}
 .brand-btn-icon{
-    max-width: 1.5em;
-    max-height: 1.5em;
+    max-width: 1.1em;
+    max-height: 1.1em;
 }
 .auto-search {
     margin-top: 1.5em;
@@ -30,9 +46,6 @@
 input::-webkit-input-placeholder {
     font-size: 1rem;
     padding: 0.5rem;
-}
-#search-btn {
-    background-color: #0099CC;
 }
 .mobile-list-container {
     width: 100%;
