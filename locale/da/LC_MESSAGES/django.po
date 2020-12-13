@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-13 17:31+0100\n"
+"POT-Creation-Date: 2020-12-14 00:27+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -229,7 +229,8 @@ msgstr "Opdateret"
 msgid "Offer"
 msgstr "Tilbud"
 
-#: telecompanies/models.py:38 templates/offer/offer_list.html:8
+#: telecompanies/models.py:38 templates/mobile/mobile_detail.html:31
+#: templates/offer/offer_list.html:8
 msgid "Offers"
 msgstr "Tilbud"
 
@@ -328,30 +329,46 @@ msgid "Copyright"
 msgstr "Ophavsret"
 
 #: templates/mobile/mobile_card_snippet.html:23
-#: templates/mobile/mobile_detail.html:19
+#: templates/mobile/mobile_detail.html:23
 msgid "Price From: "
 msgstr "Pris Fra: "
 
-#: templates/mobile/mobile_detail.html:24
+#: templates/mobile/mobile_detail.html:26
 msgid "Manufacturer"
 msgstr "Fabrikant"
 
-#: templates/mobile/mobile_detail.html:40
+#: templates/mobile/mobile_detail.html:33
+msgid "Colors"
+msgstr "Farver"
+
+#: templates/mobile/mobile_detail.html:35
+msgid "Memory"
+msgstr "Hukommelse"
+
+#: templates/mobile/mobile_detail.html:37
+msgid "Specs"
+msgstr "Specs"
+
+#: templates/mobile/mobile_detail.html:39
+msgid "Camera"
+msgstr "Kamera"
+
+#: templates/mobile/mobile_detail.html:46
+msgid "Sorry! No color details available yet"
+msgstr "Ingen farvedetaljer fundet"
+
+#: templates/mobile/mobile_detail.html:54
+msgid "Sorry! No memory details available yet"
+msgstr "Ingen hukommelse detaljer fundet"
+
+#: templates/mobile/mobile_detail.html:60
+#: templates/mobile/mobile_detail.html:113
 msgid "Currently no offer on this mobile"
 msgstr "I øjeblikket ikke noget tilbud på denne mobil"
 
-#: templates/mobile/mobile_detail.html:42
-msgid "Offers on"
-msgstr "Tilbud på"
-
-#: templates/mobile/mobile_detail.html:48
-#: templates/mobile/mobile_detail.html:51
-msgid "Technical Specification"
-msgstr "Teknisk specifikation"
-
-#: templates/mobile/mobile_detail.html:131
-msgid "Camera Specification"
-msgstr "Teknisk specifikation"
+#: templates/mobile/mobile_detail.html:71
+msgid "No camera details available"
+msgstr "Ingen kameradetaljer fundet"
 
 #: templates/offer/compare_offers.html:66
 #: templates/offer/compare_offers.html:71
@@ -376,7 +393,7 @@ msgstr "Populære"
 
 #: templates/offer/offer_list.html:29
 msgid "Search offer by mobile name.."
-msgstr "Søg tilbud efter mobilnavn"
+msgstr "Søg tilbud efter mobilnavn.."
 
 #: templates/offer/offer_list.html:36
 msgid "No Offers Here"
@@ -397,6 +414,15 @@ msgstr "Først"
 #: templates/paginator_template.html:33 templates/paginator_template.html:37
 msgid "Last"
 msgstr "Sidst"
+
+#~ msgid "Offers on"
+#~ msgstr "Tilbud på"
+
+#~ msgid "Technical Specification"
+#~ msgstr "Teknisk Specifikation"
+
+#~ msgid "Camera Specification"
+#~ msgstr "Kamera Specifikation"
 
 #~ msgid "Select a Phone to Check Details and Offers"
 #~ msgstr "Klik på en mobil og se tilbud"
