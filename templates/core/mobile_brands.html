@@ -10,10 +10,11 @@
 
 {% block content %}
 <div class='mobile_list_container'>
-    <h3>{% trans "Explore Mobile Brands" %}<h3>
+    <h3 class="brands-header">{% trans "Explore Mobile Brands" %}<h3>
     <div class='company-list'>
         <form method='GET' action=''>
-            <div><input name="brand" id="brand" class="btn btn-outline-info m-1" type="submit" value='Popular Mobiles' /></div>
+            <input name="brand" id="brand" class="btn btn-outline-info m-1" 
+              type="submit" value='Popular Mobiles' />
             {% for mobile_brand in mobile_brands %}
               {% if mobile_brand.image %}
               <button name="brand" id="brand" class="btn btn-outline-info m-1" 
@@ -25,31 +26,34 @@
               {% endif %}
             {% endfor %}
         </form>
-        <form class='form' method='GET' action=''>
+        <form class='auto-search' method='GET' action=''>
             <input id='query' type='text' placeholder='{% trans 'Search..'%}' 
             name='query' value={{ request.GET.query}}>
-            <button id='search_btn' class='btn btn-default bg-dark text-light' type='submit'>{% trans 'Search..'%}</button>
+            <button id='search-btn' class='btn btn-default text-light' type='submit'>{% trans 'Search..'%}</button>
         </form>
     </div>
     <div class='mobile-list-container'>
         {% if mobile_list %}
         <hr>
-        <h4>{{brand}}</h4>
-        <b>{% translate "Select a Phone to Check Details and Offers" %}</b>
+        {% comment %} <h3 class="section-header">{{brand}}</h3> {% endcomment %}
+        <b class="header-span">{% translate "Select a Phone to Check Details and Offers" %}</b>
             <div class='selected-brand-mobile-list'>
                 {% for mobile in mobile_list %}
-                    <div class='mobile-card'>
+                    <div class='col-auto mobile-brand-card'>
                       {% include 'mobile/mobile_card_snippet.html' with mobile=mobile %}
                     </div>
                 {% endfor %}
               </div>
         {% endif %}
     </div>
+  <div class="pagination-section">
+    {% include 'paginator_template.html' with page_obj=page_obj %}
+  </div>
 </div>
 
-<div class="pagination">
+{% comment %} <div class="pagination">
   {% include 'paginator_template.html' with page_obj=page_obj %}
-</div>
+</div> {% endcomment %}
 
 {% endblock content %}
 {% block extra_scripts %}
