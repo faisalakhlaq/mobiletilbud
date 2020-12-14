@@ -1,9 +1,47 @@
 {% extends 'base.html' %}
 {% load i18n %}
-
-{% block title %} {{ object.mobile_name }} | {{ block.super }}
-{% endblock title %}
-
+{% load static %}
+{% block extra_head %}
+        <link rel='stylesheet' href="{% static '/offer_detail.css'%}">
+{% endblock %}
 {% block content %}
-        {% include 'offer/offer_snippet.html' with object=object %}
+<h2 class="tilbud-detail-header"><span> {% trans 'Tilbud Details' %} </span></h2>
+{% if object %}
+<div class='tilbud-detail-section'>
+        <div class="offer-mob-image">
+        {% if object.mobile and object.mobile.image %}
+                <img src={{ object.mobile.image.url }}>
+        {% endif %}
+        </div>
+        <h3 class="mobile-name">{% if object.mobile and object.mobile.full_name %}
+                {{object.mobile.full_name}}
+        {% elif object.mobile_name %}
+                {{ object.mobile_name }}
+        {% endif %}<h3>        
+        <div class="offer-description">
+                <div class="offer-discount">
+                        {% trans "Discount"%}
+                        {% if object.discount_offered %}: {{object.discount_offered}}{% endif %}
+                </div>
+                <div class="offer-discount company-name">
+                        <p class="card-text"><span><small>{% translate "Company" %}</small>
+                        {{object.telecom_company.name}}</span></p>
+                </div>
+                <div class="">
+                {% if object.price %}
+                        Price: {{object.price}} 
+                {% endif %}
+                </div>
+                <div class="offer-url">
+                        {% if object.offer_url %}
+                        <a href={{ object.offer_url }} target=blank>
+                                {% trans 'Link to the offer on company website' %}</a>
+                        {% endif %}
+                </div>
+        </div>
+</div>
+{% endif %}
 {% endblock content %}
+
+
+

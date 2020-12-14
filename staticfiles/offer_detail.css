@@ -1,0 +1,54 @@
+.tilbud-detail-section {
+    display: flex;
+    flex-direction: column;
+    width: 30em;
+    margin: 0 auto;
+    padding: 2em;
+    align-items: center;
+    justify-content: center;
+}
+.tilbud-detail-header {
+    text-align: center;    
+}
+.tilbud-detail-header span {
+    padding: 0.5rem;
+    border-bottom: 3px solid  rgb(239, 239, 255);
+    min-width: 100%;
+}
+.offer-mob-image {
+    margin-top: 0.6em;
+    margin-bottom: 2em;
+}
+.mobile-name {
+    font-size: 1.3rem;
+}
+.offer-description {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1.8rem;
+}
+.offer-discount {
+    font-size: 1rem;
+}
+.company-name span {
+    padding: 0.3rem;
+    border-bottom: 3px solid  rgb(239, 239, 255);
+    min-width: 100%;
+}
+.offer-url {
+    margin-top: 2em;
+    font-size: 1rem;
+    background-color:#0099CC;
+    border-radius: 0.2rem;
+    /* padding: 0.5em; */
+    padding: 0.3em 0.3em;
+}
+.offer-url a {
+    text-decoration: none !important;
+    color: white;
+}
+.offer-url:hover a {
+    color: red;
+    padding: 0.3em 0.8em;
+}
