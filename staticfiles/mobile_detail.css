@@ -3,7 +3,15 @@
     flex-direction:column; 
     align-items:center; 
     align-self:center; 
-    justify-self:center
+    justify-self:center;
+}
+.color-memory-section {
+    width: 38em;
+}
+.color-memory-specs {
+    margin-top: 1em;
+    padding: 1em;
+    border-top: 1.5px solid  rgb(239, 239, 255);
 }
 .m-image-container{
     width: 10em;
@@ -20,7 +28,7 @@
     padding:0.2em; 
     display:flex; 
     align-items:center; 
-    justify-content:center
+    justify-content:center;
 }
 .m-detail-btn{
     color: #1a1a1a;
@@ -51,15 +59,41 @@
 }
 .md-cam-specs-internal{
     display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+    width: 40em;
+}
+.rear-camera {
+    width: 50%;
+    padding-right: 1em;
+    display: flex;
     flex-direction: column;
-    padding: 3rem;
+    border-right: 1.5px solid  rgb(239, 239, 255);
+}
+.front-camera {
+    width: 50%;
+    padding-left: 1em;
+    display: flex;
+    flex-direction: column;
 }
 .md-tech-specs{
     display: flex;
     flex-direction: row;
 }
 .md-tech-specs-internal{
+    width: 40em;
     display: flex;
-    flex-direction: column;
-    padding: 3rem;
+    justify-content: space-between;
+    line-height: 1.8rem;
+    padding: 1rem;
+
+}
+.md-tech-left {
+    width: 50%;
+    padding-right: 1em;
+    border-right: 1.5px solid  rgb(239, 239, 255);
+}
+.md-tech-right {
+    width: 50%;
+    padding-left: 1em;
 }
