@@ -54,9 +54,12 @@ input::-webkit-input-placeholder {
 .search-btn {
     font-weight: bold;
 }
-.card-group {
-    justify-content:center;
+.offer-cards-container {
     margin: 1em;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
 }
 .offer_card_a{
     text-decoration: none !important;

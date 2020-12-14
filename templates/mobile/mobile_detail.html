@@ -7,49 +7,113 @@
 {% block title %} {{ mobile.name }} | {{ block.super }}
 {% endblock title %}
 {% block content %}
-<div class='mt-5 text-center justify-content-center'>
-    {% if mobile.image %}
-        <img src={{ mobile.image.url }} > 
-    {% else %}
-        <img src={{ '/media/images/default_mobile_image.png' }}>
-    {% endif %}
-    <h3>{% if mobile.full_name %}{{mobile.full_name}} {% else %}
-                        {{ mobile.name }}{% endif %}<h3>
-    <h5>{% if mobile.cash_price %}
-    {%trans 'Price From: ' %} {{mobile.cash_price}} DKK 
-    {% endif %}<h5>
-    <div class="container-fluid">
-        <div class="card-body text-success">
-            <p class="card-text"><small>
-            {% translate "Manufacturer" %}</small>
-            {{mobile.brand.name}}</p>
-            {% if colours %}
-            Colours: 
-                {% for colour in colours %}{{colour.value}}, {% endfor %}
-            {% endif %}
-            {% if memory %}
-            Memory: 
-                {% for mem in memory %}{{mem.value}}, {% endfor %}
-            {% endif %}
-        </div>
+<div class='m-detail-container'>
+    <div class='title-m-name'>
+    <h3>{% if mobile.full_name %}{{mobile.full_name}} 
+    {% else %}{{ mobile.name }}{% endif %}<h3>    
+    </div>
+    <div class='m-image-container'>
+        {% if mobile.image %}
+            <img class='m-image' src={{ mobile.image.url }} > 
+        {% else %}
+            <img class='m-image' src={{ '/media/images/default_mobile_image.png' }}>
+        {% endif %}
+    </div>
+    <div class='m-basic-info'>
+        <h5>{% if mobile.cash_price %}{%trans 'Price From: ' %} 
+        {{mobile.cash_price}} DKK {% endif %}<h5>
+        <p class="card-text"><small>
+        {% translate "Manufacturer" %}</small>
+        {{mobile.brand.name}}</p>
+    </div>
+    <div class='md-btn-list'>
+        <button name="m_details" id="m_offers_btn" class="m-detail-btn"
+         type="submit" value='offers'/>{% trans 'Offers' %}</button>
+        <button name="m_details" id="m_colors_btn" class="m-detail-btn"
+         type="submit" value='colors'/>{% trans 'Colors' %}</button>
+        <button name="m_details" id="m_memory_btn" class="m-detail-btn"
+         type="submit" value='memory'/>{% trans 'Memory' %}</button>
+        <button name="m_details" id="m_specs_btn" class="m-detail-btn"
+         type="submit" value='specs'/>{% trans 'Specs' %}</button>
+        <button name="m_details" id="m_camera_btn" class="m-detail-btn"
+         type="submit" value='camera'/>{% trans 'Camera' %}</button>
+    </div>
+    <div id='md_color_div' class="md-details-container">
+        {% if colours %}
+            <b>Colours</b>: 
+            {% for colour in colours %}{{colour.value}}, {% endfor %}
+        {% else %}
+            {% trans 'Sorry! No color details available yet' %}
+        {% endif %}
+    </div>
+    <div id='md_memory_div' class='md-details-container'>
+        {% if memory %}
+        <b>Memory</b>: 
+            {% for mem in memory %}{{mem.value}}, {% endfor %}
+        {% else %}
+                {% trans 'Sorry! No memory details available yet' %}
+        {% endif %}
     </div>
 </div>
-</hr>
-<div class="row justify-content-center">
+<div id='md_offers_div' class="md-offers-container">
     {% if not offers %}
         {% trans "Currently no offer on this mobile" %}
     {% else %}
-        {% translate "Offers on" %} {{mobile.name}} </br>
+        {% comment %} {% translate "Offers on" %} {{mobile.name}} </br> {% endcomment %}
     {% for offer in offers %}
-    {% include 'offer/offer_snippet.html' with object=offer %}
+    {% include 'offer/offer_card_snippet.html' with object=offer %}
     {% endfor %}
     {% endif %}
 </div>
-<button id="view_mob_specs_btn">{% trans 'Technical Specification'%}</button>
-<div id="mobile_tech_specs" class="mobile-tech-specs">
-    {% if tech_specs %}
-        {% trans "Technical Specification" %}
-        </br>
+<div id="mobile_cam_specs" class="mobile-cam-specs">
+    {% if not camera_specs %}
+    {% trans 'No camera details available' %}
+    {% else %}
+    <div class='md-cam-specs-internal'>
+    {% if camera_specs.rear_cam_lenses %}
+        <tr><b>Rear Camera Lenses</b>  
+        {{camera_specs.rear_cam_lenses}}</tr>
+    {% endif %}
+    {% if camera_specs.rear_cam_megapixel %}
+        <tr><b>Rear Camera Megapixel</b>  
+        {{camera_specs.rear_cam_megapixel}}</tr>
+    {% endif %}
+    {% if camera_specs.back_cam_aperture %}
+        <tr><b>Rear Camera Aperture</b>  
+        {{camera_specs.back_cam_aperture}}</tr>
+    {% endif %}
+    {% if camera_specs.rear_cam_video_resolution %}
+        <tr><b>Rear Camera Resolution</b>  
+        {{camera_specs.rear_cam_video_resolution}}</tr>
+    {% endif %}    
+    </div>
+    <div class='md-cam-specs-internal'>
+    {% if camera_specs.front_cam_lenses %}
+        <tr><b>Front Camera Lenses</b>  
+        {{camera_specs.front_cam_lenses}}</tr>
+    {% endif %}    
+    {% if camera_specs.front_cam_megapixel %}
+        <tr><b>Front Camera Megapixel</b>  
+        {{camera_specs.front_cam_megapixel}}</tr>
+    {% endif %}
+    {% if camera_specs.front_cam_aperture %}
+        <tr><b>Front Camera Aperture</b>  
+        {{camera_specs.front_cam_aperture}}</tr>
+    {% endif %}
+    {% if camera_specs.front_cam_video_resolution %}
+        <tr><b>Front Camera Video Resolution</b>  
+        {{camera_specs.front_cam_video_resolution}}</tr>
+    {% endif %}
+    </div>
+{% endif %}
+</div>
+<div id="mobile_tech_specs" class="md-tech-specs">
+    {% if not tech_specs %}
+    {% trans 'Currently no offer on this mobile' %}
+    {% else %}
+        {% comment %} {% trans "Technical Specification" %} {% endcomment %}
+
+    <div class='md-tech-specs-internal'>
         {% if tech_specs.launch %}
             <tr><b>Launch</b>  {{tech_specs.launch}}</tr>
         {% endif %}
@@ -95,6 +159,8 @@
         {% if tech_specs.external_storage %}
             <tr><b>External Storage</b>  {{tech_specs.external_storage}}</tr>
         {% endif %}
+    </div>
+    <div class='md-tech-specs-internal'>
         {% if tech_specs.WLAN %}
             <tr><b>WLAN</b>  {{tech_specs.WLAN}}</tr>
         {% endif %}
@@ -125,64 +191,54 @@
         {% if tech_specs.ram %}
             <tr><b>RAM</b>  {{tech_specs.ram}}</tr>
         {% endif %}
-        <br>
+    </div>
     {% endif %}
-</div>
-<button id="mobile_cam_btn">{% trans 'Camera Specification'%}</button>
-<div id="mobile_cam_specs" class="mobile-cam-specs">
-{% if camera_specs %}
-    {% if camera_specs.rear_cam_lenses %}
-        <tr><b>Rear Camera Lenses</b>  
-        {{camera_specs.rear_cam_lenses}}</tr>
-    {% endif %}
-    {% if camera_specs.rear_cam_megapixel %}
-        <tr><b>Rear Camera Megapixel</b>  
-        {{camera_specs.rear_cam_megapixel}}</tr>
-    {% endif %}
-    {% if camera_specs.back_cam_aperture %}
-        <tr><b>Rear Camera Aperture</b>  
-        {{camera_specs.back_cam_aperture}}</tr>
-    {% endif %}
-    {% if camera_specs.rear_cam_video_resolution %}
-        <tr><b>Rear Camera Resolution</b>  
-        {{camera_specs.rear_cam_video_resolution}}</tr>
-    {% endif %}    
-    {% if camera_specs.front_cam_lenses %}
-        <tr><b>Front Camera Lenses</b>  
-        {{camera_specs.front_cam_lenses}}</tr>
-    {% endif %}    
-    {% if camera_specs.front_cam_megapixel %}
-        <tr><b>Front Camera Megapixel</b>  
-        {{camera_specs.front_cam_megapixel}}</tr>
-    {% endif %}
-    {% if camera_specs.front_cam_aperture %}
-        <tr><b>Front Camera Aperture</b>  
-        {{camera_specs.front_cam_aperture}}</tr>
-    {% endif %}
-    {% if camera_specs.front_cam_video_resolution %}
-        <tr><b>Front Camera Video Resolution</b>  
-        {{camera_specs.front_cam_video_resolution}}</tr>
-    {% endif %}
-{% endif %}
 </div>
 {%endblock content%}
 {% block extra_scripts %}
 <script>
-var specs_btn = $("#view_mob_specs_btn");
+var offers_btn = $("#m_offers_btn"); 
+var color_btn = $("#m_colors_btn"); 
+var memory_btn = $("#m_memory_btn"); 
+var specs_btn = $("#m_specs_btn");
+var cam_btn = $("#m_camera_btn"); 
+
 var tech_specs_div = $('#mobile_tech_specs');
-var cam_btn = $("#mobile_cam_btn");
 var cam_specs_div = $("#mobile_cam_specs");
+var color_div = $('#md_color_div');
+var memory_div = $("#md_memory_div");
+var offers_div = $("#md_offers_div");
+
 specs_btn.click(function() {
     tech_specs_div.toggle();
+    /* bgcolor = $(this).css('backgroundColor');
+    console.log('Colors', bgcolor)
+    if(bgcolor == rgb(0, 122, 208)){
+        $(this).css('background-color', '#fff').css('color','#000'); 
+    } else {
+        $(this).css('background-color', '#007AD0').css('color','#fff');} */
 });
 cam_btn.click(function() {
     cam_specs_div.toggle();
 });
+color_btn.click(function() {
+    color_div.toggle();
+});
+memory_btn.click(function() {
+    memory_div.toggle();
+});
+offers_btn.click(function() {
+    offers_div.toggle();
+});
+
 // Hide the camera and technical specs on page load
 $(function() {
     // Handler for .ready() called. 
     tech_specs_div.hide()
     cam_specs_div.hide()
+    color_div.hide()
+    memory_div.hide()
+    offers_div.hide()
 });
 </script>
 {% endblock extra_scripts %}
