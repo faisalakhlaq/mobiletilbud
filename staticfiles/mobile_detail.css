@@ -56,12 +56,10 @@
 .mobile-cam-specs{
     display: flex;
     flex-direction: row;
-}
-.md-cam-specs-internal{
-    display: flex;
     justify-content: space-between;
     padding: 1rem;
     width: 40em;
+    border:1px solid rgb(167, 167, 170);
 }
 .rear-camera {
     width: 50%;
@@ -79,14 +77,11 @@
 .md-tech-specs{
     display: flex;
     flex-direction: row;
-}
-.md-tech-specs-internal{
     width: 40em;
-    display: flex;
     justify-content: space-between;
     line-height: 1.8rem;
     padding: 1rem;
-
+    border:1px solid rgb(167, 167, 170);
 }
 .md-tech-left {
     width: 50%;
@@ -96,4 +91,8 @@
 .md-tech-right {
     width: 50%;
     padding-left: 1em;
+}
+.md-specs-row{
+    background-color: #f8f9fa;
+    border: 2px solid #ffffff;
 }

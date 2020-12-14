@@ -45,11 +45,11 @@
     padding-bottom: 0.8em;
     display:flex; 
     align-items:center; 
-    justify-content:center
+    justify-content:center;
 }
 .mb-search-field > input,
 .mb-search-field input {
-    height: 1.9em;
+    height: 2em;
     font-size: 1.2rem;
 }
 input::-webkit-input-placeholder {

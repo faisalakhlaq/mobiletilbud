@@ -32,11 +32,18 @@
                         Price: {{object.price}} 
                 {% endif %}
                 </div>
+                {% if object.mobile %}
+                <div class='offer-md-btn-div'>
+                    <button class='offer-md-btn'>
+                    <a href={{object.mobile.get_absolute_url}}>{% trans 'Mobile Details' %}</a>
+                    </button>
+                </div>
+                {% endif %}
                 <div class="offer-url">
-                        {% if object.offer_url %}
-                        <a href={{ object.offer_url }} target=blank>
-                                {% trans 'Link to the offer on company website' %}</a>
-                        {% endif %}
+                    {% if object.offer_url %}
+                    <a href={{ object.offer_url }} target=blank>
+                            {% trans 'Link to the offer on company website' %}</a>
+                    {% endif %}
                 </div>
         </div>
 </div>
