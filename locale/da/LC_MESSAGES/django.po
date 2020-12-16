@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-14 18:34+0100\n"
+"POT-Creation-Date: 2020-12-16 15:04+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -70,37 +70,37 @@ msgstr "Kontantpris"
 msgid "Launch Date"
 msgstr "Lancering"
 
-#: mobiles/models.py:68 templates/mobile/mobile_detail.html:137
+#: mobiles/models.py:68 templates/mobile/mobile_detail.html:144
 msgid "Dimensions"
 msgstr "Dimensioner"
 
-#: mobiles/models.py:70 templates/mobile/mobile_detail.html:140
+#: mobiles/models.py:70 templates/mobile/mobile_detail.html:147
 msgid "Weight"
 msgstr "Vægt"
 
-#: mobiles/models.py:72 templates/mobile/mobile_detail.html:143
+#: mobiles/models.py:72 templates/mobile/mobile_detail.html:150
 msgid "Screen Type"
 msgstr "Skærmtype"
 
-#: mobiles/models.py:74 templates/mobile/mobile_detail.html:146
+#: mobiles/models.py:74 templates/mobile/mobile_detail.html:153
 msgid "Screen Size"
 msgstr "Skærmstørrelse"
 
-#: mobiles/models.py:76 templates/mobile/mobile_detail.html:149
+#: mobiles/models.py:76 templates/mobile/mobile_detail.html:156
 msgid "Screen Resolution"
 msgstr "Skærmopløsning"
 
-#: mobiles/models.py:78 templates/mobile/mobile_detail.html:152
+#: mobiles/models.py:78 templates/mobile/mobile_detail.html:159
 msgid "IP Certification"
 msgstr "IP Certificering"
 
-#: mobiles/models.py:80 templates/mobile/mobile_detail.html:155
+#: mobiles/models.py:80 templates/mobile/mobile_detail.html:162
 msgid "Internal Storage"
 msgstr "Intern Lagringshukommelse"
 
-#: mobiles/models.py:82 templates/mobile/mobile_detail.html:158
+#: mobiles/models.py:82 templates/mobile/mobile_detail.html:165
 msgid "External Storage"
-msgstr "Ekstern Hukommelse"
+msgstr "Ekstern lagringshukommelse"
 
 #: mobiles/models.py:84
 msgid "WLAN"
@@ -114,23 +114,23 @@ msgstr "bluetooth"
 msgid "USB"
 msgstr "USB"
 
-#: mobiles/models.py:91 templates/mobile/mobile_detail.html:175
+#: mobiles/models.py:91 templates/mobile/mobile_detail.html:182
 msgid "Battery Type"
 msgstr "Batteri Type"
 
-#: mobiles/models.py:93 templates/mobile/mobile_detail.html:178
+#: mobiles/models.py:93 templates/mobile/mobile_detail.html:185
 msgid "Wireless Charging"
 msgstr "Trådløs Opladning"
 
-#: mobiles/models.py:95 templates/mobile/mobile_detail.html:181
+#: mobiles/models.py:95 templates/mobile/mobile_detail.html:188
 msgid "Fast Charging"
 msgstr "Hurtigopladning"
 
-#: mobiles/models.py:97 templates/mobile/mobile_detail.html:184
+#: mobiles/models.py:97 templates/mobile/mobile_detail.html:191
 msgid "Chipset"
 msgstr "Chipset"
 
-#: mobiles/models.py:99 templates/mobile/mobile_detail.html:187
+#: mobiles/models.py:99 templates/mobile/mobile_detail.html:194
 msgid "Operating System"
 msgstr "Operativ System"
 
@@ -138,11 +138,11 @@ msgstr "Operativ System"
 msgid "RAM"
 msgstr "RAM"
 
-#: mobiles/models.py:103 templates/mobile/mobile_detail.html:116
+#: mobiles/models.py:103 templates/mobile/mobile_detail.html:123
 msgid "Launch"
 msgstr "Lancering"
 
-#: mobiles/models.py:105
+#: mobiles/models.py:105 templates/mobile/mobile_detail.html:120
 msgid "Status"
 msgstr "Status"
 
@@ -154,7 +154,7 @@ msgstr "Bagsidekamera Linser"
 msgid "rear_camera_megapixel"
 msgstr "Bagsidekamera Megapixel"
 
-#: mobiles/models.py:119 templates/mobile/mobile_detail.html:82
+#: mobiles/models.py:119 templates/mobile/mobile_detail.html:86
 msgid "Rear Camera Aperture"
 msgstr "Bagsidekamera blændetal"
 
@@ -229,7 +229,7 @@ msgstr "Opdateret"
 msgid "Offer"
 msgstr "Tilbud"
 
-#: telecompanies/models.py:38 templates/mobile/mobile_detail.html:31
+#: telecompanies/models.py:38 templates/mobile/mobile_detail.html:35
 #: templates/offer/offer_list.html:8
 msgid "Offers"
 msgstr "Tilbud"
@@ -337,73 +337,80 @@ msgstr "Pris Fra: "
 msgid "Manufacturer"
 msgstr "Fabrikant"
 
-#: templates/mobile/mobile_detail.html:33
+#: templates/mobile/mobile_detail.html:32 templates/offer/offer_detail.html:39
+msgid "Back"
+msgstr "Tilbage"
+
+#: templates/mobile/mobile_detail.html:37
 msgid "Colors"
 msgstr "Farver"
 
-#: templates/mobile/mobile_detail.html:35
-#: templates/mobile/mobile_detail.html:52
+#: templates/mobile/mobile_detail.html:39
+#: templates/mobile/mobile_detail.html:56
 msgid "Memory"
 msgstr "Hukommelse"
 
-#: templates/mobile/mobile_detail.html:37
+#: templates/mobile/mobile_detail.html:41
 msgid "Specs"
 msgstr "Specs"
 
-#: templates/mobile/mobile_detail.html:39
+#: templates/mobile/mobile_detail.html:43
 msgid "Camera"
 msgstr "Kamera"
 
-#: templates/mobile/mobile_detail.html:44
+#: templates/mobile/mobile_detail.html:48
 msgid "Colours"
 msgstr "Farver"
 
-#: templates/mobile/mobile_detail.html:47
+#: templates/mobile/mobile_detail.html:51
 msgid "Sorry! No color details available yet"
 msgstr "Ingen farvedetaljer fundet"
 
-#: templates/mobile/mobile_detail.html:55
+#: templates/mobile/mobile_detail.html:59
 msgid "Sorry! No memory details available yet"
 msgstr "Ingen hukommelse detaljer fundet"
 
-#: templates/mobile/mobile_detail.html:61
-#: templates/mobile/mobile_detail.html:112
-msgid "Currently no offer on this mobile"
-msgstr "I øjeblikket ikke noget tilbud på denne mobil"
+#: templates/mobile/mobile_detail.html:65
+msgid "Currently no offer on this device"
+msgstr "Der er i øjeblikket ikke noget tilbud"
 
-#: templates/mobile/mobile_detail.html:70
+#: templates/mobile/mobile_detail.html:74
 msgid "No camera details available"
 msgstr "Ingen kameradetaljer fundet"
 
-#: templates/mobile/mobile_detail.html:74
+#: templates/mobile/mobile_detail.html:78
 msgid "Rear Camera Lenses"
 msgstr "Bagsidekamera, antal linser"
 
-#: templates/mobile/mobile_detail.html:78
+#: templates/mobile/mobile_detail.html:82
 msgid "Rear Camera Megapixel"
 msgstr "Bagsidekamera Megapixel"
 
-#: templates/mobile/mobile_detail.html:86
+#: templates/mobile/mobile_detail.html:90
 msgid "Rear Camera Resolution"
 msgstr "Bagsidekamera Videooptagelse"
 
-#: templates/mobile/mobile_detail.html:92
+#: templates/mobile/mobile_detail.html:96
 msgid "Front Camera Lenses"
 msgstr "Frontkamera Linser"
 
-#: templates/mobile/mobile_detail.html:96
+#: templates/mobile/mobile_detail.html:100
 msgid "Front Camera Megapixel"
 msgstr "Frontkamera Megapixel"
 
-#: templates/mobile/mobile_detail.html:100
+#: templates/mobile/mobile_detail.html:104
 msgid "Front Camera Aperture"
 msgstr "Frontkamera Blændetal"
 
-#: templates/mobile/mobile_detail.html:104
+#: templates/mobile/mobile_detail.html:108
 msgid "Front Camera Video Resolution"
 msgstr "Frontkamera Videoopløsning"
 
-#: templates/mobile/mobile_detail.html:134
+#: templates/mobile/mobile_detail.html:116
+msgid "No technical specification available"
+msgstr "Ingen teknisk specifikation fundet"
+
+#: templates/mobile/mobile_detail.html:141
 msgid "Dual Sim"
 msgstr "Dobbelt SIM-kort"
 
@@ -424,11 +431,11 @@ msgstr "Tilbudsdetaljer"
 msgid "Company"
 msgstr "Teleselskab"
 
-#: templates/offer/offer_detail.html:38
+#: templates/offer/offer_detail.html:45
 msgid "Mobile Details"
 msgstr "Mobildetaljer"
 
-#: templates/offer/offer_detail.html:45 templates/offer/offer_snippet.html:27
+#: templates/offer/offer_detail.html:52 templates/offer/offer_snippet.html:27
 msgid "Link to the offer on company website"
 msgstr "Link til tilbuddet på hjemmeside"
 

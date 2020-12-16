@@ -21,7 +21,7 @@ from selenium.common.exceptions import (
 )
 from mobiles.models import MobileBrand, Mobile
 from mobiles.mobile_specs_spider import HeaderFactory, ProxyFactory
-
+from .mobile_specs_spider import GsmarenaMobileSpecSpider
 
 class AbstractMobileSpider(ABC):
  
@@ -45,7 +45,7 @@ class AbstractMobileSpider(ABC):
             if not brand:
                 brand = MobileBrand.objects.get(name__iexact=brand_name)
             # mobile = Mobile.objects.get(name__iexact=name, brand=brand)
-            mobile = Mobile.objects.create(
+            mobile, _created = Mobile.objects.get_or_create(
                 name=name,
                 full_name=full_name,
                 brand=brand,
@@ -54,23 +54,24 @@ class AbstractMobileSpider(ABC):
             # if not mobile:
             #     print('Cannot find mobile: ', full_name)
             #     return
-            if mobile.image:
-                # mobile is already in the database and has a image.
+            # if mobile.image:
+                # mobile is already in the database and has an image.
                 # Therefore we are not going to update it.
-                print('NO UPDATES - Mobile and image already available.')
-                return
+                # print('NO UPDATES - Mobile and image already available.')
+                # return
             if image:
                 thumb_io = io.BytesIO()
                 image.save(thumb_io, image.format, quality=95)
                 # TODO if mobile/ OR ANyName/ is not provided in the save method then 
                 # the image is saved to the parent folder i.e. media
                 # mobile.image.save('sony/'+image.filename, ContentFile(thumb_io.getvalue()), save=False)
-                mobile.image.save(brand_name+'/'+image.filename, ContentFile(thumb_io.getvalue()), save=False)
-            # mobile.save()
+                mobile.image.save('HTC'+'/'+image.filename, ContentFile(thumb_io.getvalue()), save=False)
+            mobile.save()
             # if created:
-            #     print("Saved a new mobile: ", mobile.full_name)
+            print("Saved a new mobile: ", mobile.full_name)
+            # import pdb; pdb.set_trace()
             # else:
-            print('Updated mobile image: ', mobile.full_name)
+            # print('Updated mobile image: ', mobile.full_name)
         except Exception as e:
             print("Exception while saving Mobile: ", e)
     
@@ -94,7 +95,6 @@ class GadgetsndtvMobileSpider(AbstractMobileSpider):
         super().__init__()
     
     def fetch_mobiles(self, brand_name_):
-        import pdb; pdb.set_trace()
         header = HeaderFactory().get_header()
         proxies = get_proxies()
         proxy_pool = cycle(proxies)
@@ -161,6 +161,8 @@ class GsmarenaMobileSpider(AbstractMobileSpider):
         self.nokia_base_url = 'https://www.gsmarena.com/nokia-phones-f-1-0-p'
         self.huawei_url = 'https://www.gsmarena.com/huawei-phones-58.php'
         self.huawei_base_url = 'https://www.gsmarena.com/huawei-phones-f-58-0-p'
+        self.htc_url = 'https://www.gsmarena.com/htc-phones-45.php'
+        self.htc_base_url = 'https://www.gsmarena.com/htc-phones-f-45-0-p'
         super().__init__()
 
     def get_pages(self, brand_name):
@@ -179,6 +181,9 @@ class GsmarenaMobileSpider(AbstractMobileSpider):
         elif 'huawei' in brand_name.lower():
             url = self.huawei_url
             base_url = self.huawei_base_url
+        elif 'htc' in brand_name.lower():
+            url = self.htc_url
+            base_url = self.htc_base_url
 
         response = requests.get(url=url, 
                                 headers=self.headers.get_header(), 
@@ -205,7 +210,8 @@ class GsmarenaMobileSpider(AbstractMobileSpider):
 
     def update_mobile_url(self, brand_name_):
         pages = self.get_pages(brand_name_)
-        for page in pages:
+        m_brand = MobileBrand.objects.get(name__iexact=brand_name_)
+        for p_index, page in enumerate(pages):
             soup = BeautifulSoup(page, "html.parser")
             rows = soup.find('div', {'class', 'makers'}).find('ul').find_all('li')
             # print("GOT mobiles = ", len(rows))
@@ -219,24 +225,68 @@ class GsmarenaMobileSpider(AbstractMobileSpider):
                     if 'apple' in brand_name_.lower() and "iphone" not in mobile_name.lower():
                         continue
                     m_full_name = brand_name_.lower().capitalize() + " " + mobile_name
-                    filtered_mobiles = Mobile.objects.filter(Q(brand__name__iexact=brand_name_),
+                    filtered_mobiles = Mobile.objects.filter(Q(brand=m_brand),
                                                     Q(name__iexact=mobile_name))
                     mobile = None
-                    if filtered_mobiles and len(filtered_mobiles) > 0:
+                    if not filtered_mobiles:
+                        filtered_mobiles = Mobile.objects.filter(Q(brand=m_brand),
+                                                    Q(full_name__iexact=m_full_name))
+                    if filtered_mobiles:
                         mobile = filtered_mobiles[0]
+                        # print('Found a mobile: ', mobile)
                     else:
                         print('Found no mobile with name: ', mobile_name)
-                    if mobile and not 'gsmarena' in mobile.url:
+                        continue
+                    specs = mobile.technical_specs.all()
+                    if specs: specs = specs[0]
+                    specs_is_null = True
+                    if specs:
+                        if specs.weight and not specs.weight.strip() == '':
+                            specs_is_null = False
+                        if specs.screen_type and not specs.screen_type.strip() == '':
+                            specs_is_null = False
+                        if specs.screen_size and not specs.screen_size.strip() == '':
+                            specs_is_null = False
+                        if specs.screen_resolution and not specs.screen_resolution.strip() == '':
+                            specs_is_null = False
+                        if specs.ip_certification and not specs.ip_certification.strip() == '':
+                            specs_is_null = False
+                        if specs.internal_storage and not specs.internal_storage.strip() == '':
+                            specs_is_null = False
+                        if specs.external_storage and not specs.external_storage.strip() == '':
+                            specs_is_null = False
+                        if specs.WLAN and not specs.WLAN.strip() == '':
+                            specs_is_null = False
+                        if specs.bluetooth and not specs.bluetooth.strip() == '':
+                            specs_is_null = False
+                        if specs.USB and not specs.USB.strip() == '':
+                            specs_is_null = False
+                        if specs.battery_type and not specs.battery_type.strip() == '':
+                            specs_is_null = False
+                        if specs.wireless_charging and not specs.wireless_charging.strip() == '':
+                            specs_is_null = False
+                        if specs.operating_system and not specs.operating_system.strip() == '':
+                            specs_is_null = False
+                        if specs.ram and not specs.ram.strip() == '':
+                            specs_is_null = False       
+                        if specs.launch and not specs.launch.strip() == '':
+                            specs_is_null = False
+                    # if mobile and not 'gsmarena' in mobile.url:
+                    if 'gadgets' in mobile.url or specs_is_null:
                         mobile.url = mobile_url
                         mobile.save()
-                        print("Saved mobile url for: ", mobile)
+                        # If we got a mobile then try to get its specs as well
+                        print(f"Page number = {p_index}, Sending request for: ", mobile)
+                        GsmarenaMobileSpecSpider().fetch_single_specs(mobile)
+                        time.sleep(20)
                 except Exception as e:
                     print('Exception occured while fetching mobile: ', e)
                     continue
-        
+
     def fetch_mobiles(self, brand_name_):
         # import pdb; pdb.set_trace()
         pages = self.get_pages(brand_name_)
+        brand = MobileBrand.objects.get(name='HTC')
         for page in pages:
             soup = BeautifulSoup(page, "html.parser")
             rows = soup.find('div', {'class', 'makers'}).find('ul').find_all('li')
@@ -248,13 +298,13 @@ class GsmarenaMobileSpider(AbstractMobileSpider):
                     mobile_name = anker.find('strong').find('span').text.strip()
                     # To avoid storing apple watches and ipad we are checking if the name
                     # contains iphone, so its a phone. Therefore store it.
-                    if 'apple' in brand_name_.lower() and "iphone" not in mobile_name.lower():
-                        continue
+                    # if 'apple' in brand_name_.lower() and "iphone" not in mobile_name.lower():
+                    #     continue
                     m_full_name = brand_name_.lower().capitalize() + " " + mobile_name
                     img_src = anker.find('img')['src']
                     image = self.get_image(img_src)
                     self.save_mobile(name=mobile_name, full_name=m_full_name,
-                    brand_name=brand_name_, url=mobile_url, image=image)
+                    brand_name=brand_name_, brand=brand, url=mobile_url, image=image)
                     # import time
                     # time.sleep(10)
                 except Exception as e:

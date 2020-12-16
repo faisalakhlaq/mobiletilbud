@@ -27,6 +27,10 @@
         {{mobile.brand.name}}</p>
     </div>
     <div class='md-btn-list'>
+        {% if previous_page %}
+            <button class='m-detail-btn' onclick="location.href = '{{ previous_page }}'">
+            {% trans 'Back' %}</button>
+        {% endif %}
         <button name="m_details" id="m_offers_btn" class="m-detail-btn"
          type="submit" value='offers'/>{% trans 'Offers' %}</button>
         <button name="m_details" id="m_colors_btn" class="m-detail-btn"
@@ -58,7 +62,7 @@
     </div>
 <div id='md_offers_div' class="md-offers-container">
     {% if not offers %}
-        {% trans "Currently no offer on this mobile" %}
+        {% trans "Currently no offer on this device" %}
     {% else %}
     {% for offer in offers %}
     {% include 'offer/offer_card_snippet.html' with object=offer %}
@@ -109,9 +113,12 @@
 </div>
 <div id="mobile_tech_specs" class="md-tech-specs">
     {% if not tech_specs %}
-    {% trans 'Currently no offer on this mobile' %}
+    {% trans 'No technical specification available' %}
     {% else %}
     <div class="md-tech-left">
+        {% if tech_specs.status %}
+            <div class='md-specs-row'><b>{% trans 'Status' %}</b>  {{tech_specs.status}}</div>
+        {% endif %}
         {% if tech_specs.launch %}
             <div class='md-specs-row'><b>{% trans 'Launch' %}</b>  {{tech_specs.launch}}</div>
         {% endif %}

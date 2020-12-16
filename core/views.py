@@ -21,15 +21,14 @@ from telecompanies.utils import get_popular_offers
 
 class HomeView(View):
     def get(self, *args, **kwargs):
-        # update_launch_date('Sony')
+        # update_launch_date('Samsung')
         # ThreeSpider().fetch_offers() 
         # TelenorSpider().fetch_offers()
         # TeliaSpider().fetch_offers()
         # YouSeeSpider().fetch_offers()
-        # TeliaSpider().fetch_offers()
-        # fetch_mobiles_task.delay('Motorola')
-        # GsmarenaMobileSpecSpider().fetch_mobile_specs('Huawei')
-        # GsmarenaMobileSpider().update_mobile_url(brand_name_='Huawei')
+        # GsmarenaMobileSpecSpider().fetch_mobile_specs('HTC')
+        # GsmarenaMobileSpider().update_mobile_url(brand_name_='Samsung')
+        # GsmarenaMobileSpider().fetch_mobiles('HTC')
         context = self.get_context_data(*kwargs)
         return render(self.request, 'core/home.html', context)
     
@@ -54,12 +53,12 @@ class MobileManufacturersView(ListView):
         query = self.request.GET.get('query')            
         if query and len(query.strip()) > 0:
             return Mobile.objects.filter(Q(name__icontains=query.strip()) |
-            Q(full_name__icontains=query.strip())).order_by('-name')
+            Q(full_name__icontains=query.strip())).order_by(F('launch_date').desc(nulls_last=True))
         elif company:
             # If popular mobiles is not selected then a brand name is 
             # selected. Therefore, find the mobiles of the selected brand
             if company.strip() != 'Popular':
-                # Order by date and send the ones will null value at the end
+                # Order by date and send the ones with null value at the end
                 # return Mobile.objects.filter(brand__name__iexact=company.strip()).order_by('-launch_date')
                 return Mobile.objects.filter(brand__name__iexact=company.strip()).order_by(F('launch_date').desc(nulls_last=True))
             elif company.strip() == 'Popular':

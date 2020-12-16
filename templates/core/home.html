@@ -17,7 +17,7 @@
     </div>
     <div class="home-popular-offers">
         {% if offer_list %}{% endif %}
-        <h3 class="popular-heading"><span>{% trans "Popular Offers" %}</span><h3>
+        <h3 class="popular-heading"><span>{% trans "Popular Offers" %}</span></h3>
         <div class="popular-offer-list">
         {% for offer in popular_offers %}
             {% include 'offer/offer_card_snippet.html' with offer=offer%}

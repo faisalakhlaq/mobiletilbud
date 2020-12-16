@@ -88,7 +88,12 @@ class AbstractTilbudSpider(ABC):
             offer.discount = discount
             value = (''.join(i for i in discount if i.isdigit()))
             if value:
-                offer.discount_offered = float(value)
+                if telecom_company_name == '3':
+                    import pdb; pdb.set_trace()
+                    if 'spar' in discount.lower():
+                        offer.discount_offered = float(value)
+                else:
+                        offer.discount_offered = float(value)
         if price != 0:
             offer.price = price
         offer.save()

@@ -17,11 +17,12 @@ celery -A mobiletilbud beat -l INFO --scheduler django_celery_beat.schedulers:Da
 GIT
 git -c user.name=faisalakhlaq -c user.email=faisalakhlaq@aol.com stash create
 
-Datadump for whole db
-./manage.py dumpdata > db.json
+Datadump for whole database
+python manage.py dumpdata > datadump.json
 For an app
-./manage.py dumpdata core > admin.json
+python manage.py dumpdata core > admin.json
 For a specific table
-./manage.py dumpdata admin.logentry > logentry.json
+python manage.py dumpdata admin.logentry > logentry.json
 Load Data
-/manage.py loaddata db.json
+python manage.py loaddata datadump.json
+django-admin loaddata datadump.json

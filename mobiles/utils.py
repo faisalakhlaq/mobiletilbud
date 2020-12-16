@@ -12,7 +12,8 @@ from dateutil import parser
 def update_launch_date(brand_name):
     'Update the Mobile launch date where None'
     # import pdb; pdb.set_trace()
-    mobiles = Mobile.objects.filter(brand__name=brand_name) .filter(launch_date=None)
+    # mobiles = Mobile.objects.filter(brand__name=brand_name) .filter(launch_date=None)
+    mobiles = Mobile.objects.filter(brand__name=brand_name, launch_date__isnull=True, technical_specs__isnull=False)
     for ph in mobiles:
         try:
             specs = ph.technical_specs.all()

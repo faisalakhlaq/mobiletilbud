@@ -6,6 +6,10 @@ from django.db.models import Q, F
 import requests
 import random 
 import time
+from urllib3.connection import HTTPSConnection
+from requests.exceptions import ReadTimeout
+# from urllib3.exceptions import HTTPSConnectionPool
+
 from .models import (Mobile, MobileBrand, MobileTechnicalSpecification,
                      MobileCameraSpecification, MobileVariation, Variation)
 from .utils import HeaderFactory, ProxyFactory, update_mobile_launch_date
@@ -56,7 +60,7 @@ class PricePusher:
             res = row.find_all('div')
             if res:
                 mobile_divs += res
-        import pdb; pdb.set_trace()
+        # import pdb; pdb.set_trace()
         for mobile_detail in mobile_divs:
             try:
                 name = mobile_detail.find('h4').text.strip()
@@ -114,6 +118,29 @@ class GsmarenaMobileSpecSpider:
         # self.proxies = asyncio.run(get_proxies())
         # loop.close()
 
+    def fetch_single_specs(self, mobile):
+        '''Fetches specs for a single mobile and 
+        fails in case of an exception'''
+        if not mobile.url: return
+        #  or MobileTechnicalSpecification.objects.filter(mobile=mobile): continue
+        # proxy = next(proxy_pool)
+        header = self.headers.get_header()
+        print(f'Sending Request for mobile = {mobile}')
+        response = requests.get(
+            url=mobile.url, 
+            # proxies={"http": proxy, "https": proxy}, 
+            headers=header,
+            timeout=20, # timeout in 20 seconds in order to avoid hanging/freezing
+        )
+        soup = BeautifulSoup(response.content, 'html.parser')
+        tables = soup.find_all('table')
+        rows = []
+        # import pdb; pdb.set_trace()
+        for table in tables:
+            new_rows = table.find_all('tr')
+            if new_rows: rows = rows + new_rows
+        self.extract_mobile_info(rows, mobile)
+
     # @shared_task
     def fetch_mobile_specs(self, brand_name):
         """Get url links for all mobile in he given brand.
@@ -127,7 +154,10 @@ class GsmarenaMobileSpecSpider:
             return None
         # import pdb; pdb.set_trace()
         # mobiles = Mobile.objects.filter(brand=brand)
-        mobiles = Mobile.objects.filter(brand=brand).order_by(F('launch_date').desc(nulls_last=True))
+        # mobiles = Mobile.objects.filter(brand=brand).order_by(F('launch_date').desc(nulls_last=True))
+        # mobiles = Mobile.objects.filter(brand__name=brand_name)[:100]
+        mobiles = Mobile.objects.filter(brand=brand, technical_specs__isnull=True)[:100]
+        # mobiles = mobiles.filter(technical_specs=None)
         # self.proxies = ProxyFactory().get_proxies(5)
         # proxy_pool = cycle(self.proxies)
         for index, mobile in enumerate(mobiles):
@@ -138,7 +168,7 @@ class GsmarenaMobileSpecSpider:
                 #  or MobileTechnicalSpecification.objects.filter(mobile=mobile): continue
                 # proxy = next(proxy_pool)
                 header = self.headers.get_header()
-                print(f'Remaining {len(mobiles)-index} Sending Request # {index} for mobile = {mobile} with proxy =  and headers = \n {header}')
+                print(f'Remaining {len(mobiles)-index} Sending Request # {index} for mobile = {mobile}')
                 response = requests.get(
                     url=mobile.url, 
                     # proxies={"http": proxy, "https": proxy}, 
@@ -160,15 +190,21 @@ class GsmarenaMobileSpecSpider:
                     # print('Got new proxy pool')
                     # proxy_pool = cycle(self.proxies)
                 if index % 3 == 0:
-                    time.sleep(20)
+                    time.sleep(25)
                 else:
-                    time.sleep(10)
+                    time.sleep(15)
                 print('Went to sleep')
-            except Exception as e:                
+            except ReadTimeout as rt:
+                print('Read time out. Trying again')
+                continue
+            except HTTPSConnection as nce:
+                print('Unable to establish connection!', nce)
+                return
+            except Exception as e:
                 print(f'Exception occured while fetching specs for {mobile}', e)
-                with open('to_fetch_motorola.txt', 'a') as f:
-                    f.write(str(mobile))
-                    f.write('\n')
+                # with open('to_fetch_motorola.txt', 'a') as f:
+                #     f.write(str(mobile))
+                #     f.write('\n')
                 continue
                 # if index !=0 and index % 20 == 0:
                     # after every 20 requests update the proxy list 
@@ -184,7 +220,7 @@ class GsmarenaMobileSpecSpider:
         # isinstance(rows, list)
         # import pdb; pdb.set_trace()
         if len(rows) == 0:
-            print(f'Got not data for {mobile.name}')
+            print(f'Got no data for {mobile.name}')
             return None
         info_dict = {}
         th_title = ''
@@ -199,6 +235,9 @@ class GsmarenaMobileSpecSpider:
                 key = th_title + "-" + t.find('a').text.strip().lower()
                 info = i.text.strip()
                 info_dict[key] = info
+            except AttributeError as e:
+                # a row is empty and accessing its text generates NoneType. Skip it
+                continue
             except Exception as e:
                 print('Exception while extracting ', mobile)
                 print(e)
@@ -208,7 +247,6 @@ class GsmarenaMobileSpecSpider:
         self.save_variations(info_dict, mobile)
 
     def save_mobile_info(self, data_dict, mobile):
-        # import pdb; pdb.set_trace()
         old_specs = MobileTechnicalSpecification.objects.filter(mobile=mobile)
         mob_specs = MobileTechnicalSpecification.objects.create(mobile=mobile)
         technology = data_dict.get('network-technology')
@@ -291,8 +329,7 @@ class GsmarenaMobileSpecSpider:
             launch = launch  + " - Status " + status.strip()
         if launch:
             mob_specs.launch = launch
-
-        old_specs.delete()
+        if old_specs:old_specs.delete()
         mob_specs.save()
         print('Saved specs for ', mobile)
 
@@ -381,7 +418,7 @@ class GsmarenaMobileSpecSpider:
         front_cam_video_resolution = data_dict.get('selfie camera-video')
         if front_cam_video_resolution:
             cam_specs.front_cam_video_resolution = front_cam_video_resolution.strip()[:50]
-        old_cam_specs.delete()
+        if old_cam_specs: old_cam_specs.delete()
         cam_specs.save()
         print('Saved Camera Specs for ', mobile)
 
@@ -398,8 +435,8 @@ class GadgetsMobileSpecSpider:
         # updated_urls = Mobile.objects.filter(Q(brand=brand),Q(url__icontains='gadgets'))
         # import pdb; pdb.set_trace()
         # Read the file 
-        with open('to_fetch_mobile_specs.txt', 'r') as f:
-            lines = f.readlines()
+        # with open('to_fetch_mobile_specs.txt', 'r') as f:
+        #     lines = f.readlines()
         proxy_pool = cycle(self.proxies)
         # check the index and change sleep time to avoid regular intervals
         for index, l in enumerate(lines):
@@ -458,9 +495,9 @@ class GadgetsMobileSpecSpider:
                 print('Went to sleep')
             except Exception as e:
                 # Save the unsaved mobile in a file for later retry
-                with open('to_fetch_mobile_specs.txt', 'a') as f:
-                    f.write(str(mobile))
-                    f.write('\n')
+                # with open('to_fetch_mobile_specs.txt', 'a') as f:
+                #     f.write(str(mobile))
+                #     f.write('\n')
                 print(f'Exception occured while fetching specs for {mobile}', e)
                 continue
 

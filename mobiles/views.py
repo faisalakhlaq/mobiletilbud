@@ -42,5 +42,6 @@ class MobileDetailView(View):
                 'camera_specs': cam,
                 'colours': colours,
                 'memory': memory,
+                'previous_page': self.request.META.get('HTTP_REFERER')
             }
         return context

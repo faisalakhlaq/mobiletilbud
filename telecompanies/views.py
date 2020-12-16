@@ -43,6 +43,12 @@ class OfferDetailView(DetailView):
     template_name = 'offer/offer_detail.html'
     model = Offer
 
+    def get_context_data(self, **kwargs):
+        context = super(OfferDetailView, self).get_context_data(**kwargs)
+        context['previous_page'] = self.request.META.get('HTTP_REFERER')
+        return context
+
+
 class PopularOffersView(ListView):
     """ Return top 5 offers from each company.
     """
