@@ -1,8 +1,10 @@
 from django.contrib import admin
 
 from .models import Offer
+from .forms import OfferForm
 
 class OfferAdmin(admin.ModelAdmin):
+    form = OfferForm
     readonly_fields = ['updated']
     list_display = [
         'mobile',
