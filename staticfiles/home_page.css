@@ -5,19 +5,20 @@
     flex-direction: row;
 }
 .popular-heading {
+    font-size: 1.1em;
     font-weight:bold; 
     font-family:sans-serif; 
     color:#000061;
-    margin-top: .5em;
+    margin-top: .5rem;
     text-transform: uppercase;
     text-align: center;
-    margin-bottom: 1em;
+    margin-bottom: 1rem;
 }
-/* .popular-heading span { */
-    /* padding: 1rem; */
-    /* border-bottom: 3px solid  rgb(239, 239, 255); */
-    /* min-width: 100%; */
-/* } */
+/* .popular-heading span { 
+    padding: 1rem;
+     border-bottom: 3px solid  rgb(239, 239, 255);
+     min-width: 100%;  
+} */
 .home-popular-mobiles {
     width: 40%;
     display: flex;

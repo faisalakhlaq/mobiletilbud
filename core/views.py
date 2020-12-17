@@ -68,7 +68,7 @@ class MobileManufacturersView(ListView):
         context['mobile_brands'] = MobileBrand.objects.all()
         context["brand"] = company or query
         return context
-    
+
 def get_mobile_auto_complete(request):    
     """Search mobile names containing the user provided string.
     Return 5 matching names."""

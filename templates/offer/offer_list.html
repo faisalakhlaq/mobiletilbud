@@ -2,7 +2,7 @@
 {% load i18n %}
 {% load static %}
 {% block extra_head %}
-        <link rel='stylesheet' href="{% static '/main.css'%}">
+        <link rel='stylesheet' href="{% static '/offer_list.css'%}">
 {% endblock %}
 
 {% block title %} {% translate "Offers" %} | {{ block.super }}
@@ -11,7 +11,7 @@
 {% block content %}
 <div class='offer_list_container'>
     <h3 class="offer-header">
-        {% trans "POPULAR OFFERS" %}<h3>
+        {% trans "POPULAR OFFERS" %}</h3>
     <div class='offers-company-list'>
         <form method='GET' action=''>
             <button id='company' name="company" class="tele-comp-btn" 
@@ -33,7 +33,7 @@
     </form></div>
     <div class="offer-cards-container">
         {% if not object_list %}
-        <h3>{% trans "No Offers Here" %}<h3>
+        <h3>{% trans "No Offers Here" %}</h3>
         {% endif %}
         {% for offer in object_list %}
         {% include 'offer/offer_card_snippet.html' with offer=offer%}

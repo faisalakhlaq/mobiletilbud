@@ -5,6 +5,7 @@
     margin-top: -0.3em;
     margin-bottom: 0.1em;
     text-transform: uppercase;
+    text-align: center;
 }
 .mobile-list-container {
     display:flex; 
@@ -17,7 +18,8 @@
     padding:0.2em; 
     display:flex; 
     align-items:center; 
-    justify-content:center
+    text-align: center;
+    justify-content:center;
 }
 .mb-btn{
     color: #1a1a1a;
@@ -32,7 +34,7 @@
     font-size: 1rem;
 }
 .mb-btn:hover {
-    background-color:  #008CBA;; /* Green */
+    background-color:  #008CBA;
     color: white;
 }
 .brand-btn-icon{
@@ -49,7 +51,7 @@
 }
 .mb-search-field > input,
 .mb-search-field input {
-    height: 2em;
+    height: 2.30em;
     font-size: 1.2rem;
 }
 input::-webkit-input-placeholder {

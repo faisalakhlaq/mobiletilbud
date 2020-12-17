@@ -4,25 +4,20 @@
         <link rel='stylesheet' href="{% static '/mobile_card_snippet.css'%}">
 {% endblock %}
 
-<a class="col-auto mobile_card_a" href={{ mobile.get_absolute_url }}>
-    <div class="card mobile-card">
-    
-        <div class="card-body">
-            {% if mobile.image %}
-            <div class="mobile-image">
-                <img class="mob-image" src={{ mobile.image.url }}>
-            </div>
-            {% else %}
-            <div class="mobile-image">
-                <img class="mob-image" src={{'/media/images/default_mobile_image.png' }}>
-            </div>
-            {% endif %}
-        <div class="mobile-card-info"> 
-            <p>{{mobile.full_name}}</p>
-            <p>{% if mobile.cash_price %}
-                {%trans 'Price From: ' %}{{mobile.cash_price}}
-            {% endif %}</p>
+<a class="mobile-card-container mobile-card mobile_card_a" href={{ mobile.get_absolute_url }}>
+    {% if mobile.image %}
+        <div class="mobile-card-image">
+            <img class="mob-image" src={{ mobile.image.url }}>
         </div>
+    {% else %}
+        <div class="mobile-card-image">
+            <img class="mob-image" src={{'/media/images/default_mobile_image.png' }}>
         </div>
+    {% endif %}
+    <div class="mobile-card-info"> 
+        {{mobile.full_name}}
+        {% if mobile.cash_price %}
+            <br>{%trans 'Price From: ' %}{{mobile.cash_price}}
+        {% endif %}
     </div>
 </a>

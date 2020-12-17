@@ -11,12 +11,14 @@
     color:#000061;
     margin-top: -0.3em;
     margin-bottom: 0.1em;
+    text-align: center;
 }
 .offers-company-list {
     padding:0.2em; 
     display:flex; 
     align-items:center; 
-    justify-content:center
+    justify-content:center;
+    text-align: center;
 }
 .tele-comp-btn{
     color: #1a1a1a;
@@ -45,10 +47,10 @@
 .offer-search-field > input,
 input::-webkit-input-placeholder {
     font-size: 1rem;
-    padding: 0.3rem;
+    padding: 0.5rem;
 }
 .offer-search-field input {
-    height: 2em;
+    height: 2.30em;
     font-size: 1.2rem;
 }
 .search-btn {

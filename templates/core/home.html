@@ -8,7 +8,7 @@
 {% block content %}
 <div class='home-container'>
     <div class="home-popular-mobiles">
-        <h3 class="popular-heading"><span>{% trans "Popular Mobiles" %}</span></h3>
+        <h3 class="popular-heading">{% trans "Popular Mobiles" %}</h3>
         <div class="popular-mobiles-list">
             {% for pm in popular_mobiles %}
                 {% include 'mobile/mobile_card_snippet.html' with mobile=pm.mobile %}
@@ -17,7 +17,8 @@
     </div>
     <div class="home-popular-offers">
         {% if offer_list %}{% endif %}
-        <h3 class="popular-heading"><span>{% trans "Popular Offers" %}</span></h3>
+        <h3 class="popular-heading">{% trans "Popular Offers" %}</h3>
+        {% comment %} <h3 class="popular-heading"><span>{% trans "Popular Offers" %}</span></h3> {% endcomment %}
         <div class="popular-offer-list">
         {% for offer in popular_offers %}
             {% include 'offer/offer_card_snippet.html' with offer=offer%}

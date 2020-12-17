@@ -17,9 +17,11 @@
 <div>
 {% include 'main_nav.html'%}
 </div>
+
 <div class='mt-4'>
 {% include 'baner.html' %}
 </div>
+
 {% if messages %}
   <div class='mt-5 pt-4'>
     {% for message in messages %}
@@ -32,7 +34,7 @@
     {% endfor %}
   </div>
 {% endif %}
-<div>
+{% comment %} <div> {% endcomment %}
     <div class='row mt-2'>
         {% comment %} <div class='col-3'>{% include 'left_menu.html' %}</div> {% endcomment %}
         <div class='col-12'>{% block content %}{% endblock content %}</div>
@@ -40,7 +42,7 @@
     <div class='row mt-2'>
         <div class='col-9 ml-auto'>{% block extra_body %}{% endblock extra_body %}</div>
     </div>
-</div>
+{% comment %} </div> {% endcomment %}
 {% include 'main_footer.html' %}
 {% include 'bootstrap/js.html' %}
 {% block extra_scripts %}
