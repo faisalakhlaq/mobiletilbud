@@ -14,28 +14,15 @@ from telecompanies.models import Offer
 # from telecompanies.tilbud_spider import ThreeSpider, TelenorSpider, TeliaSpider, YouSeeSpider
 from telecompanies.utils import get_popular_offers
 
-# from mobiles.mobile_specs_spider import GsmarenaMobileSpecSpider
-# from telecompanies.spider import YouSeeSpider
-# from mobiles.utils import update_launch_date
-# from mobiles.mobile_spider import GsmarenaMobileSpider
-
 class HomeView(View):
     def get(self, *args, **kwargs):
-        # update_launch_date('Samsung')
-        # ThreeSpider().fetch_offers() 
-        # TelenorSpider().fetch_offers()
-        # TeliaSpider().fetch_offers()
-        # YouSeeSpider().fetch_offers()
-        # GsmarenaMobileSpecSpider().fetch_mobile_specs('HTC')
-        # GsmarenaMobileSpider().update_mobile_url(brand_name_='Samsung')
-        # GsmarenaMobileSpider().fetch_mobiles('HTC')
         context = self.get_context_data(*kwargs)
         return render(self.request, 'core/home.html', context)
     
     def get_context_data(self, **kwargs):
         """Returns all the popular mobiles and one offer from 
         each telecompany"""
-        popular_mobiles = PopularMobile.objects.all()[:10]
+        popular_mobiles = PopularMobile.objects.all().order_by(F('mobile__launch_date').desc(nulls_last=True))[:10]
         context = {
             "popular_mobiles": popular_mobiles,
         }
@@ -70,7 +57,7 @@ class MobileManufacturersView(ListView):
         # then display the popular mobiles
         if not company and not query:
             ids = PopularMobile.objects.values_list('mobile')
-            return Mobile.objects.filter(id__in = ids).order_by('-name')
+            return Mobile.objects.filter(id__in = ids).order_by(F('launch_date').desc(nulls_last=True))
     
     def get_context_data(self, **kwargs):
         context = super(MobileManufacturersView, self).get_context_data(**kwargs)

@@ -16,6 +16,7 @@ celery -A mobiletilbud beat -l INFO --scheduler django_celery_beat.schedulers:Da
 
 GIT
 git -c user.name=faisalakhlaq -c user.email=faisalakhlaq@aol.com stash create
+git commit -a --allow-empty-message -m ''
 
 Datadump for whole database
 python manage.py dumpdata > datadump.json

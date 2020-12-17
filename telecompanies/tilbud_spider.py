@@ -19,6 +19,12 @@ from core.models import TelecomCompany
 from mobiles.models import Mobile, MobileBrand
 from mobiles.utils import HeaderFactory, ProxyFactory
 
+def task_fetch_offers():
+    TelenorSpider().fetch_offers()
+    YouSeeSpider().fetch_offers()
+    TeliaSpider().get_telia_offers()
+    ThreeSpider().get_three_offers()
+
 class AbstractTilbudSpider(ABC):
     def __init__(self):
         self.headers = HeaderFactory()
