@@ -3,73 +3,49 @@
 <!-- Navbar -->
 <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light scrolling-navbar">
     <div class="container-fluid">
-
-      <!-- Brand -->
-      <a class="navbar-brand waves-effect" href="{% url 'core:home' %}">
-        <img style="width:1.5rem;" class='logo-image' src={% static 'logo1.png' %}>
-        <strong class="blue-text">MobilTilbud</strong>
-      </a>
-
-      <!-- Collapse -->
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-      <!-- Links -->
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-
-        <!-- Left -->
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item">
-              <a class="nav-link waves-effect" href={% url 'telecompanies:offers' %}>
-                <span class="clearfix d-none d-sm-inline-block"> {% translate "Popular Offers" %} </span>
-              </a>
-          </li>
-          {% comment %} 
-          <li class="nav-item">
-              <a class="nav-link waves-effect" href={% url 'telecompanies:telecom-companies' %}>
-                <span class="clearfix d-none d-sm-inline-block"> {% translate "Telecom Companies" %} </span>
-              </a>
-          </li> 
-          <li class="nav-item active">
-            <a class="nav-link waves-effect" href="{% url 'core:home' %}">Home
-              <span class="sr-only">(current)</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link waves-effect" href="{% url 'telecompanies:compare-offers' %}">{% translate "Compare" %}</a>
-          </li>
-           {% endcomment %}
-          <li class="nav-item">
-            <a class="nav-link waves-effect" href="{% url 'core:mobile-brands' %}">{% translate "Mobile Brands" %}</a>
-          </li>
-        </ul>
-        <!-- Right -->
-        <ul class="navbar-nav nav-flex-icons">
-          {% get_current_language as LANGUAGE_CODE %}
-          <form class="navbar-form form-inline" action="{% url 'change_language' %}" method="post">
-              {% csrf_token %}
-              {% comment %} <select name="language"> {% endcomment %}
-              <select name="language" class="form-control" onchange="this.form.submit()">
-                  {% get_available_languages as LANGUAGES %}
-                  {% for language in LANGUAGES %}
-                  <option class="nav-item dropdown" value="{{ language.0 }}" {% if language.0 == LANGUAGE_CODE %} selected{% endif %}>
-                      {% comment %} {{ language.0|language_name_local }} {% endcomment %}
-                      {% comment %} ({{ language.0 }}) {% endcomment %}
-                      <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="{% url 'change_language' %}">{{ language.0 }}</a>
-                        {% comment %} <a class="dropdown-item" href="{% url 'change_language' %}">{{ language.0|language_name_local }}</a> {% endcomment %}
-                      </div>
-                      {% comment %} <a class="nav-link waves-effect" href="{% url 'change_language' %}">
-                        <span>{{ language.0|language_name_local }}</span>
-                      </a>  {% endcomment %}
-                  </option>
-                  {% endfor %}
-              </select>
-          </form>
-        </ul>
-      </div>
+        <!-- Brand -->
+        <a class="navbar-brand waves-effect" href="{% url 'core:home' %}">
+            <img style="width:1.5rem;" class='logo-image' src={% static 'logo1.png' %}>
+            <strong class="blue-text">MobilTilbud</strong>
+        </a>
+        <!-- Collapse -->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <!-- Links -->
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <!-- Left -->
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link waves-effect" href={% url 'telecompanies:offers' %}>
+                        {% translate "Popular Offers" %} </span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link waves-effect" href={% url 'core:mobile-brands' %}>
+                        {% translate "Mobile Brands" %}
+                    </a>
+                </li>
+            </ul>
+            <!-- Right -->
+            <ul class="navbar-nav nav-flex-icons">
+                {% get_current_language as LANGUAGE_CODE %}
+                <form class="navbar-form form-inline" action="{% url 'change_language' %}" method="post">
+                    {% csrf_token %}
+                    <select name="language" class="form-control" onchange="this.form.submit()">
+                        {% get_available_languages as LANGUAGES %}
+                        {% for language in LANGUAGES %}
+                        <option class="nav-item dropdown" value="{{ language.0 }}" {% if language.0 == LANGUAGE_CODE %} selected{% endif %}>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <a class="dropdown-item" href="{% url 'change_language' %}">{{ language.0 }}</a>
+                            </div>
+                        </option>
+                        {% endfor %}
+                    </select>
+                </form>
+            </ul>
+        </div>
     </div>
 </nav>
 <!-- Navbar -->
