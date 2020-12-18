@@ -1,5 +1,5 @@
-import aiohttp
-import asyncio
+# import aiohttp
+# import asyncio
 from collections import OrderedDict
 from lxml.html import fromstring
 import random 

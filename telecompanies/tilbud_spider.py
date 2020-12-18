@@ -22,8 +22,8 @@ from mobiles.utils import HeaderFactory, ProxyFactory
 def task_fetch_offers():
     TelenorSpider().fetch_offers()
     YouSeeSpider().fetch_offers()
-    TeliaSpider().get_telia_offers()
-    ThreeSpider().get_three_offers()
+    TeliaSpider().fetch_offers()
+    ThreeSpider().fetch_offers()
 
 class AbstractTilbudSpider(ABC):
     def __init__(self):
@@ -95,7 +95,6 @@ class AbstractTilbudSpider(ABC):
             value = (''.join(i for i in discount if i.isdigit()))
             if value:
                 if telecom_company_name == '3':
-                    import pdb; pdb.set_trace()
                     if 'spar' in discount.lower():
                         offer.discount_offered = float(value)
                 else:
@@ -297,7 +296,7 @@ class TeliaSpider(AbstractTilbudSpider):
             except Exception as e:
                 print('Exception in Telia while fetching request: ', e)
                 continue
-        if not rows or not len(rows) > 0: 
+        if not rows or not len(rows) == 0: 
             print('No offers found for Telia')
             return
         offer_divs = []

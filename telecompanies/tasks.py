@@ -1,8 +1,9 @@
+#!/usr/bin/python3.8
 # from celery.decorators import periodic_task
 # from celery import shared_task
 # from celery.utils.log import get_task_logger
 
-from telecompanies.tilbud_spider import TelenorSpider, TeliaSpider, ThreeSpider, YouSeeSpider
+from .tilbud_spider import TelenorSpider, TeliaSpider, ThreeSpider, YouSeeSpider
 
 # logger = get_task_logger(__name__)
 
