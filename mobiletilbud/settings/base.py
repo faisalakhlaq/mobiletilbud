@@ -16,6 +16,7 @@ INSTALLED_APPS = [
     'telecompanies',
     'mobiles',
 
+    'geoip2',
     'django_celery_beat',
 ]
 
@@ -54,7 +55,7 @@ WSGI_APPLICATION = 'mobiletilbud.wsgi.application'
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
-LANGUAGE_CODE = 'da'
+# LANGUAGE_CODE = 'da'
 
 TIME_ZONE = 'Europe/Copenhagen'
 

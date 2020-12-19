@@ -10,7 +10,7 @@
 <div class='tilbud-detail-section'>
         <div class="offer-mob-image">
         {% if object.mobile and object.mobile.image %}
-                <img src={{ object.mobile.image.url }}>
+                <img class='om-image' src={{ object.mobile.image.url }}>
         {% endif %}
         </div>
         <h3 class="mobile-name">{% if object.mobile and object.mobile.full_name %}

@@ -1,24 +1,55 @@
 from django.conf import settings
+from django.contrib.gis.geoip2 import GeoIP2, GeoIP2Exception
+from django.utils import translation
 from django.db.models import Q, F
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.utils.translation import gettext as _
 from django.views import View
 from django.views.generic import ListView, View
+from geoip2.errors import AddressNotFoundError
 import json
 from urllib.parse import urlparse
+
 
 from .models import TelecomCompany
 from mobiles.models import Mobile, MobileBrand, PopularMobile
 from telecompanies.models import Offer
-# from telecompanies.tilbud_spider import ThreeSpider, TelenorSpider, TeliaSpider, YouSeeSpider
 from telecompanies.utils import get_popular_offers
 
 class HomeView(View):
+    def select_language(self, request):
+        '''If language not set in the previous sesssion, 
+        set the language according to the users country.'''
+        import pdb; pdb.set_trace()
+        try:
+            lang = translation.get_language()
+            if lang:
+                translation.activate(lang)
+                return 
+            ip = request.META.get('REMOTE_ADDR', None)
+            if ip:
+                g = GeoIP2('geoip/GeoLite2-Country_20201215')
+                c_dict = g.country(ip)
+                country = c_dict['country_name']
+            else:
+                country = 'Denmark' # default country
+            if country.lower() != 'denmark':
+                # If country is not Denmark and language is set to da
+                # then change it to English
+                translation.activate('en')
+        except (AddressNotFoundError, GeoIP2Exception, ValueError) as e:
+            print('Problem in GeoIP2', e)
+            pass
+        except Exception as e:
+            print(e)
+            pass
+
     def get(self, *args, **kwargs):
         context = self.get_context_data(*kwargs)
+        self.select_language(self.request)
         return render(self.request, 'core/home.html', context)
-    
+
     def get_context_data(self, **kwargs):
         """Returns all the popular mobiles and one offer from 
         each telecompany"""
@@ -94,18 +125,15 @@ def change_language(request):
         if language:
             if language != settings.LANGUAGE_CODE and [lang for lang in settings.LANGUAGES if lang[0] == language]:
                 referer_page = urlparse(request.META.get('HTTP_REFERER')).path
+                if language == 'da' and '/en' in referer_page:
+                    referer_page = referer_page.replace('/en', '') 
+                else:
+                    referer_page = referer_page.replace('/da', '')
                 redirect_path = f'/{language}{referer_page}'
-            elif language == settings.LANGUAGE_CODE:
-                referer_page = urlparse(request.META.get('HTTP_REFERER')).path
-                if '/en' in referer_page:
-                    referer_page = referer_page.replace('/en', '')
-                redirect_path = f'{referer_page}'
             else:
                 return response
-            from django.utils import translation
             translation.activate(language)
             response = HttpResponseRedirect(redirect_path)
-            response.set_cookie(settings.LANGUAGE_COOKIE_NAME, language)
     return response
 
 # Error page handlers
