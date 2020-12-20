@@ -11,7 +11,6 @@ from geoip2.errors import AddressNotFoundError
 import json
 from urllib.parse import urlparse
 
-
 from .models import TelecomCompany
 from mobiles.models import Mobile, MobileBrand, PopularMobile
 from telecompanies.models import Offer
@@ -21,9 +20,10 @@ class HomeView(View):
     def select_language(self, request):
         '''If language not set in the previous sesssion, 
         set the language according to the users country.'''
-        import pdb; pdb.set_trace()
+        # import pdb; pdb.set_trace()
         try:
-            lang = translation.get_language()
+            # lang = translation.get_language()
+            lang = request.session.get('language')
             if lang:
                 translation.activate(lang)
                 return 
@@ -32,17 +32,21 @@ class HomeView(View):
                 g = GeoIP2('geoip/GeoLite2-Country_20201215')
                 c_dict = g.country(ip)
                 country = c_dict['country_name']
-            else:
-                country = 'Denmark' # default country
+            # else:
+            #     country = 'Denmark' # default country
             if country.lower() != 'denmark':
                 # If country is not Denmark and language is set to da
                 # then change it to English
                 translation.activate('en')
+                request.session['language'] = 'en'
+            else:
+                translation.activate('da')
+                request.session['language'] = 'da'
         except (AddressNotFoundError, GeoIP2Exception, ValueError) as e:
             print('Problem in GeoIP2', e)
             pass
         except Exception as e:
-            print(e)
+            print('Exception while language selection and country detection: ', e)
             pass
 
     def get(self, *args, **kwargs):
@@ -133,6 +137,7 @@ def change_language(request):
             else:
                 return response
             translation.activate(language)
+            request.session['language'] = language
             response = HttpResponseRedirect(redirect_path)
     return response
 
