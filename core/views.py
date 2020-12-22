@@ -11,14 +11,13 @@ from urllib.parse import urlparse
 from .models import TelecomCompany
 from mobiles.models import Mobile, MobileBrand, PopularMobile
 from telecompanies.models import Offer
-# from telecompanies.tilbud_spider import ThreeSpider, TelenorSpider, TeliaSpider, YouSeeSpider
 from telecompanies.utils import get_popular_offers
 
 class HomeView(View):
     def get(self, *args, **kwargs):
         context = self.get_context_data(*kwargs)
         return render(self.request, 'core/home.html', context)
-    
+
     def get_context_data(self, **kwargs):
         """Returns all the popular mobiles and one offer from 
         each telecompany"""
@@ -105,7 +104,6 @@ def change_language(request):
             from django.utils import translation
             translation.activate(language)
             response = HttpResponseRedirect(redirect_path)
-            response.set_cookie(settings.LANGUAGE_COOKIE_NAME, language)
     return response
 
 # Error page handlers
