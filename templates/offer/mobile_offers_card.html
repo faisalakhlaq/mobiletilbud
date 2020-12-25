@@ -14,9 +14,12 @@
         <a href={{ mobile.get_absolute_url }}>
         {% if mobile.image %}<img class="mo-image" src={{ mobile.image.url }}>
         {% else %}<img class="mo-image" src={{'/media/images/default_mobile_image.png' }}>{% endif %}
+        </a>
+        <div class='mo-img-container-btn-span'>
         <button class='mo-link-btn' onclick="location.href = '{{ mobile.get_absolute_url }}'">
         {% trans 'View All Offers' %}</button>
-        </a>
+        <button id='compare' class='mo-link-btn' value={{mobile}}>{% trans 'Compare' %}</button>
+        </div>
     </div>
 </div>
 <table class='mo-offers-data-table'>

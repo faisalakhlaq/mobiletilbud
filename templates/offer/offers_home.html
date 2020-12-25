@@ -43,9 +43,16 @@
     </div>
     {% endif %}
 <div>
+<div class='oh-compare-container'>
+{% include 'core/compare_modal.html' %}
+</div>
 {% endblock content %}
 {% block extra_scripts %}
 <script>
+$("#compare").on('click', function () {
+  console.log('clicked');
+    //$('.mobile1').append($(this).attr('value'));
+});
 $("[id='filter'][value={{filter}}]").css('background-color', '#007AD0').css('color','#fff');
 $(function() {
   $( "#query" ).autocomplete({
