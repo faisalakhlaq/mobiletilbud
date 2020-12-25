@@ -4,7 +4,7 @@
 <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light scrolling-navbar">
     <div class="container-fluid">
         <!-- Brand -->
-        <a class="navbar-brand waves-effect" href="{% url 'core:home' %}">
+        <a class="navbar-brand waves-effect" href="{% url 'telecompanies:home' %}">
             <img style="width:1.5rem;" class='logo-image' src={% static 'logo1.png' %}>
             <strong class="blue-text">MobilTilbud</strong>
         </a>
@@ -18,13 +18,23 @@
             <!-- Left -->
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
+                    <a class="nav-link waves-effect" href={% url 'telecompanies:home' %}>
+                        {% translate "Home" %} </span>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link waves-effect" href={% url 'telecompanies:offers' %}>
-                        {% translate "Popular Offers" %} </span>
+                        {% translate "Telecom-companies" %} </span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link waves-effect" href={% url 'core:mobile-brands' %}>
-                        {% translate "Mobile Brands" %}
+                        {% translate "Mobiles" %}
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link waves-effect" href={% url 'core:mobiles-and-offers' %}>
+                        {% translate "Check" %}
                     </a>
                 </li>
             </ul>

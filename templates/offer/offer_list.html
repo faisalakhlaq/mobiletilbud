@@ -34,10 +34,11 @@
     <div class="offer-cards-container">
         {% if not object_list %}
         <h3>{% trans "No Offers Here" %}</h3>
-        {% endif %}
+        {% else %}
         {% for offer in object_list %}
         {% include 'offer/offer_card_snippet.html' with offer=offer%}
         {% endfor %}
+        {% endif %}
     </div>
 </div>
 {% include 'paginator_template.html' with page_obj=page_obj %}

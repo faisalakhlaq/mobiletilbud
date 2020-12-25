@@ -1,11 +1,12 @@
 from django.urls import path
 
 from .views import (PopularOffersView, OfferDetailView, CompareOffersView, 
-TelecomCompaniesView, get_tilbud_auto_complete)
+TelecomCompaniesView, get_tilbud_auto_complete, OffersHome)
 
 app_name = 'telecompanies'
 
 urlpatterns = [
+    path('', OffersHome.as_view(), name='home'), 
     path('telecom-companies', TelecomCompaniesView.as_view(), 
     name='telecom-companies'), 
     path('offers/', PopularOffersView.as_view(), name='offers'),

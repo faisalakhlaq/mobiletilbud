@@ -33,11 +33,11 @@
                 {% endif %}
                 </div>
                 <div class='offer-md-btn-div'>
-                {% if previous_page %}
+                {% comment %} {% if previous_page %}
                     <button class='offer-md-btn' 
-                    onclick="location.href = '{{ previous_page }}'">
+                    onclick="location.href = '{{ request.META.HTTP_REFERER }}'">
                     {% trans 'Back' %}</button>
-                {% endif %}
+                {% endif %} {% endcomment %}
                 {% if object.mobile %}
                     <button class='offer-md-btn' onclick="location.href = '{{ object.mobile.get_absolute_url }}'">
                     {% comment %} <a href={{object.mobile.get_absolute_url}}></a> {% endcomment %}

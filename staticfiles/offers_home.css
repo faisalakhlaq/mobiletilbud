@@ -1,0 +1,62 @@
+.oh-container{
+    display:flex; 
+    flex-direction:column; 
+    align-items:center; 
+    align-self:center; 
+    justify-self:center
+}
+.oh-title{
+    font-weight:bold; 
+    font-family:sans-serif; 
+    color:#000061;
+    margin-top: -0.3em;
+    margin-bottom: 0.1em;
+    text-align: center;
+}
+.oh-filters-list {
+    padding:0.2em; 
+    display:flex; 
+    align-items:center; 
+    justify-content:center;
+    text-align: center;
+}
+.oh-tele-comp-btn{
+    color: #1a1a1a;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;  
+    border: .1px solid #767676;
+    border-radius: 3px;
+    margin: 0.2rem;
+    padding: 0.5rem;
+    font-size: 1rem;
+}
+.oh-tele-comp-btn:hover {
+    background-color:  #008CBA;; /* Green */
+    color: white;
+}
+.oh-search-field{
+    border-bottom: 2px solid #e8f4f8; 
+    padding:0.5rem; 
+    padding-bottom: 0.8em;
+    display:flex; 
+    align-items:center; 
+    justify-content:center
+}
+.oh-search-field > input,
+input::-webkit-input-placeholder {
+    font-size: 1rem;
+    padding: 0.5rem;
+}
+.oh-search-field input {
+    height: 2.30em;
+    font-size: 1.2rem;
+}
+.oh-cards-container {
+    margin: 1em;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
