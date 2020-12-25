@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-16 15:04+0100\n"
+"POT-Creation-Date: 2020-12-25 18:23+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,13 +22,12 @@ msgstr ""
 msgid "Name"
 msgstr "Navn"
 
-#: core/models.py:14 mobiles/models.py:35 telecompanies/models.py:30
+#: core/models.py:14 mobiles/models.py:35 telecompanies/models.py:31
 msgid "slug"
 msgstr "slug"
 
-#: core/models.py:17 telecompanies/models.py:16
+#: core/models.py:17 telecompanies/models.py:17
 #: templates/core/telecom_companies.html:29
-#: templates/offer/offer_card_snippet.html:21
 #: templates/offer/offer_snippet.html:19
 msgid "Telecom Company"
 msgstr "Teleselskab"
@@ -70,35 +69,35 @@ msgstr "Kontantpris"
 msgid "Launch Date"
 msgstr "Lancering"
 
-#: mobiles/models.py:68 templates/mobile/mobile_detail.html:144
+#: mobiles/models.py:68 templates/mobile/mobile_detail.html:147
 msgid "Dimensions"
 msgstr "Dimensioner"
 
-#: mobiles/models.py:70 templates/mobile/mobile_detail.html:147
+#: mobiles/models.py:70 templates/mobile/mobile_detail.html:150
 msgid "Weight"
 msgstr "Vægt"
 
-#: mobiles/models.py:72 templates/mobile/mobile_detail.html:150
+#: mobiles/models.py:72 templates/mobile/mobile_detail.html:153
 msgid "Screen Type"
 msgstr "Skærmtype"
 
-#: mobiles/models.py:74 templates/mobile/mobile_detail.html:153
+#: mobiles/models.py:74 templates/mobile/mobile_detail.html:156
 msgid "Screen Size"
 msgstr "Skærmstørrelse"
 
-#: mobiles/models.py:76 templates/mobile/mobile_detail.html:156
+#: mobiles/models.py:76 templates/mobile/mobile_detail.html:159
 msgid "Screen Resolution"
 msgstr "Skærmopløsning"
 
-#: mobiles/models.py:78 templates/mobile/mobile_detail.html:159
+#: mobiles/models.py:78 templates/mobile/mobile_detail.html:162
 msgid "IP Certification"
 msgstr "IP Certificering"
 
-#: mobiles/models.py:80 templates/mobile/mobile_detail.html:162
+#: mobiles/models.py:80 templates/mobile/mobile_detail.html:165
 msgid "Internal Storage"
 msgstr "Intern Lagringshukommelse"
 
-#: mobiles/models.py:82 templates/mobile/mobile_detail.html:165
+#: mobiles/models.py:82 templates/mobile/mobile_detail.html:168
 msgid "External Storage"
 msgstr "Ekstern lagringshukommelse"
 
@@ -114,23 +113,23 @@ msgstr "bluetooth"
 msgid "USB"
 msgstr "USB"
 
-#: mobiles/models.py:91 templates/mobile/mobile_detail.html:182
+#: mobiles/models.py:91 templates/mobile/mobile_detail.html:185
 msgid "Battery Type"
 msgstr "Batteri Type"
 
-#: mobiles/models.py:93 templates/mobile/mobile_detail.html:185
+#: mobiles/models.py:93 templates/mobile/mobile_detail.html:188
 msgid "Wireless Charging"
 msgstr "Trådløs Opladning"
 
-#: mobiles/models.py:95 templates/mobile/mobile_detail.html:188
+#: mobiles/models.py:95 templates/mobile/mobile_detail.html:191
 msgid "Fast Charging"
 msgstr "Hurtigopladning"
 
-#: mobiles/models.py:97 templates/mobile/mobile_detail.html:191
+#: mobiles/models.py:97 templates/mobile/mobile_detail.html:194
 msgid "Chipset"
 msgstr "Chipset"
 
-#: mobiles/models.py:99 templates/mobile/mobile_detail.html:194
+#: mobiles/models.py:99 templates/mobile/mobile_detail.html:197
 msgid "Operating System"
 msgstr "Operativ System"
 
@@ -138,11 +137,11 @@ msgstr "Operativ System"
 msgid "RAM"
 msgstr "RAM"
 
-#: mobiles/models.py:103 templates/mobile/mobile_detail.html:123
+#: mobiles/models.py:103 templates/mobile/mobile_detail.html:126
 msgid "Launch"
 msgstr "Lancering"
 
-#: mobiles/models.py:105 templates/mobile/mobile_detail.html:120
+#: mobiles/models.py:105 templates/mobile/mobile_detail.html:123
 msgid "Status"
 msgstr "Status"
 
@@ -154,7 +153,7 @@ msgstr "Bagsidekamera Linser"
 msgid "rear_camera_megapixel"
 msgstr "Bagsidekamera Megapixel"
 
-#: mobiles/models.py:119 templates/mobile/mobile_detail.html:86
+#: mobiles/models.py:119 templates/mobile/mobile_detail.html:89
 msgid "Rear Camera Aperture"
 msgstr "Bagsidekamera blændetal"
 
@@ -198,39 +197,42 @@ msgstr "Dansk"
 msgid "Mobile"
 msgstr "Mobil"
 
-#: telecompanies/models.py:19
+#: telecompanies/models.py:20
 msgid "Mobile Name"
 msgstr "Mobilnavn"
 
-#: telecompanies/models.py:21 templates/core/telecom_companies.html:24
-#: templates/offer/offer_card_snippet.html:10
+#: telecompanies/models.py:22 templates/core/telecom_companies.html:24
+#: templates/offer/mobile_offers_card.html:25
+#: templates/offer/mobile_offers_card.html:35
+#: templates/offer/offer_card_snippet.html:9
 #: templates/offer/offer_detail.html:23 templates/offer/offer_snippet.html:15
 msgid "Discount"
 msgstr "Rabat"
 
-#: telecompanies/models.py:23
+#: telecompanies/models.py:24
 msgid "Discount Offered"
 msgstr "Rabat"
 
-#: telecompanies/models.py:26
+#: telecompanies/models.py:27
 msgid "Offer Url"
 msgstr "Tilbud URL"
 
-#: telecompanies/models.py:28
+#: telecompanies/models.py:29 templates/offer/mobile_offers_card.html:26
 msgid "Price"
 msgstr "Pris"
 
-#: telecompanies/models.py:34
+#: telecompanies/models.py:35
 msgid "Updated"
 msgstr "Opdateret"
 
-#: telecompanies/models.py:37 templates/core/telecom_companies.html:33
-#: templates/offer/offer_card_snippet.html:26
+#: telecompanies/models.py:38 templates/core/telecom_companies.html:33
+#: templates/offer/mobile_offers_card.html:38
+#: templates/offer/offer_card_snippet.html:23
 msgid "Offer"
 msgstr "Tilbud"
 
-#: telecompanies/models.py:38 templates/mobile/mobile_detail.html:35
-#: templates/offer/offer_list.html:8
+#: telecompanies/models.py:39 templates/mobile/mobile_detail.html:36
+#: templates/offer/offer_list.html:8 templates/offer/offers_home.html:7
 msgid "Offers"
 msgstr "Tilbud"
 
@@ -259,14 +261,13 @@ msgid "Popular Mobiles"
 msgstr "Populære Mobiler"
 
 #: templates/core/home.html:20 templates/core/telecom_companies.html:17
-#: templates/left_menu.html:7 templates/main_nav.html:26
+#: templates/left_menu.html:7
 msgid "Popular Offers"
 msgstr "Populære Tilbud"
 
 #: templates/core/mobile_brands.html:8 templates/left_menu.html:10
-#: templates/main_nav.html:46
 msgid "Mobile Brands"
-msgstr "Mobile Mærker"
+msgstr "Mobil Mærker"
 
 #: templates/core/mobile_brands.html:13
 msgid "Explore Mobile Brands"
@@ -277,6 +278,7 @@ msgid "Search Mobile.."
 msgstr "Søg Mobil.."
 
 #: templates/core/mobile_brands.html:35 templates/offer/offer_list.html:32
+#: templates/offer/offers_home.html:29
 msgid "Search.."
 msgstr "Søg.."
 
@@ -316,7 +318,7 @@ msgstr "Oops! 500 Intern serverfejl"
 msgid "Sorry something bad happened on our end. We will look into it."
 msgstr "Beklager, der skete noget fejl i vores ende. Vi vil undersøge det."
 
-#: templates/left_menu.html:4
+#: templates/left_menu.html:4 templates/main_nav.html:22
 msgid "Home"
 msgstr "Hjem"
 
@@ -328,7 +330,19 @@ msgstr "Sammenligne"
 msgid "Copyright"
 msgstr "Ophavsret"
 
-#: templates/mobile/mobile_card_snippet.html:23
+#: templates/main_nav.html:27
+msgid "Telecom-companies"
+msgstr "Teleselskaber"
+
+#: templates/main_nav.html:32
+msgid "Mobiles"
+msgstr "Mobiler"
+
+#: templates/main_nav.html:37
+msgid "Check"
+msgstr "Tjek"
+
+#: templates/mobile/mobile_card_snippet.html:20
 #: templates/mobile/mobile_detail.html:23
 msgid "Price From: "
 msgstr "Pris Fra: "
@@ -337,80 +351,76 @@ msgstr "Pris Fra: "
 msgid "Manufacturer"
 msgstr "Fabrikant"
 
-#: templates/mobile/mobile_detail.html:32 templates/offer/offer_detail.html:39
-msgid "Back"
-msgstr "Tilbage"
-
-#: templates/mobile/mobile_detail.html:37
+#: templates/mobile/mobile_detail.html:38
 msgid "Colors"
 msgstr "Farver"
 
-#: templates/mobile/mobile_detail.html:39
-#: templates/mobile/mobile_detail.html:56
+#: templates/mobile/mobile_detail.html:40
+#: templates/mobile/mobile_detail.html:58
 msgid "Memory"
 msgstr "Hukommelse"
 
-#: templates/mobile/mobile_detail.html:41
+#: templates/mobile/mobile_detail.html:42
 msgid "Specs"
 msgstr "Specs"
 
-#: templates/mobile/mobile_detail.html:43
+#: templates/mobile/mobile_detail.html:44
 msgid "Camera"
 msgstr "Kamera"
 
-#: templates/mobile/mobile_detail.html:48
+#: templates/mobile/mobile_detail.html:50
 msgid "Colours"
 msgstr "Farver"
 
-#: templates/mobile/mobile_detail.html:51
+#: templates/mobile/mobile_detail.html:53
 msgid "Sorry! No color details available yet"
 msgstr "Ingen farvedetaljer fundet"
 
-#: templates/mobile/mobile_detail.html:59
+#: templates/mobile/mobile_detail.html:61
 msgid "Sorry! No memory details available yet"
 msgstr "Ingen hukommelse detaljer fundet"
 
-#: templates/mobile/mobile_detail.html:65
+#: templates/mobile/mobile_detail.html:68
 msgid "Currently no offer on this device"
 msgstr "Der er i øjeblikket ikke noget tilbud"
 
-#: templates/mobile/mobile_detail.html:74
+#: templates/mobile/mobile_detail.html:77
 msgid "No camera details available"
 msgstr "Ingen kameradetaljer fundet"
 
-#: templates/mobile/mobile_detail.html:78
+#: templates/mobile/mobile_detail.html:81
 msgid "Rear Camera Lenses"
 msgstr "Bagsidekamera, antal linser"
 
-#: templates/mobile/mobile_detail.html:82
+#: templates/mobile/mobile_detail.html:85
 msgid "Rear Camera Megapixel"
 msgstr "Bagsidekamera Megapixel"
 
-#: templates/mobile/mobile_detail.html:90
+#: templates/mobile/mobile_detail.html:93
 msgid "Rear Camera Resolution"
 msgstr "Bagsidekamera Videooptagelse"
 
-#: templates/mobile/mobile_detail.html:96
+#: templates/mobile/mobile_detail.html:99
 msgid "Front Camera Lenses"
 msgstr "Frontkamera Linser"
 
-#: templates/mobile/mobile_detail.html:100
+#: templates/mobile/mobile_detail.html:103
 msgid "Front Camera Megapixel"
 msgstr "Frontkamera Megapixel"
 
-#: templates/mobile/mobile_detail.html:104
+#: templates/mobile/mobile_detail.html:107
 msgid "Front Camera Aperture"
 msgstr "Frontkamera Blændetal"
 
-#: templates/mobile/mobile_detail.html:108
+#: templates/mobile/mobile_detail.html:111
 msgid "Front Camera Video Resolution"
 msgstr "Frontkamera Videoopløsning"
 
-#: templates/mobile/mobile_detail.html:116
+#: templates/mobile/mobile_detail.html:119
 msgid "No technical specification available"
 msgstr "Ingen teknisk specifikation fundet"
 
-#: templates/mobile/mobile_detail.html:141
+#: templates/mobile/mobile_detail.html:144
 msgid "Dual Sim"
 msgstr "Dobbelt SIM-kort"
 
@@ -423,41 +433,58 @@ msgstr "Tilbudsdetaljer"
 msgid "Compare More"
 msgstr "Sammenligne mere"
 
+#: templates/offer/mobile_offers_card.html:18
+msgid "View All Offers"
+msgstr "Se Alle Tilbud"
+
+#: templates/offer/mobile_offers_card.html:24
+#: templates/offer/offer_detail.html:27
+msgid "Company"
+msgstr "Selskab"
+
+#: templates/offer/mobile_offers_card.html:27
+msgid "Link"
+msgstr "Link"
+
+#: templates/offer/mobile_offers_card.html:41
+msgid "Details"
+msgstr "Detaljer"
+
 #: templates/offer/offer_detail.html:8 templates/offer/offer_snippet.html:2
 msgid "Tilbud Details"
 msgstr "Tilbudsdetaljer"
 
-#: templates/offer/offer_detail.html:27
-msgid "Company"
-msgstr "Teleselskab"
-
-#: templates/offer/offer_detail.html:45
+#: templates/offer/offer_detail.html:46
 msgid "Mobile Details"
 msgstr "Mobildetaljer"
 
-#: templates/offer/offer_detail.html:52 templates/offer/offer_snippet.html:27
+#: templates/offer/offer_detail.html:53 templates/offer/offer_snippet.html:27
 msgid "Link to the offer on company website"
 msgstr "Link til tilbuddet på hjemmeside"
 
-#: templates/offer/offer_list.html:14
+#: templates/offer/offer_list.html:14 templates/offer/offers_home.html:12
 msgid "POPULAR OFFERS"
 msgstr "POPULÆRE TILBUD"
 
-#: templates/offer/offer_list.html:18
+#: templates/offer/offer_list.html:18 templates/offer/offers_home.html:16
 msgid "All"
 msgstr "Alle"
 
-#: templates/offer/offer_list.html:20
+#: templates/offer/offer_list.html:20 templates/offer/offers_home.html:18
 msgid "Popular"
 msgstr "Populære"
 
-#: templates/offer/offer_list.html:29
+#: templates/offer/offer_list.html:29 templates/offer/offers_home.html:26
 msgid "Search offer by mobile name.."
 msgstr "Søg tilbud efter mobilnavn.."
 
-#: templates/offer/offer_list.html:36
+#: templates/offer/offer_list.html:36 templates/offer/offers_home.html:32
 msgid "No Offers Here"
 msgstr "Ingen tilbud her"
+
+#: templates/offer/offers_home.html:23
+msgid "Filter by Company"
+msgstr "Søg efter Firma"
 
 #: templates/paginator_template.html:7 templates/paginator_template.html:13
 msgid "First"
@@ -466,6 +493,12 @@ msgstr "Først"
 #: templates/paginator_template.html:33 templates/paginator_template.html:37
 msgid "Last"
 msgstr "Sidst"
+
+#~ msgid "All Offers"
+#~ msgstr "Se alle tilbud"
+
+#~ msgid "Back"
+#~ msgstr "Tilbage"
 
 #~ msgid "Offers on"
 #~ msgstr "Tilbud på"
@@ -496,9 +529,6 @@ msgstr "Sidst"
 
 #~ msgid "Signup"
 #~ msgstr "Tilmelde"
-
-#~ msgid "View All Offers"
-#~ msgstr "Se alle tilbud"
 
 #~ msgid "Monthly Charges"
 #~ msgstr "Månedlig Betaling"

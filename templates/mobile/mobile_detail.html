@@ -27,10 +27,10 @@
         {{mobile.brand.name}}</p>
     </div>
     <div class='md-btn-list'>
-        {% if previous_page %}
+        {% comment %} {% if previous_page %}
             <button class='m-detail-btn' onclick="location.href = '{{ previous_page }}'">
             {% trans 'Back' %}</button>
-        {% endif %}
+        {% endif %} {% endcomment %}
         <button name="m_details" id="m_offers_btn" class="m-detail-btn"
          type="submit" value='offers'/>{% trans 'Offers' %}</button>
         <button name="m_details" id="m_colors_btn" class="m-detail-btn"
@@ -59,7 +59,6 @@
                 {% trans 'Sorry! No memory details available yet' %}
         {% endif %}
     </div>
-    {% comment %} </div> {% endcomment %}
     <div id='md_offers_div' class="md-offers-container">
         {% if not offers %}
             {% trans "Currently no offer on this device" %}
@@ -220,30 +219,54 @@ specs_btn.click(function() {
     $('html, body').animate({
             scrollTop: $(tech_specs_div).offset().top
         }, 600);
-    /* bgcolor = $(this).css('backgroundColor');
-    console.log('Colors', bgcolor)
-    if(bgcolor == rgb(0, 122, 208)){
-        $(this).css('background-color', '#fff').css('color','#000'); 
-    } else {
-        $(this).css('background-color', '#007AD0').css('color','#fff');} */
+    if(tech_specs_div.is(':visible')){
+        specs_btn.css('background-color', '#007AD0').css('color','#fff');
+    }
+    else{
+        specs_btn.css('background-color', '').css('color','#1a1a1a');
+    }
 });
 cam_btn.click(function() {
     cam_specs_div.toggle();
     $('html, body').animate({
         scrollTop: $(cam_specs_div).offset().top
     }, 600);
+    if(cam_specs_div.is(':visible')){
+        cam_btn.css('background-color', '#007AD0').css('color','#fff');
+    }
+    else{
+        cam_btn.css('background-color', '').css('color','#1a1a1a');
+    }
 });
 color_btn.click(function() {
     color_div.toggle();
+    if(color_div.is(':visible')){
+        color_btn.css('background-color', '#007AD0').css('color','#fff');
+    }
+    else{
+        color_btn.css('background-color', '').css('color','#1a1a1a');
+    }
 });
 memory_btn.click(function() {
     memory_div.toggle();
+    if(memory_div.is(':visible')){
+        memory_btn.css('background-color', '#007AD0').css('color','#fff');
+    }
+    else{
+        memory_btn.css('background-color', '').css('color','#1a1a1a');
+    }
 });
 offers_btn.click(function() {
     offers_div.toggle();
     $('html, body').animate({
         scrollTop: $(offers_div).offset().top
     }, 600);
+    if(offers_div.is(':visible')){
+        offers_btn.css('background-color', '#007AD0').css('color','#fff');
+    }
+    else{
+        offers_btn.css('background-color', '').css('color','#1a1a1a');
+    }
 });
 
 // Hide the camera and technical specs on page load
@@ -253,7 +276,13 @@ $(function() {
     cam_specs_div.hide()
     color_div.hide()
     memory_div.hide()
-    offers_div.hide()
+    // offers_div.hide()
+    if(offers_div.is(':visible')){
+        offers_btn.css('background-color', '#007AD0').css('color','#fff');
+    }
+    else{
+        offers_btn.css('background-color', '').css('color','#1a1a1a');
+    }
 });
 </script>
 {% endblock extra_scripts %}

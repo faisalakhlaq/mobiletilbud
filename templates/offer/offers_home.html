@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+{% block extra_head %}
+        <link rel='stylesheet' href="{% static '/offers_home.css'%}">
+{% endblock %}
+{% block title %} {% translate "Offers" %} | {{ block.super }}
+{% endblock title %}
+{% block content %}
+<div class='oh-container'>
+    <h3 class="oh-title">
+        {% trans "POPULAR OFFERS" %}</h3>
+    <div class='oh-filters-list'>
+        <form method='GET' action=''>
+            <button id='filter' name="filter" class="oh-tele-comp-btn" 
+            type="submit" value='All'/>{% trans 'All' %}</button>
+            <button id='filter' name="filter" class="oh-tele-comp-btn" 
+            type="submit" value='Popular'/>{% trans 'Popular' %}</button>
+        </form>
+        <button id='company' name="company" class="oh-tele-comp-btn" 
+        type="submit" value='search_by_company' 
+        onclick="location.href = '{% url 'telecompanies:offers' %}'"/>
+        {% trans 'Filter by Company' %}</button>
+    </div>
+    <div class='oh-search-field'><form class='form' method='GET' action=''>
+        <input id='query' type='text' placeholder='{% trans 'Search offer by mobile name..'%}'
+        name='query' value={{ request.GET.query}}>
+        <button id='search_btn' class='oh-tele-comp-btn' 
+        type='submit'>{% trans 'Search..'%}</button>
+    </form></div>
+    {% if offers_dict|length < 1 and not unknown_offers%}
+        <h3>{% trans "No Offers Here" %}</h3>
+    {% else %}
+    <div class="oh-cards-container">
+        {% for mobile, offers in offers_dict.items %}
+            {% include 'offer/mobile_offers_card.html' with mobile=mobile offers=offers %}
+        {% endfor %}
+        {% if unknown_offers %}
+        {% for offer in unknown_offers %}
+            {% include 'offer/offer_card_snippet.html' with offer=offer%}
+        {% endfor %}
+        {% endif %}
+    </div>
+    {% endif %}
+<div>
+{% endblock content %}
+{% block extra_scripts %}
+<script>
+$("[id='filter'][value={{filter}}]").css('background-color', '#007AD0').css('color','#fff');
+$(function() {
+  $( "#query" ).autocomplete({
+    source: "/tilbud_search_auto_complete",
+    select: function (event, ui) { //item selected
+      AutoCompleteSelectHandler(event, ui)
+    },
+    minLength: 2,
+  });
+});
+function AutoCompleteSelectHandler(event, ui)
+{
+  var selectedObj = ui.item;
+}
+// TODO call the below function if the user has
+// clicked / choosen one option from given list
+function SearchHandler()
+{
+  $( "#search_btn" ).click()
+}
+</script>
+{% endblock extra_scripts %}

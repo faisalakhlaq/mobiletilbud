@@ -1,18 +1,55 @@
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.db.models import Q
+from django.db.models import Q, Count
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView, View
 from django.http import HttpResponse
 from itertools import chain
 import json
 
+from mobiles.models import Mobile
 from telecompanies.models import Offer, TelecomCompany
 from telecompanies.utils import get_popular_offers
+
+class OffersHome(View):
+    """View for all mobiles with offers on them."""
+    def get(self, *args, **kwargs):
+        template_name = 'offer/offers_home.html'
+        context = self.get_context_data(**kwargs)
+        return render(self.request, template_name, context)
+
+    def get_context_data(self, **kwargs):
+        filter = self.request.GET.get('filter')
+        query = self.request.GET.get("query")
+        all_offers = Offer.objects.all().order_by('updated')
+        offer_mobiles = Mobile.objects.filter(offers__isnull=False)
+        context = {}
+        if query and len(query.strip()) > 0:
+            all_offers = all_offers.filter(Q(mobile_name__icontains=query.strip()) |
+            Q(mobile__full_name__icontains=query.strip())).order_by('-mobile_name')
+            offer_mobiles = offer_mobiles.filter(Q(name__icontains=query.strip()) |
+            Q(full_name__icontains=query.strip()))
+            # create a list of offers where the mobile is null
+            context['unknown_offers'] = all_offers.filter(mobile=None)
+        elif filter:
+            if filter == 'All':
+                context['unknown_offers'] = all_offers.filter(mobile=None)
+            elif filter == 'Popular':
+                offer_mobiles = offer_mobiles.annotate(num_offers=Count('offers')).filter(num_offers__gte=3)
+        if not query and not filter:
+            filter = 'All'
+            context['unknown_offers'] = all_offers.filter(mobile=None)
+        offers_dict = {}
+        for m in offer_mobiles:
+            offers_dict[m] = all_offers.filter(mobile=m)[:3]
+        context['offers_dict'] = offers_dict
+        context['tele_companies'] = TelecomCompany.objects.values_list('name', flat=True).order_by('name')
+        context['filter'] = filter
+        return context
 
 class TelecomCompaniesView(View):
     def get(self, *args, **kwargs):
         template_name = 'core/telecom_companies.html'
-        context = self.get_context_data(self, args, kwargs)
+        context = self.get_context_data(args, kwargs)
         return render(self.request, template_name, context)
 
     def get_context_data(self, *args, **kwargs):
@@ -21,7 +58,6 @@ class TelecomCompaniesView(View):
         # TODO get the set of related mobiles from the MobileBrand table
         if offers and company and company != 'ALL':
             offers = offers.filter(telecom_company__name__iexact=company.strip())  
-
         page = self.request.GET.get('page', 1)
         paginator = Paginator(offers, 10)
         try:
@@ -30,7 +66,6 @@ class TelecomCompaniesView(View):
             offer_list = paginator.page(1)
         except EmptyPage:
             offer_list = paginator.page(paginator.num_pages)
-
         context = {
             "paginator": paginator,
             "offers": offer_list,
@@ -42,12 +77,6 @@ class TelecomCompaniesView(View):
 class OfferDetailView(DetailView):
     template_name = 'offer/offer_detail.html'
     model = Offer
-
-    def get_context_data(self, **kwargs):
-        context = super(OfferDetailView, self).get_context_data(**kwargs)
-        context['previous_page'] = self.request.META.get('HTTP_REFERER')
-        return context
-
 
 class PopularOffersView(ListView):
     """ Return top 5 offers from each company.
@@ -77,12 +106,11 @@ class PopularOffersView(ListView):
         context = super(PopularOffersView, self).get_context_data(**kwargs)
         company = self.request.GET.get('company')
         query = self.request.GET.get('query')
-        if not company and not query:
-            query = 'Popular'
         context["tele_companies"] = TelecomCompany.objects.all()
-        context["company"] = company or query
+        if not company:
+            company = 'Popular'
+        context["company"] = company # or query
         return context
-
 
 class CompareOffersView(View):
     def get(self, *args, **kwargs):

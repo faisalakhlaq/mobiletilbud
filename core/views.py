@@ -62,10 +62,8 @@ class MobileManufacturersView(ListView):
         context = super(MobileManufacturersView, self).get_context_data(**kwargs)
         company = self.request.GET.get("brand")
         query = self.request.GET.get('query')            
-        if not company and not query:
-            query = 'Popular'
         context['mobile_brands'] = MobileBrand.objects.all()
-        context["brand"] = company or query
+        context["brand"] = company #or query
         return context
 
 def get_mobile_auto_complete(request):    

@@ -1,0 +1,45 @@
+{% load static %}
+{% load i18n %}
+{% block extra_head %}
+        <link rel='stylesheet' href="{% static '/mobile_offers_card.css'%}">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% endblock %}
+<div class='mo-container'>
+<div class='mo-image-container'>
+    <div class='mo-mobile-name'>
+        {% if mobile.full_name %}{{ mobile.full_name }}
+        {% else %}{{ mobile.name }}{% endif %}
+    </div>
+    <div class='mo-image-column'>
+        <a href={{ mobile.get_absolute_url }}>
+        {% if mobile.image %}<img class="mo-image" src={{ mobile.image.url }}>
+        {% else %}<img class="mo-image" src={{'/media/images/default_mobile_image.png' }}>{% endif %}
+        <button class='mo-link-btn' onclick="location.href = '{{ mobile.get_absolute_url }}'">
+        {% trans 'View All Offers' %}</button>
+        </a>
+    </div>
+</div>
+<table class='mo-offers-data-table'>
+  <tr>
+    <th>{% trans 'Company' %}</th>
+    <th>{% trans 'Discount' %}</th>
+    <th>{% trans 'Price' %}</th>
+    <th>{% trans 'Link' %}</th>
+  </tr>
+  {% for offer in offers %}
+  <tr>
+    <td>{{offer.telecom_company.name}}</td>
+    <td>
+        {% if offer.discount_offered %}{{ offer.discount_offered }}.kr 
+        {% elif offer.discount %}{{ offer.discount }}
+        {% else %}{% trans "Discount" %}{% endif %}
+    </td>
+    <td class='mo-price-column'>{% if offer.price %}{{offer.price}} 
+        {% else %}{%trans "Offer" %} {% endif %}
+    </td>
+    <td><button class='mo-link-btn' onclick="location.href = '{{ offer.get_absolute_url }}'">
+        {% trans 'Details' %}</button></td>
+  </tr>
+  {% endfor %}
+</table>
+</div>
