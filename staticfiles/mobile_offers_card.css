@@ -7,7 +7,8 @@
         background-color: rgb(239, 239, 255);
         max-height: 40rem;
         width: 23rem;
-        border: 2px solid rgb(146, 143, 143);
+        border: 1px solid rgba(0,0,0,.125);
+        border-radius: .25rem;
     }
     .mo-offers-data-table{
         width: 100%;
@@ -31,7 +32,8 @@
         background-color: rgb(239, 239, 255);
         height: 25rem;
         width: 33rem;
-        border: 2px solid rgb(146, 143, 143);
+        border: 1px solid rgba(0,0,0,.125);
+        border-radius: .25rem;
     }
     .mo-image-container{
         width: 12rem;
