@@ -16,8 +16,8 @@
     width: 100%;
 }
 .m-image-container{
-    width: 10em;
-    height: 15em;
+    max-width: 15rem;
+    max-height: 30rem;
     border: none;
     cursor: pointer;
     padding: 1rem;
