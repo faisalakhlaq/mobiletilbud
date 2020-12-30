@@ -27,7 +27,7 @@
   {% comment %} <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"> {% endcomment %}
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
-  <title>{% block title %} MobilTilbud {% endblock %}</title>
+  <title>{% block title %} MobileTilbud {% endblock %}</title>
   {% block extra_head %}
   {% endblock %}
   {% include 'bootstrap/css.html' %}
@@ -54,15 +54,12 @@
     {% endfor %}
   </div>
 {% endif %}
-{% comment %} <div> {% endcomment %}
-    <div class='row mt-2'>
-        {% comment %} <div class='col-3'>{% include 'left_menu.html' %}</div> {% endcomment %}
-        <div class='col-12'>{% block content %}{% endblock content %}</div>
-    </div>
-    <div class='row mt-2'>
-        <div class='col-9 ml-auto'>{% block extra_body %}{% endblock extra_body %}</div>
-    </div>
-{% comment %} </div> {% endcomment %}
+<div class='row mt-2'>
+    <div class='col-12'>{% block content %}{% endblock content %}</div>
+</div>
+<div class='row mt-2'>
+    <div class='col-9 ml-auto'>{% block extra_body %}{% endblock extra_body %}</div>
+</div>
 {% include 'main_footer.html' %}
 {% include 'bootstrap/js.html' %}
 {% block extra_scripts %}

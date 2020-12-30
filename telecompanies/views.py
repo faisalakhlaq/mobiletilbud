@@ -36,8 +36,9 @@ class OffersHome(View):
             elif filter == 'Popular':
                 offer_mobiles = offer_mobiles.annotate(num_offers=Count('offers')).filter(num_offers__gte=3)
         if not query and not filter:
-            filter = 'All'
-            context['unknown_offers'] = all_offers.filter(mobile=None)
+            filter = 'Popular'
+            offer_mobiles = offer_mobiles.annotate(num_offers=Count('offers')).filter(num_offers__gte=3)
+            # context['unknown_offers'] = all_offers.filter(mobile=None)
         offers_dict = {}
         for m in offer_mobiles:
             offers_dict[m] = all_offers.filter(mobile=m)[:3]

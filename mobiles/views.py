@@ -1,6 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic import View
 from django.db.models import Q
+from django.http import HttpResponse
+import json
 
 from telecompanies.models import Offer
 from .models import (Mobile, MobileTechnicalSpecification, 
@@ -16,7 +18,7 @@ class MobileDetailView(View):
             return render(self.request, template_name, context)
         except Mobile.DoesNotExist:
             # TODO give a message about mobile not found
-            raise Http404("No MyModel matches the given query.")
+            raise Http404("No mobile matches the given query.")
     
     def get_context_data(self, **kwargs):
         # import pdb; pdb.set_trace()
@@ -44,3 +46,29 @@ class MobileDetailView(View):
                 'memory': memory,
             }
         return context
+
+# https://github.com/TyMaszWeb/django-cookie-law
+class CompareMobile(View):
+    """Gets the two mobile ids to be compared from the request.
+    Redirects to the mobile comparison page."""
+    def get(self, *args, **kwargs):
+        # if self.request.is_ajax():
+        mobile1_id = self.request.GET.get('id1')
+        mobile2_id = self.request.GET.get('id2')
+        mobile1 = Mobile.objects.get(id=mobile1_id)
+        mobile2 = Mobile.objects.get(id=mobile2_id)
+        print(mobile1)
+        print(mobile2)
+        return render(self.request, 'offer/compare_offers.html', {})
+
+def fetch_mobiles(request):
+    """Find the two mobiles to be compared using the ids from the request."""
+    if request.is_ajax():
+        mobile1_id = request.GET.get('mobile1_id')
+        mobile2_id = request.GET.get('mobile2_id')
+        mobile1 = Mobile.objects.get(id=mobile1_id)
+        mobile2 = Mobile.objects.get(id=mobile2_id)
+        print(mobile1)
+        print(mobile2)
+        # data = json.dumps([mobile1, mobile2])
+        return HttpResponse(mobile1, 'application/json')

@@ -1,8 +1,10 @@
 {% load static %}
 {% load i18n %}
 {% block extra_head %}
-        <link rel='stylesheet' href="{% static '/mobile_offers_card.css'%}">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<head>
+    <link rel='stylesheet' href="{% static '/mobile_offers_card.css'%}">
+</head>
+        {% comment %} <meta name="viewport" content="width=device-width, initial-scale=1.0"> {% endcomment %}
 {% endblock %}
 <div class='mo-container'>
 <div class='mo-image-container'>
@@ -18,7 +20,9 @@
         <div class='mo-img-container-btn-span'>
         <button class='mo-link-btn' onclick="location.href = '{{ mobile.get_absolute_url }}'">
         {% trans 'View All Offers' %}</button>
-        <button id='compare' class='mo-link-btn' value={{mobile}}>{% trans 'Compare' %}</button>
+        <button id='{{mobile.pk|safe}}' class='compare-btn mo-link-btn' value='{{mobile.image}}' name='{{mobile.name|safe}}'>{% trans 'Compare' %}</button>
+        {% comment %} <button id='compare' class='compare-btn mo-link-btn' value={{mobile}} onclick="addMobile(this, '{{mobile}}')">{% trans 'Compare' %}</button> {% endcomment %}
+        {% comment %} <button id='compare' class='compare-btn mo-link-btn' value='{{mobile.pk|safe}}' onclick="addMobile(this)">{% trans 'Compare' %}</button> {% endcomment %}
         </div>
     </div>
 </div>
@@ -46,3 +50,19 @@
   {% endfor %}
 </table>
 </div>
+{% comment %} <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> {% endcomment %}
+<script>
+//$("[id='compare']").click(function() {
+  //open_modal();
+  //console.log('{{mobile.name}}');
+  //console.log(this);
+  //add_mobile('{{mobile.name}}');
+//});
+{% comment %} function addMobile(element){
+  var m_name = document.getElementsByClassName('mo-mobile-name')[0];
+  var m_image = document.getElementsByClassName('mo-image')[0];
+  console.log('I am CLicked ' + m_name.innerHTML + '- Image: ' + m_image.src);
+  open_modal();
+  add_mobile(m_name.innerHTML.trim());
+} {% endcomment %}
+</script>
