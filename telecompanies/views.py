@@ -18,10 +18,12 @@ class OffersHome(View):
         return render(self.request, template_name, context)
 
     def get_context_data(self, **kwargs):
-        filter = self.request.GET.get('filter')
+        filters = self.request.GET.get('filter')
         query = self.request.GET.get("query")
         all_offers = Offer.objects.all().order_by('updated')
-        offer_mobiles = Mobile.objects.filter(offers__isnull=False)
+        offer_mobiles = Mobile.objects.filter(offers__isnull=False).order_by('name')
+        # Create a list of mobiles on offer to display in the baner
+        slider_offers = offer_mobiles.distinct()
         context = {}
         if query and len(query.strip()) > 0:
             all_offers = all_offers.filter(Q(mobile_name__icontains=query.strip()) |
@@ -30,20 +32,21 @@ class OffersHome(View):
             Q(full_name__icontains=query.strip()))
             # create a list of offers where the mobile is null
             context['unknown_offers'] = all_offers.filter(mobile=None)
-        elif filter:
-            if filter == 'All':
+        elif filters:
+            if filters == 'All':
                 context['unknown_offers'] = all_offers.filter(mobile=None)
-            elif filter == 'Popular':
+            elif filters == 'Popular':
                 offer_mobiles = offer_mobiles.annotate(num_offers=Count('offers')).filter(num_offers__gte=3)
-        if not query and not filter:
-            filter = 'All'
+        if not query and not filters:
+            filters = 'All'
             context['unknown_offers'] = all_offers.filter(mobile=None)
         offers_dict = {}
         for m in offer_mobiles:
             offers_dict[m] = all_offers.filter(mobile=m)[:3]
         context['offers_dict'] = offers_dict
         context['tele_companies'] = TelecomCompany.objects.values_list('name', flat=True).order_by('name')
-        context['filter'] = filter
+        context['filter'] = filters
+        context['slider_offers'] = slider_offers
         return context
 
 class TelecomCompaniesView(View):
@@ -70,7 +73,8 @@ class TelecomCompaniesView(View):
             "paginator": paginator,
             "offers": offer_list,
             "object_list": TelecomCompany.objects.all(),
-            "offer_count": offers.count()
+            "offer_count": offers.count(),
+            "slider_offers": Mobile.objects.filter(offers__isnull=False).order_by('name').distinct(),
         }
         return context
 
@@ -107,9 +111,10 @@ class PopularOffersView(ListView):
         company = self.request.GET.get('company')
         query = self.request.GET.get('query')
         context["tele_companies"] = TelecomCompany.objects.all()
-        if not company:
+        if not company and not query:
             company = 'Popular'
         context["company"] = company # or query
+        context["slider_offers"] = Mobile.objects.filter(offers__isnull=False).distinct().order_by('name')
         return context
 
 class CompareOffersView(View):

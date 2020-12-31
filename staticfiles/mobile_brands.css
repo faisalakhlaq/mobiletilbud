@@ -1,18 +1,19 @@
-.brands-header {
-    font-weight:bold; 
-    font-family:sans-serif; 
-    color:#000061;
-    margin-top: -0.3em;
-    margin-bottom: 0.1em;
-    text-transform: uppercase;
-    text-align: center;
-}
 .mobile-list-container {
     display:flex; 
     flex-direction:column; 
     align-items:center; 
     align-self:center; 
     justify-self:center;
+    margin-top: 2rem;
+}
+.brands-header {
+    font-weight:bold; 
+    font-family:sans-serif; 
+    color:#000061;
+    margin-top: 0.1em;
+    margin-bottom: 0.1em;
+    text-transform: uppercase;
+    text-align: center;
 }
 .mb-company-list {
     padding:0.2em; 
