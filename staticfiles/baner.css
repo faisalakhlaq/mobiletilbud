@@ -5,6 +5,13 @@
     cursor: pointer;
     margin-top: 1rem;
 }
+.carousel-item {
+    width: 100%;
+    height: 12rem;
+}
+.carousel-indicators {
+    bottom: -15px;
+}
 .carousel .carousel-indicators li{
     width: .5rem!important;
     height: .5rem!important;

@@ -430,7 +430,7 @@ msgid "Details"
 msgstr "Detaljer"
 
 #: templates/offer/offer_detail.html:10 templates/offer/offer_snippet.html:2
-msgid "Tilbud Details"
+msgid "Offer Details"
 msgstr "Tilbudsdetaljer"
 
 #: templates/offer/offer_detail.html:45
