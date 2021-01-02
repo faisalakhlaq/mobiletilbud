@@ -1,5 +1,5 @@
 {% load i18n %}
-{% load static %}
+{% load static %} 
 <!DOCTYPE html>
 <html lang="">
 <head>
@@ -65,6 +65,8 @@
 {% comment %} </div> {% endcomment %}
 {% include 'main_footer.html' %}
 {% include 'bootstrap/js.html' %}
+{% load cookielaw_tags %}
+{% cookielaw_banner %}
 {% block extra_scripts %}
 {% endblock extra_scripts %}
 </body>

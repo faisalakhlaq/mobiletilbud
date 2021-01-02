@@ -1,0 +1,23 @@
+{% load i18n static %}
+<script src="{% static 'cookielaw/js/cookielaw.js' %}"></script>
+<head>
+  <link rel='stylesheet' href="{% static '/cookie_baner.css'%}">
+</head>
+<div id="CookielawBanner" class="cookie-container">
+    <div class="cookie-content">
+        <div class="cookie-text">
+            {% trans 'This website uses google analytics cookies to make your experience better.' %}
+        </div>
+        <div class="cookie-buttons">
+            {% comment %} <a class="btn-blue" href="{% url 'legal_advice' %}">{% trans "What are the cookies?" %}</a> {% endcomment %}
+            <a class="btn btn-primary accept-btn" href="javascript:Cookielaw.createCookielawCookie();">{% trans "Accept" %}</a>
+            <a class="btn btn-primary cookie-detail-btn" href="{% url 'cookie-policy' %}">{% trans "Cookie Details" %}</a>
+        </div>
+        <div class="close-cookies"></div>
+    </div>
+</div>
+<script>
+$('.accept-btn').click = function(){
+    $('.cookie-container').close();
+}
+</script>

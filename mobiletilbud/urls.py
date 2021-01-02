@@ -5,6 +5,7 @@ from django.contrib import admin
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.urls import path, include
 from django.utils.translation import gettext as _
+from django.views.generic import TemplateView
 from django.views.generic.base import RedirectView
 
 from core.views import change_language
@@ -19,6 +20,9 @@ urlpatterns = [
 ]
 
 urlpatterns += i18n_patterns(
+    path('cookie-policy/', 
+    TemplateView.as_view(template_name="core/cookie_policy.html"), 
+    name='cookie-policy'),
     path('admin/', admin.site.urls),
     path('', include('core.urls')),
     path('', include('telecompanies.urls')),

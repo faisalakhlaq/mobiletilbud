@@ -17,6 +17,7 @@ INSTALLED_APPS = [
     'mobiles',
 
     'django_celery_beat',
+    'cookielaw',
 ]
 
 MIDDLEWARE = [

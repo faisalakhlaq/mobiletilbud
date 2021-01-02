@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load i18n static %}
+{% block title %} Cookie-Policy | {{ block.super }} {% endblock %}
+{% block extra_head %}
+  <link rel='stylesheet' href="{% static '/cookie_policy.css'%}">
+{% endblock extra_head %}
+{% block content %}
+<div class='cp-container'>
+    <h3 class='cp-main-heading'>{% trans "Cookie policy" %}</h3>
+    {% comment %} Cookie-retningslinjer 
+    Vi anvender cookies, som er teknologi til indsamling af oplysninger om hvordan du og andre besøgende bruger vores hjemmeside. Formålet med disse retningslinjer er at fortælle dig, hvordan vi anvender cookies, og hvordan dine oplysninger er brugt. Vi fortæller dig også,  hvordan du kan forhindre brug af dine oplysninger. 
+    {% endcomment %}
+    <p>We use cookies, which are technology for collecting information about how you and other visitors use our website. The purpose of these guidelines is to tell you how we use cookies and how your information is used. We also tell you how to prevent the use of your information.</p>
+    <h5>{% trans "What are cookies?" %}</h5> <!--Hvad er cookies?-->
+    <p>Cookies are stored on your computer or other IT equipment and which collect information. Cookies cannot spread viruses or other malicious programs. Cookies tell us which websites you have visited on your device. We may combine this with other information we have about you.</p>
+    {% comment %} Cookies gemmes på din computer eller andet IT-udstyr, og som indsamler oplysninger. Cookies kan ikke sprede virus eller andre skadelige programmer. Cookies fortælle os, hvilke hjemmesider du har besøgt på din enhed. Vi kan kombinere dette med andre oplysninger, som vi har om dig.   {% endcomment %}
+    <h5>Which cookies we use</h5>
+    <p>We use google analytics cookies. With Google Analytics we track visitor behavior on our website so we can optimize the effectiveness of our website. For example, we track how visitors use our site, what region they come from, and what features they are looking at.</p>
+    {% comment %} Vi bruger Google Analytics. Med Google Analytics vi spore besøgendes adfærd på vores hjemmeside, så vi kan optimere vores hjemmesides effektivitet. Vi sporer for eksempel, hvordan besøgende bruger vores side, hvilken region de kommer fra, og hvilke funktioner de kigger på. {% endcomment %}
+    <p>We save cookies for one year from the latest visit to our website</p>
+    {% comment %} Vi gemmer dine cookiedata i op til tre år efter den seneste aktivering (dit seneste besøg på vores hjemmeside).  {% endcomment %}
+    <h5>Deleting of cookies</h5>
+    <p>Cookies from our website can be easily deleted. It depends on which browser you are using.
+    So in order to do that check the specifics of your brower on 'How to delete cookies.'</p>
+</div>
+{% endblock content %}
