@@ -27,6 +27,7 @@ class HomeView(View):
         }
         popular_offers = get_popular_offers(offers_per_company=2)
         context['popular_offers'] = popular_offers
+        context["slider_offers"] = Mobile.objects.filter(offers__isnull=False).distinct().order_by('name')
         return context
 
 class MobileManufacturersView(ListView):
@@ -64,6 +65,9 @@ class MobileManufacturersView(ListView):
         query = self.request.GET.get('query')            
         context['mobile_brands'] = MobileBrand.objects.all()
         context["brand"] = company #or query
+        context["slider_offers"] = Mobile.objects.filter(offers__isnull=False).distinct().order_by('name')
+        if not company and not query:
+            context["brand"] = 'Popular'
         return context
 
 def get_mobile_auto_complete(request):    

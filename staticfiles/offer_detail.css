@@ -15,9 +15,13 @@
     border-bottom: 3px solid  rgb(239, 239, 255);
     min-width: 100%;
 }
-.offer-mob-image {
+.offer-mob-image-div {
     margin-top: 0.6em;
     margin-bottom: 2em;
+}
+.offer-mob-image{
+    max-width: 12rem;
+    max-height: 23rem;
 }
 .mobile-name {
     font-size: 1.3rem;

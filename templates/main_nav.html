@@ -1,8 +1,10 @@
 {% load i18n %}
 {% load static %}
+<head>
+  <link rel='stylesheet' href="{% static '/main_nav.css'%}">
+</head>
 <!-- Navbar -->
-<nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light scrolling-navbar">
-    <div class="container-fluid">
+<nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light scrolling-navbar border-bottom border-grey">
         <!-- Brand -->
         <a class="navbar-brand waves-effect" href="{% url 'telecompanies:home' %}">
             <img style="width:1.5rem;" class='logo-image' src={% static 'logo1.png' %}>
@@ -56,6 +58,5 @@
                 </form>
             </ul>
         </div>
-    </div>
 </nav>
 <!-- Navbar -->

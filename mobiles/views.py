@@ -18,12 +18,13 @@ class MobileDetailView(View):
             return render(self.request, template_name, context)
         except Mobile.DoesNotExist:
             # TODO give a message about mobile not found
-            raise Http404("No mobile matches the given query.")
+            return redirect(self.request.META.get('HTTP_REFERER'))
+            # raise Http404("No mobile matches the given query.")
     
     def get_context_data(self, **kwargs):
         # import pdb; pdb.set_trace()
-        slug = self.kwargs["slug"]   
-        mobile = Mobile.objects.get(slug=slug)        
+        slug = self.kwargs["slug"]
+        mobile = Mobile.objects.get(slug=slug) or None
         offers = Offer.objects.filter(Q(mobile=mobile) | 
                                       Q(mobile__name__iexact=mobile.name))
         # specs = MobileTechnicalSpecification.objects.filter(mobile=mobile)
@@ -47,19 +48,47 @@ class MobileDetailView(View):
             }
         return context
 
-# https://github.com/TyMaszWeb/django-cookie-law
 class CompareMobile(View):
     """Gets the two mobile ids to be compared from the request.
     Redirects to the mobile comparison page."""
     def get(self, *args, **kwargs):
+        # try:
         # if self.request.is_ajax():
-        mobile1_id = self.request.GET.get('id1')
-        mobile2_id = self.request.GET.get('id2')
+        # import pdb; pdb.set_trace()
+        mobile1_id = kwargs.get('id1')
+        mobile2_id = kwargs.get('id2')
         mobile1 = Mobile.objects.get(id=mobile1_id)
         mobile2 = Mobile.objects.get(id=mobile2_id)
-        print(mobile1)
-        print(mobile2)
-        return render(self.request, 'offer/compare_offers.html', {})
+        context = self.get_context_data(mobile1)
+        return render(self.request, 'offer/compare_mobiles.html', context)
+        # except Mobile.DoesNotExist:
+            # TODO display a message that couldn't find mobile
+            # print('Something went wrong! Mobile not found')
+            # return redirect(self.request.META.get('HTTP_REFERER'))
+            
+    def get_context_data(self, mobile):
+        offers = Offer.objects.filter(Q(mobile=mobile) | 
+                                      Q(mobile__name__iexact=mobile.name))
+        # specs = MobileTechnicalSpecification.objects.filter(mobile=mobile)
+        specs = mobile.technical_specs.all()
+        variation = Variation.objects.filter(mobile=mobile)
+        # TODO get the variation values from MobileVariation
+        if specs: specs = specs[0]
+        cam = mobile.camera_specs.all()
+        if cam: cam = cam[0]
+        colours = MobileVariation.objects.filter(variation__mobile=mobile,
+                                            variation__name='colour')
+        memory = MobileVariation.objects.filter(variation__mobile=mobile, 
+                                            variation__name='memory')
+        context = {
+                'mobile': mobile,
+                'offers': offers,
+                'tech_specs': specs,
+                'camera_specs': cam,
+                'colours': colours,
+                'memory': memory,
+            }
+        return context
 
 def fetch_mobiles(request):
     """Find the two mobiles to be compared using the ids from the request."""

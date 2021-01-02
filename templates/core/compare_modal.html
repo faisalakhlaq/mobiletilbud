@@ -136,13 +136,35 @@ compare_btn.onclick = function() {
   mobile1_id.innerHTML==mobile2_id.innerHTML){
     return;
   }
-  $.ajax({
+  var m1=mobile1_id.innerHTML;
+  console.log(m1);
+  var m2=mobile2_id.innerHTML;
+  console.log(m2);
+  
+  //var url = '{% url "mobiles:mobile-comparison" 1 2 %}';
+  //var mapObj = {
+    //1: m1.trim(),
+    //2: m2.trim(),
+  //};
+  //console.log(url);
+  //{% comment %} url = url.replace(/1|2/gi, function(matched){
+    //return mapObj[matched];
+  //});
+  //console.log(url); {% endcomment %}
+
+  // Construct the full URL with "id"
+  document.location.href = '{% url "mobiles:mobile-comparison" id1=11 id2=22 %}'.replace(11,m1).replace(22, m2);
+  //document.location.href = url.replace(1,m1).replace(2, m2);
+  
+  // {% comment %} location.replace("{% url 'mobiles:mobile-comparison' m1 m2 %}"); {% endcomment %}
+
+/*  $.ajax({
     type: "GET",
     url: "/mobile_comparison",
     data: {
       "id1": mobile1_id.innerHTML,
       "id2": mobile2_id.innerHTML,
     },
-  });
+  });*/
 }
 </script>

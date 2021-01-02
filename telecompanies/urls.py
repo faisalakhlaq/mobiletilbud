@@ -7,11 +7,11 @@ app_name = 'telecompanies'
 
 urlpatterns = [
     path('', OffersHome.as_view(), name='home'), 
-    path('telecom-companies', TelecomCompaniesView.as_view(), 
-    name='telecom-companies'), 
+    # path('telecom-companies', TelecomCompaniesView.as_view(), 
+    # name='telecom-companies'), 
     path('offers/', PopularOffersView.as_view(), name='offers'),
-    path('compare-offers/', CompareOffersView.as_view(), 
-    name='compare-offers'),
+    # path('compare-offers/', CompareOffersView.as_view(), 
+    # name='compare-offers'),
     path('offer-detail/<slug>', OfferDetailView.as_view(), 
     name='offer-detail'),
     path('tilbud_search_auto_complete/', get_tilbud_auto_complete, 

@@ -42,7 +42,6 @@ class Mobile(models.Model):
                                   auto_now=False, auto_now_add=False,
                                   blank=True, null=True)
 
-
     class Meta:
         unique_together = (
             ('name', 'brand')

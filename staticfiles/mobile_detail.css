@@ -4,6 +4,7 @@
     align-items:center; 
     align-self:center; 
     justify-self:center;
+    margin-top: 2rem;
 }
 .title-m-name{
     text-align: center;
