@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-31 23:40+0100\n"
+"POT-Creation-Date: 2021-01-03 16:51+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -185,11 +185,11 @@ msgstr "værdi"
 msgid "Created"
 msgstr "Oprettet"
 
-#: mobiletilbud/settings/base.py:68
+#: mobiletilbud/settings/base.py:69
 msgid "English"
 msgstr "Engelsk"
 
-#: mobiletilbud/settings/base.py:69
+#: mobiletilbud/settings/base.py:70
 msgid "Danish"
 msgstr "Dansk"
 
@@ -234,6 +234,128 @@ msgstr "Tilbud"
 #: telecompanies/models.py:39 templates/mobile/mobile_detail.html:36
 msgid "Offers"
 msgstr "Tilbud"
+
+#: templates/cookielaw/banner.html:11
+msgid "Accept"
+msgstr "Acceptere"
+
+#: templates/cookielaw/banner.html:12
+msgid "Cookie Details"
+msgstr "Cookie detaljer"
+
+#: templates/cookielaw/banner.html:15
+msgid "MobileTilbud uses cookies to improve your experience."
+msgstr "MobileTilbud anvender cookies til at forbedre din oplevelse."
+
+#: templates/cookielaw/banner.html:19
+msgid "Necessary"
+msgstr "Nødvendige"
+
+#: templates/cookielaw/banner.html:19
+msgid ""
+"These help to activate basic functions such as page navigation and ensure "
+"communication on the website."
+msgstr ""
+"Disse hjælper at aktivere grundlæggende funktioner som for eksempel "
+"sidenavigation og sikre kommunication på hjemmesiden. "
+
+#: templates/cookielaw/banner.html:22
+msgid "Statistical"
+msgstr "Statistiske"
+
+#: templates/cookielaw/banner.html:22
+msgid ""
+"These enable us to track the behavior of our visitors. This is anonymous, "
+"and is used to measure and optimize the effectiveness of our website."
+msgstr ""
+"Disse gør det muligt for os til at følge adfærden for vores  besøgende. "
+"Dette er anonym, og bruges til at måle og optimere effektiviteten for vores "
+"hjemmeside."
+
+#: templates/core/cookie_policy.html:9
+msgid "Cookie policy"
+msgstr "Cookie-retningslinjer"
+
+#: templates/core/cookie_policy.html:10
+msgid ""
+"We use cookies, which are technology for collecting information about how "
+"you and other visitors use our website. The purpose of these guidelines is "
+"to tell you how we use cookies and how your information is used. We also "
+"tell you how to prevent the use of your information."
+msgstr ""
+"Vi anvender cookies, som er teknologi til indsamling af oplysninger om "
+"hvordan du og andre besøgende bruger vores hjemmeside. Formålet med disse "
+"retningslinjer er at fortælle dig, hvordan vi anvender cookies, og hvordan "
+"dine oplysninger er brugt. Vi fortæller dig også,  hvordan du kan forhindre "
+"brug af dine oplysninger."
+
+#: templates/core/cookie_policy.html:11
+msgid "What are cookies?"
+msgstr "Hvad er cookies"
+
+#: templates/core/cookie_policy.html:12
+msgid ""
+"Cookies are stored on your computer or other IT equipment and which collect "
+"information. Cookies cannot spread viruses or other malicious programs. "
+"Cookies tell us which websites you have visited on your device. We may "
+"combine this with other information we have about you."
+msgstr ""
+"Cookies gemmes på din computer eller andet IT-udstyr, og som indsamler "
+"oplysninger. Cookies kan ikke sprede virus eller andre skadelige programmer. "
+"Cookies fortælle os, hvilke hjemmesider du har besøgt på din enhed. Vi kan "
+"kombinere dette med andre oplysninger, som vi har om dig."
+
+#: templates/core/cookie_policy.html:13
+msgid "Which cookies we use"
+msgstr "Hvilke cookies vi anvender"
+
+#: templates/core/cookie_policy.html:14
+msgid ""
+"We use google analytics cookies. With Google Analytics we track visitor "
+"behavior on our website so we can optimize the effectiveness of our website. "
+"For example, we track how visitors use our site, what region they come from, "
+"and what features they are looking at."
+msgstr ""
+"Vi bruger Google Analytics. Med Google Analytics vi spore besøgendes adfærd "
+"på vores hjemmeside, så vi kan optimere vores hjemmesides effektivitet. Vi "
+"sporer for eksempel, hvordan besøgende bruger vores side, hvilken region de "
+"kommer fra, og hvilke funktioner de kigger på."
+
+#: templates/core/cookie_policy.html:15
+msgid "Cross Site Request Forgery protection"
+msgstr "Cross Site Request Forgery protection"
+
+#: templates/core/cookie_policy.html:16
+msgid ""
+"The CSRF middleware and template tag provides easy-to-use protection against "
+"Cross Site Request Forgeries."
+msgstr ""
+"CSRF middleware og skabelon tag giver brugervenlig beskyttelse mod "
+"forfalskninger på tværs af websteder."
+
+#: templates/core/cookie_policy.html:17
+msgid "We save cookies for ten years from the latest visit to our website"
+msgstr ""
+"Vi gemmer dine cookiedata i op til ti år efter den seneste aktivering (dit "
+"seneste besøg på vores hjemmeside)."
+
+#: templates/core/cookie_policy.html:18
+msgid "Google Cookies lifetime and policy can be checked on google."
+msgstr "Tjek Google Cookies levetid og politik på google."
+
+#: templates/core/cookie_policy.html:19
+msgid "Deleting of cookies"
+msgstr "Sletning af cookies"
+
+#: templates/core/cookie_policy.html:20
+msgid ""
+"Cookies from our website can be easily deleted. It depends on which browser "
+"you are using. So in order to do that check the specifics of your browser "
+"on, How to delete cookies."
+msgstr ""
+"Cookies fra vores hjemmeside kan let slettes. Det afhænger af, hvilken "
+"browser du bruger. Så for at gøre det skal du kontrollere detaljerne i din "
+"browser på, Sådan slettes cookies."
 
 #: templates/core/home.html:11 templates/core/mobile_brands.html:17
 msgid "Popular Mobiles"
@@ -305,7 +427,7 @@ msgstr "Hjem"
 msgid "Compare"
 msgstr "Sammenligne"
 
-#: templates/main_footer.html:45
+#: templates/main_footer.html:46
 msgid "Copyright"
 msgstr "Ophavsret"
 
@@ -404,7 +526,8 @@ msgid "Dual Sim"
 msgstr "Dobbelt SIM-kort"
 
 #: templates/offer/compare_offers.html:66
-#: templates/offer/compare_offers.html:71
+#: templates/offer/compare_offers.html:71 templates/offer/offer_detail.html:10
+#: templates/offer/offer_snippet.html:2
 msgid "Offer Details"
 msgstr "Tilbudsdetaljer"
 
@@ -428,10 +551,6 @@ msgstr "Link"
 #: templates/offer/mobile_offers_card.html:41
 msgid "Details"
 msgstr "Detaljer"
-
-#: templates/offer/offer_detail.html:10 templates/offer/offer_snippet.html:2
-msgid "Offer Details"
-msgstr "Tilbudsdetaljer"
 
 #: templates/offer/offer_detail.html:45
 msgid "Mobile Details"

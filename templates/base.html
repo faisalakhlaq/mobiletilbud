@@ -3,6 +3,7 @@
 <!DOCTYPE html>
 <html lang="">
 <head>
+{% if "cookielaw_accepted" in request.COOKIES %}
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-7QL4QB4QW9"></script>
 <script>
@@ -23,6 +24,7 @@
   ga('send', 'pageview');
   </script>
   <!-- End Google Analytics -->
+{% endif %}
   <meta charset="utf-8">
   {% comment %} <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"> {% endcomment %}
   <meta name="viewport" content="width=device-width, initial-scale=1.0">

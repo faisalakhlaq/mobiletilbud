@@ -1,12 +1,30 @@
-.cookie-container{
-    height: 95px; 
-    position: fixed; 
-    bottom:0%;
-    width:100%; 
-    /* background-color: #393838;  */
-    background-color: rgba(34, 34, 32, 0.6);
-    /* opacity: .3; */
-    text-align: center;
+@media only screen and (max-width: 767px) {
+    .cookie-container{
+        position: fixed; 
+        bottom:0%;
+        width:100%; 
+        background-color: rgba(34, 34, 32, 0.8);
+        padding: .5rem;
+        font-size: .85em;
+    }
+    .cookie-buttons{
+        text-align: center;
+        margin-bottom: 1rem;
+    }
+}
+@media only screen and (min-width: 768px) {
+    .cookie-container{
+        height: 50%; 
+        position: fixed; 
+        bottom:0%;
+        width:100%; 
+        padding: 1rem 3rem 0 3rem;
+        background-color: rgba(34, 34, 32, 0.8);
+    }
+    .cookie-buttons{
+        text-align: center;
+        margin-bottom: 2rem;
+    }
 }
 .cookie-content{
     color: white;

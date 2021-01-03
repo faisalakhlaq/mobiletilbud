@@ -5,13 +5,16 @@
 </head>
 <div id="CookielawBanner" class="cookie-container">
     <div class="cookie-content">
-        <div class="cookie-text">
-            {% trans 'This website uses google analytics cookies to make your experience better.' %}
-        </div>
         <div class="cookie-buttons">
-            {% comment %} <a class="btn-blue" href="{% url 'legal_advice' %}">{% trans "What are the cookies?" %}</a> {% endcomment %}
             <a class="btn btn-primary accept-btn" href="javascript:Cookielaw.createCookielawCookie();">{% trans "Accept" %}</a>
             <a class="btn btn-primary cookie-detail-btn" href="{% url 'cookie-policy' %}">{% trans "Cookie Details" %}</a>
+        </div>
+        <div class="cookie-text">
+            <p>{% trans 'MobileTilbud uses cookies to improve your experience.' %}</p>
+            {% comment %} <input type="checkbox" name="necessary" checked/>Accept Necessary</input>
+            <input type="checkbox" name="all" checked/>Accept All</input> {% endcomment %}
+            <p><b>{% trans 'Necessary' %} </b>{% trans "These help to activate basic functions such as page navigation and ensure communication on the website." %}</p>
+            <p><b>{% trans 'Statistical'%} </b>{% trans "These enable us to track the behavior of our visitors. This is anonymous, and is used to measure and optimize the effectiveness of our website." %}</p>
         </div>
         <div class="close-cookies"></div>
     </div>
