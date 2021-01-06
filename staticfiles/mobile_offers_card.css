@@ -50,7 +50,7 @@
     .mo-image-container{
         width: 12rem;
         height: 100%;
-        padding-left: 0 .1rem;
+        padding: 0 .1rem;
         vertical-align: middle;
         align-self: center;
         /* box-shadow: 0 .3125rem .625rem rgba(30, 95, 44, 0.5); */
