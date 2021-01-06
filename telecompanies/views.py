@@ -21,7 +21,7 @@ class OffersHome(View):
         filters = self.request.GET.get('filter')
         query = self.request.GET.get("query")
         all_offers = Offer.objects.all().order_by('updated')
-        offer_mobiles = Mobile.objects.filter(offers__isnull=False).order_by('name')
+        offer_mobiles = Mobile.objects.filter(offers__isnull=False).order_by('full_name')
         # Create a list of mobiles on offer to display in the baner
         slider_offers = offer_mobiles.distinct()
         context = {}

@@ -1,0 +1,130 @@
+{% load i18n %}
+{% load static %}
+<link rel='stylesheet' href="{% static '/compare_modal.css'%}">
+<div id="compare_mobile_modal" class="modal">
+    <span class="close">&times;</span>
+    <ul class='compare-ul'>
+        <li class='cm-mobile-container'>
+            <span class="delete-mobile delete-mobile1">&times;</span>
+            <img id='cm_mobile1_image' class='cm_mobile_image'></img>
+            <p id='mobile1_name'></p>
+            <p id='cm_mobile1_id' hidden></p>
+        </li>
+        <li class='cm-mobile-container'>
+            <span class="delete-mobile delete-mobile2">&times;</span>
+            <img id='cm_mobile2_image' class='cm_mobile_image'></img>
+            <p  id='mobile2_name'></p>
+            <p id='cm_mobile2_id' hidden></p>
+        </li>
+        <li>
+        <form method='GET' action='/mobile-comparison/'>
+          <input id='form_id1' name='id1' hidden value={{request.GET.id1}}>
+          <input id='form_id2' name='id2' hidden value={{request.GET.id2}}>
+          <button type="submit" class='cm-compare-mobile-btn'>{% trans 'Compare' %}</button>
+        </form>
+        {% comment %} 
+        {% url 'mobiles:mobile_comparison' 1655 1655 as c_url %}
+        <a class='btn btn-primary' href={{c_url}}>Compare Link</a>
+        <button id='cm_compare_mobile_btn' class='cm-compare-mobile-btn'
+        onclick="location.href ={% url 'mobiles:mobile-comparison' id1=1655 id2=1655 %}">
+        onclick="location.href = '{% url 'mobiles:mobile-comparison' 
+        id1=cm_mobile1_id.innerHTML id2=cm_mobile2_id.innerHTML %}'"> 
+        {% trans 'Compare' %}</button>{% endcomment %}
+        </li>
+    </ul>
+</div>
+<script>
+// Get the modal
+var modal = document.getElementById("compare_mobile_modal");
+var compare_btn = document.getElementById('cm_compare_mobile_btn');
+var form_id1 = document.getElementById('form_id1');
+var form_id2 = document.getElementById('form_id2');
+
+// Get the mobile fields
+var mobile1_name = document.getElementById("mobile1_name");
+var mobile1_id = document.getElementById("cm_mobile1_id");
+var mobile1_image = document.getElementById("cm_mobile1_image");
+var mobile2_name = document.getElementById("mobile2_name");
+var mobile2_id = document.getElementById("cm_mobile2_id");
+var mobile2_image = document.getElementById("cm_mobile2_image");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+var delete_mobile1 = document.getElementsByClassName("delete-mobile1")[0];
+var delete_mobile2 = document.getElementsByClassName("delete-mobile2")[0];
+
+function close_modal(){
+  modal.style.display = "none";
+}
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+  modal.style.display = "none";
+}
+delete_mobile1.onclick = function() {
+  mobile1_name.innerHTML = "";
+  mobile1_image.src = '';
+  mobile1_image.style.display='none'
+  form_id1.value = '';
+  if(is_empty(mobile1_name) && is_empty(mobile2_name)){
+    close_modal();
+  }
+}
+delete_mobile2.onclick = function() {
+  mobile2_name.innerHTML = "";  
+  mobile2_image.src = '';
+  mobile2_image.style.display = 'none'
+  mobile2_id.innerHTML = '';
+  form_id2.value = '';
+  if(is_empty(mobile1_name) && is_empty(mobile2_name)){
+    close_modal();
+  }
+}
+// When the user clicks anywhere outside of the modal, close it
+{% comment %} window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+} {% endcomment %}
+function open_modal(){
+  modal.style.display = "block";
+}
+function add_mobile(id, m_name, image){
+  if(!is_empty(mobile1_name) && !is_empty(mobile2_name)){
+    populate_mobile2(mobile1_id.innerHTML, 
+    mobile1_name.innerHTML, mobile1_image.src,
+    append_media=false)
+    populate_mobile1(id, m_name, image);
+  }
+  else if(is_empty(mobile1_name)){
+    populate_mobile1(id, m_name, image);
+  }
+  else if(is_empty(mobile2_name)){
+    populate_mobile2(id, m_name, image);
+  }
+}
+function is_empty(field){
+  if(field.innerHTML == '') return true;
+  return false;
+  //for(var i in field) return false;
+  //return true; 
+}
+function populate_mobile1(id, name, image){
+  mobile1_id.innerHTML = id;
+  form_id1.value = id;
+  mobile1_name.innerHTML = name;
+  mobile1_image.style.display = "block";
+  mobile1_image.src = '/media/'+image;
+}
+function populate_mobile2(id, name, image, append_media=true){
+  mobile2_id.innerHTML = id;
+  form_id2.value = id;
+  mobile2_name.innerHTML = name;
+  mobile2_image.style.display = "block";
+  if(append_media){
+    mobile2_image.src = '/media/'+image;
+  }
+  else{
+    mobile2_image.src = image
+  }
+}
+</script>

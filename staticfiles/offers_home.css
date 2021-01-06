@@ -9,7 +9,7 @@
 .oh-title{
     font-weight:bold; 
     font-family:sans-serif; 
-    color:#000061;
+    color:rgb(167, 123, 12);
     margin-top: -0.3em;
     margin-bottom: 0.1em;
     text-align: center;
@@ -34,7 +34,8 @@
     font-size: 1rem;
 }
 .oh-tele-comp-btn:hover {
-    background-color:  #008CBA;; /* Green */
+    background-color: rgb(167, 123, 12);
+    /* background-color:  #008CBA; */
     color: white;
 }
 .oh-search-field{
@@ -43,7 +44,7 @@
     padding-bottom: 0.8em;
     display:flex; 
     align-items:center; 
-    justify-content:center
+    justify-content:center;
 }
 .oh-search-field > input,
 input::-webkit-input-placeholder {

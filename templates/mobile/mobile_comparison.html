@@ -1,0 +1,213 @@
+{% extends 'base.html' %}
+{% load  i18n %}
+{% load static %}
+{% block extra_head %}
+    <link rel='stylesheet' href="{% static '/compare_mobiles.css'%}">
+{% endblock extra_head %}
+{% block title %} {% trans 'Mobile Comparison' %} | {{ block.super }}{% endblock title %}
+{% block content %}
+<div class='cm-container'>
+    <h4>{% trans "Mobile Comparison" %}</h4>
+    <table class="cm-table">
+        <tr>
+            <td class='cm-attribute'></td>
+            {% if mobile2.image %}<td  class='cm-table-col'><img class='cm-image' src={{mobile.image.url}}/></td>{% endif %}
+            {% if mobile2.image %}<td  class='cm-table-col'><img class='cm-image' src={{mobile2.image.url}}/></td>{% endif %}
+        </tr>
+        <tr>
+            <th class='cm-attribute'>{% trans "Mobile Name" %}</th>
+            <th class='cm-table-col'>{{mobile.name}}</th>
+            <th class='cm-table-col'>{{mobile2.name}}</th>
+        </tr>
+        <tr>
+            <td class='cm-attribute'><b>{% trans 'Offers' %}</b></td>
+            <td class='cm-table-col'>{% for offer in offers %}
+            <a class='btn btn-primary btn-sm ml-1' href={{ offer.get_absolute_url }}>
+            {{offer.telecom_company.name}}</button> {% endfor %}</td>
+            <td class='cm-table-col'>{% for offer in offers2 %}
+            <a class='btn btn-primary btn-sm ml-1' href={{ offer.get_absolute_url }}>
+            {{offer.telecom_company.name}}</a> {% endfor %}</td>
+        </tr>
+        <tr>
+            <td class='cm-attribute'><b>{% trans 'Colours' %}</b></td>
+            <td class='cm-table-col'>{% for colour in colours %}{{colour.value}}, {% endfor %}</td>
+            <td class='cm-table-col'>{% for colour in colours2 %}{{colour.value}}, {% endfor %}</td>
+        </tr>
+        <tr>
+            <td class='cm-attribute'><b>{% trans 'Rear Camera Lenses' %}</b></td>
+            <td class='cm-table-col'>{{camera_specs.rear_cam_lenses}}</td>
+            <td class='cm-table-col'>{{camera_specs2.rear_cam_lenses}}</td>
+        </tr>
+        <tr>
+            <td class='cm-attribute'><b>{% trans 'Rear Camera Megapixel' %}</b></td>
+            <td class='cm-table-col'>{{camera_specs.rear_cam_megapixel}}</td>
+            <td class='cm-table-col'>{{camera_specs2.rear_cam_megapixel}}</td>
+        </tr>
+        <tr>
+            <td class='cm-attribute'><b>{% trans 'Rear Camera Aperture' %}</b></td>
+            <td class='cm-table-col'>{{camera_specs.back_cam_aperture}}</td>
+            <td class='cm-table-col'>{{camera_specs2.back_cam_aperture}}</td>
+        </tr>
+        <tr>
+            <td class='cm-attribute'><b>{% trans 'Rear Camera Resolution' %}</b></td>
+            <td class='cm-table-col'>{{camera_specs.rear_cam_video_resolution}}</td>
+            <td class='cm-table-col'>{{camera_specs2.rear_cam_video_resolution}}</td>
+        </tr>
+        <tr>
+            <td class='cm-attribute'><b>{% trans 'Front Camera Lenses' %}</b></td>
+            <td class='cm-table-col'>{{camera_specs.front_cam_lenses}}</td>
+            <td class='cm-table-col'>{{camera_specs2.front_cam_lenses}}</td>
+        </tr>        
+        <tr>
+            <td class='cm-attribute'><b>{% trans 'Front Camera Megapixel' %}</b></td>
+            <td class='cm-table-col'>{{camera_specs.front_cam_megapixel}}</td>
+            <td class='cm-table-col'>{{camera_specs2.front_cam_megapixel}}</td>
+        </tr>        
+        <tr>
+            <td class='cm-attribute'><b>{% trans 'Front Camera Aperture' %}</b></td>
+            <td class='cm-table-col' class='cm-table-col'>{{camera_specs.front_cam_aperture}}</td>
+            <td class='cm-table-col' class='cm-table-col'>{{camera_specs2.front_cam_aperture}}</td>
+        </tr>
+        <tr>
+            <td class='cm-attribute'><b>{% trans 'Front Camera Video Resolution' %}</b></td>
+            <td class='cm-table-col' class='cm-table-col'>{{camera_specs.front_cam_video_resolution}}</td>
+            <td class='cm-table-col' class='cm-table-col'>{{camera_specs2.front_cam_video_resolution}}</td>
+        </tr>
+        <tr>
+            <td class='cm-attribute'><b>{% trans 'Status' %}</b></td>
+            <td class='cm-table-col' class='cm-table-col'>{{tech_specs.status}}</td>
+            <td class='cm-table-col' class='cm-table-col'>{{tech_specs2.status}}</td>
+        </tr>
+        <tr>
+            <td class='cm-attribute'><b>{% trans 'Launch' %}</b></td>
+            <td class='cm-table-col'>{{tech_specs.launch}}</td>
+            <td class='cm-table-col'>{{tech_specs.launch}}</td>
+        </tr>
+        <tr>
+            <td class='cm-attribute'><b>2G</b></td>
+            <td class='cm-table-col'>{{tech_specs.two_g}}</td>
+            <td class='cm-table-col'>{{tech_specs2.two_g}}</td>
+        </tr>
+        <tr>
+            <td class='cm-attribute'><b>3G</b></td>
+            <td class='cm-table-col'>{{tech_specs.three_g}}</td>
+            <td class='cm-table-col'>{{tech_specs2.three_g}}</td>
+        </tr>
+        <tr>
+            <td class='cm-attribute'><b>4G</b></td>
+            <td class='cm-table-col' class='cm-table-col'>{{tech_specs.four_g}}</td>
+            <td class='cm-table-col' class='cm-table-col'>{{tech_specs2.four_g}}</td>
+        </tr>
+        <tr>
+            <td class='cm-attribute'><b>5G</b></td>
+            <td class='cm-table-col' class='cm-table-col'>{{tech_specs.five_g}}</td>
+            <td class='cm-table-col' class='cm-table-col'>{{tech_specs.five_g}}</td>
+        </tr>
+        <tr>
+            <td class='cm-attribute'><b>WiFi</b></td>
+            <td class='cm-table-col' class='cm-table-col'>{{tech_specs.WiFi}}</td>
+            <td class='cm-table-col' class='cm-table-col'>{{tech_specs2.WiFi}}</td>
+        </tr>
+        <tr>
+            <td class='cm-attribute'><b>{% trans 'Dual Sim' %}</b></td>
+            <td class='cm-table-col'>{{tech_specs.dual_sim}}</td>
+            <td class='cm-table-col'>{{tech_specs2.dual_sim}}</td>
+        </tr>
+        <tr>
+            <td class='cm-attribute'><b>{% trans 'Dimensions' %}</b></td>
+            <td class='cm-table-col'>{{tech_specs.dimensions}}</td>
+            <td class='cm-table-col'>{{tech_specs2.dimensions}}</td>
+        </tr>
+        <tr>
+            <td class='cm-attribute'><b>{% trans 'Weight' %}</b></td>
+            <td class='cm-table-col'>{{tech_specs.weight}}</td>
+            <td class='cm-table-col'>{{tech_specs2.weight}}</td>
+        </tr>
+        <tr>
+            <td class='cm-attribute'><b>{% trans 'Screen Type' %}</b></td>
+            <td class='cm-table-col'>{{tech_specs.screen_type}}</td>
+            <td class='cm-table-col'>{{tech_specs2.screen_type}}</td>
+        </tr>
+        <tr>
+            <td class='cm-attribute'><b>{% trans 'Screen Size' %}</b></td>
+            <td class='cm-table-col'>{{tech_specs.screen_size}}</td>
+            <td class='cm-table-col'>{{tech_specs2.screen_size}}</td>
+        </tr>
+        <tr>
+            <td class='cm-attribute'><b>{% trans 'Screen Resolution' %}</b></td>
+            <td class='cm-table-col'>{{tech_specs.screen_resolution}}</td>
+            <td class='cm-table-col'>{{tech_specs2.screen_resolution}}</td>
+        </tr>
+        <tr> 
+            <td class='cm-attribute'><b>{% trans 'IP Certification' %}</b></td>
+            <td class='cm-table-col'>{{tech_specs.ip_certification}}</td>
+            <td class='cm-table-col'>{{tech_specs2.ip_certification}}</td>
+        </tr>
+        <tr>
+            <td class='cm-attribute'><b>{% trans 'Internal Storage' %}</b></td>
+            <td class='cm-table-col'>{{tech_specs.internal_storage}}</td>
+            <td class='cm-table-col'>{{tech_specs2.internal_storage}}</td>
+        </tr>
+        <tr>
+            <td class='cm-attribute'><b>{% trans 'External Storage' %}</b></td>
+            <td class='cm-table-col'>{{tech_specs.external_storage}}</td>
+            <td class='cm-table-col'>{{tech_specs2.external_storage}}</td>
+        </tr>
+        <tr>
+            <td class='cm-attribute'><b>WLAN</b></td>
+            <td class='cm-table-col'>{{tech_specs.WLAN}}</td>
+            <td class='cm-table-col'>{{tech_specs2.WLAN}}</td>
+        </tr>
+        <tr>
+            <td class='cm-attribute'><b>Blootooth</b></td>
+            <td class='cm-table-col'>{{tech_specs.bluetooth}}</td>
+            <td class='cm-table-col'>{{tech_specs2.bluetooth}}</td>
+        </tr>
+        <tr>
+            <td class='cm-attribute'><b>NFC</b></td>
+            <td class='cm-table-col'>{{tech_specs.NFC}}</td>
+            <td class='cm-table-col'>{{tech_specs.NFC}}</td>
+        </tr>
+        <tr>
+            <td class='cm-attribute'><b>USB</b></td>
+            <td class='cm-table-col'>{{tech_specs.USB}}</td>
+            <td class='cm-table-col'>{{tech_specs2.USB}}</td>
+        </tr>
+        <tr>
+            <td class='cm-attribute'><b>{% trans 'Battery Type' %}</b></td>
+            <td class='cm-table-col'>{{tech_specs.battery_type}}</td>
+            <td class='cm-table-col'>{{tech_specs2.battery_type}}</td>
+        </tr>
+        <tr>
+            <td class='cm-attribute'><b>{% trans 'Wireless Charging' %}</b></td>
+            <td class='cm-table-col'>{{tech_specs.wireless_charging}}</td>
+            <td class='cm-table-col'>{{tech_specs2.wireless_charging}}</td>
+        </tr>
+        <tr>
+            <td class='cm-attribute'><b>{% trans 'Fast Charging' %}</b></td>
+            <td class='cm-table-col'>{{tech_specs.fast_charging}}</td>
+            <td class='cm-table-col'>{{tech_specs2.fast_charging}}</td>
+        </tr>
+        <tr>
+            <td class='cm-attribute'><b>{% trans 'Chipset' %}</b></td>
+            <td class='cm-table-col'>{{tech_specs.chipset}}</td>
+            <td class='cm-table-col'>{{tech_specs2.chipset}}</td>
+        </tr>
+        <tr>
+            <td class='cm-attribute'><b>{% trans 'Operating System' %}</b></td>
+            <td class='cm-table-col'>{{tech_specs.operating_system}}</td>
+            <td class='cm-table-col'>{{tech_specs2.operating_system}}</td>
+        </tr>
+        <tr>
+            <td class='cm-attribute'><b>RAM</b></td>
+            <td class='cm-table-col'>{{tech_specs.ram}}</td>
+            <td class='cm-table-col'>{{tech_specs2.ram}}</td>
+        </tr>
+        <tr>
+            <td class='cm-attribute'><b>{% trans 'Memory' %}</b></td>
+            <td class='cm-table-col'>{% for mem in memory %}{{mem.value}}, {% endfor %}</td>
+            <td class='cm-table-col'>{% for mem in memory2 %}{{mem.value}}, {% endfor %}</td>
+        </tr>
+    </table>
+</div>
+{% endblock content %}

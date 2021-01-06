@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-03 16:51+0100\n"
+"POT-Creation-Date: 2021-01-06 07:13+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: core/models.py:13 mobiles/models.py:11 mobiles/models.py:140
+#: core/models.py:13 mobiles/models.py:11 mobiles/models.py:139
 msgid "Name"
 msgstr "Navn"
 
@@ -69,123 +69,143 @@ msgstr "Kontantpris"
 msgid "Launch Date"
 msgstr "Lancering"
 
-#: mobiles/models.py:68 templates/mobile/mobile_detail.html:145
+#: mobiles/models.py:67 templates/mobile/mobile_comparison.html:117
+#: templates/mobile/mobile_detail.html:145
 msgid "Dimensions"
 msgstr "Dimensioner"
 
-#: mobiles/models.py:70 templates/mobile/mobile_detail.html:148
+#: mobiles/models.py:69 templates/mobile/mobile_comparison.html:122
+#: templates/mobile/mobile_detail.html:148
 msgid "Weight"
 msgstr "Vægt"
 
-#: mobiles/models.py:72 templates/mobile/mobile_detail.html:151
+#: mobiles/models.py:71 templates/mobile/mobile_comparison.html:127
+#: templates/mobile/mobile_detail.html:151
 msgid "Screen Type"
 msgstr "Skærmtype"
 
-#: mobiles/models.py:74 templates/mobile/mobile_detail.html:154
+#: mobiles/models.py:73 templates/mobile/mobile_comparison.html:132
+#: templates/mobile/mobile_detail.html:154
 msgid "Screen Size"
 msgstr "Skærmstørrelse"
 
-#: mobiles/models.py:76 templates/mobile/mobile_detail.html:157
+#: mobiles/models.py:75 templates/mobile/mobile_comparison.html:137
+#: templates/mobile/mobile_detail.html:157
 msgid "Screen Resolution"
 msgstr "Skærmopløsning"
 
-#: mobiles/models.py:78 templates/mobile/mobile_detail.html:160
+#: mobiles/models.py:77 templates/mobile/mobile_comparison.html:142
+#: templates/mobile/mobile_detail.html:160
 msgid "IP Certification"
 msgstr "IP Certificering"
 
-#: mobiles/models.py:80 templates/mobile/mobile_detail.html:163
+#: mobiles/models.py:79 templates/mobile/mobile_comparison.html:147
+#: templates/mobile/mobile_detail.html:163
 msgid "Internal Storage"
 msgstr "Intern Lagringshukommelse"
 
-#: mobiles/models.py:82 templates/mobile/mobile_detail.html:166
+#: mobiles/models.py:81 templates/mobile/mobile_comparison.html:152
+#: templates/mobile/mobile_detail.html:166
 msgid "External Storage"
 msgstr "Ekstern lagringshukommelse"
 
-#: mobiles/models.py:84
+#: mobiles/models.py:83
 msgid "WLAN"
 msgstr "WLAN"
 
-#: mobiles/models.py:86
+#: mobiles/models.py:85
 msgid "Bluetooth"
 msgstr "bluetooth"
 
-#: mobiles/models.py:89
+#: mobiles/models.py:88
 msgid "USB"
 msgstr "USB"
 
-#: mobiles/models.py:91 templates/mobile/mobile_detail.html:183
+#: mobiles/models.py:90 templates/mobile/mobile_comparison.html:177
+#: templates/mobile/mobile_detail.html:183
 msgid "Battery Type"
 msgstr "Batteri Type"
 
-#: mobiles/models.py:93 templates/mobile/mobile_detail.html:186
+#: mobiles/models.py:92 templates/mobile/mobile_comparison.html:182
+#: templates/mobile/mobile_detail.html:186
 msgid "Wireless Charging"
 msgstr "Trådløs Opladning"
 
-#: mobiles/models.py:95 templates/mobile/mobile_detail.html:189
+#: mobiles/models.py:94 templates/mobile/mobile_comparison.html:187
+#: templates/mobile/mobile_detail.html:189
 msgid "Fast Charging"
 msgstr "Hurtigopladning"
 
-#: mobiles/models.py:97 templates/mobile/mobile_detail.html:192
+#: mobiles/models.py:96 templates/mobile/mobile_comparison.html:192
+#: templates/mobile/mobile_detail.html:192
 msgid "Chipset"
 msgstr "Chipset"
 
-#: mobiles/models.py:99 templates/mobile/mobile_detail.html:195
+#: mobiles/models.py:98 templates/mobile/mobile_comparison.html:197
+#: templates/mobile/mobile_detail.html:195
 msgid "Operating System"
 msgstr "Operativ System"
 
-#: mobiles/models.py:101
+#: mobiles/models.py:100
 msgid "RAM"
 msgstr "RAM"
 
-#: mobiles/models.py:103 templates/mobile/mobile_detail.html:124
+#: mobiles/models.py:102 templates/mobile/mobile_comparison.html:82
+#: templates/mobile/mobile_detail.html:124
 msgid "Launch"
 msgstr "Lancering"
 
-#: mobiles/models.py:105 templates/mobile/mobile_detail.html:121
+#: mobiles/models.py:104 templates/mobile/mobile_comparison.html:77
+#: templates/mobile/mobile_detail.html:121
 msgid "Status"
 msgstr "Status"
 
-#: mobiles/models.py:115
+#: mobiles/models.py:114
 msgid "rear_camera_lenses"
 msgstr "Bagsidekamera Linser"
 
-#: mobiles/models.py:117
+#: mobiles/models.py:116
 msgid "rear_camera_megapixel"
 msgstr "Bagsidekamera Megapixel"
 
-#: mobiles/models.py:119 templates/mobile/mobile_detail.html:87
+#: mobiles/models.py:118 templates/mobile/mobile_comparison.html:47
+#: templates/mobile/mobile_detail.html:87
 msgid "Rear Camera Aperture"
 msgstr "Bagsidekamera blændetal"
 
-#: mobiles/models.py:121
+#: mobiles/models.py:120
 msgid "rear_camera_video_resolution"
 msgstr "Bagsidekamera Videooptagelse"
 
-#: mobiles/models.py:123
+#: mobiles/models.py:122
 msgid "front_camera_lenses"
 msgstr "Frontkamera Linser"
 
-#: mobiles/models.py:125
+#: mobiles/models.py:124
 msgid "front_camera_megapixel"
 msgstr "Frontkamera Megapixel"
 
-#: mobiles/models.py:127
+#: mobiles/models.py:126
 msgid "front_camera_aperture"
 msgstr "Frontkamera Blændetal"
 
-#: mobiles/models.py:129
+#: mobiles/models.py:128
 msgid "front_camera_video_resolution"
 msgstr "Frontkamera Blændetal"
 
-#: mobiles/models.py:155
+#: mobiles/models.py:154
 msgid "value"
 msgstr "værdi"
 
-#: mobiles/models.py:171
+#: mobiles/models.py:170
 msgid "Created"
 msgstr "Oprettet"
 
-#: mobiletilbud/settings/base.py:69
+#: mobiles/views.py:60 mobiles/views.py:68
+msgid "Please try choosing two different mobiles"
+msgstr "Prøv at vælge to forskellige mobiltelefoner"
+
+#: mobiletilbud/settings/base.py:68
 msgid "English"
 msgstr "Engelsk"
 
@@ -197,13 +217,15 @@ msgstr "Dansk"
 msgid "Mobile"
 msgstr "Mobil"
 
-#: telecompanies/models.py:20
+#: telecompanies/models.py:20 templates/mobile/mobile_comparison.html:18
 msgid "Mobile Name"
 msgstr "Mobilnavn"
 
 #: telecompanies/models.py:22 templates/core/telecom_companies.html:24
-#: templates/offer/mobile_offers_card.html:25
-#: templates/offer/mobile_offers_card.html:35
+#: templates/offer/bootstrap_mobile_offers_card.html:44
+#: templates/offer/bootstrap_mobile_offers_card.html:56
+#: templates/offer/mobile_offers_card.html:29
+#: templates/offer/mobile_offers_card.html:39
 #: templates/offer/offer_card_snippet.html:9
 #: templates/offer/offer_detail.html:23 templates/offer/offer_snippet.html:15
 msgid "Discount"
@@ -217,7 +239,9 @@ msgstr "Rabat"
 msgid "Offer Url"
 msgstr "Tilbud URL"
 
-#: telecompanies/models.py:29 templates/offer/mobile_offers_card.html:26
+#: telecompanies/models.py:29
+#: templates/offer/bootstrap_mobile_offers_card.html:45
+#: templates/offer/mobile_offers_card.html:30
 msgid "Price"
 msgstr "Pris"
 
@@ -226,136 +250,22 @@ msgid "Updated"
 msgstr "Opdateret"
 
 #: telecompanies/models.py:38 templates/core/telecom_companies.html:33
-#: templates/offer/mobile_offers_card.html:38
+#: templates/offer/bootstrap_mobile_offers_card.html:59
+#: templates/offer/mobile_offers_card.html:42
 #: templates/offer/offer_card_snippet.html:23
 msgid "Offer"
 msgstr "Tilbud"
 
-#: telecompanies/models.py:39 templates/mobile/mobile_detail.html:36
+#: telecompanies/models.py:39 templates/mobile/mobile_comparison.html:23
+#: templates/mobile/mobile_detail.html:36
 msgid "Offers"
 msgstr "Tilbud"
 
-#: templates/cookielaw/banner.html:11
-msgid "Accept"
-msgstr "Acceptere"
-
-#: templates/cookielaw/banner.html:12
-msgid "Cookie Details"
-msgstr "Cookie detaljer"
-
-#: templates/cookielaw/banner.html:15
-msgid "MobileTilbud uses cookies to improve your experience."
-msgstr "MobileTilbud anvender cookies til at forbedre din oplevelse."
-
-#: templates/cookielaw/banner.html:19
-msgid "Necessary"
-msgstr "Nødvendige"
-
-#: templates/cookielaw/banner.html:19
-msgid ""
-"These help to activate basic functions such as page navigation and ensure "
-"communication on the website."
-msgstr ""
-"Disse hjælper at aktivere grundlæggende funktioner som for eksempel "
-"sidenavigation og sikre kommunication på hjemmesiden. "
-
-#: templates/cookielaw/banner.html:22
-msgid "Statistical"
-msgstr "Statistiske"
-
-#: templates/cookielaw/banner.html:22
-msgid ""
-"These enable us to track the behavior of our visitors. This is anonymous, "
-"and is used to measure and optimize the effectiveness of our website."
-msgstr ""
-"Disse gør det muligt for os til at følge adfærden for vores  besøgende. "
-"Dette er anonym, og bruges til at måle og optimere effektiviteten for vores "
-"hjemmeside."
-
-#: templates/core/cookie_policy.html:9
-msgid "Cookie policy"
-msgstr "Cookie-retningslinjer"
-
-#: templates/core/cookie_policy.html:10
-msgid ""
-"We use cookies, which are technology for collecting information about how "
-"you and other visitors use our website. The purpose of these guidelines is "
-"to tell you how we use cookies and how your information is used. We also "
-"tell you how to prevent the use of your information."
-msgstr ""
-"Vi anvender cookies, som er teknologi til indsamling af oplysninger om "
-"hvordan du og andre besøgende bruger vores hjemmeside. Formålet med disse "
-"retningslinjer er at fortælle dig, hvordan vi anvender cookies, og hvordan "
-"dine oplysninger er brugt. Vi fortæller dig også,  hvordan du kan forhindre "
-"brug af dine oplysninger."
-
-#: templates/core/cookie_policy.html:11
-msgid "What are cookies?"
-msgstr "Hvad er cookies"
-
-#: templates/core/cookie_policy.html:12
-msgid ""
-"Cookies are stored on your computer or other IT equipment and which collect "
-"information. Cookies cannot spread viruses or other malicious programs. "
-"Cookies tell us which websites you have visited on your device. We may "
-"combine this with other information we have about you."
-msgstr ""
-"Cookies gemmes på din computer eller andet IT-udstyr, og som indsamler "
-"oplysninger. Cookies kan ikke sprede virus eller andre skadelige programmer. "
-"Cookies fortælle os, hvilke hjemmesider du har besøgt på din enhed. Vi kan "
-"kombinere dette med andre oplysninger, som vi har om dig."
-
-#: templates/core/cookie_policy.html:13
-msgid "Which cookies we use"
-msgstr "Hvilke cookies vi anvender"
-
-#: templates/core/cookie_policy.html:14
-msgid ""
-"We use google analytics cookies. With Google Analytics we track visitor "
-"behavior on our website so we can optimize the effectiveness of our website. "
-"For example, we track how visitors use our site, what region they come from, "
-"and what features they are looking at."
-msgstr ""
-"Vi bruger Google Analytics. Med Google Analytics vi spore besøgendes adfærd "
-"på vores hjemmeside, så vi kan optimere vores hjemmesides effektivitet. Vi "
-"sporer for eksempel, hvordan besøgende bruger vores side, hvilken region de "
-"kommer fra, og hvilke funktioner de kigger på."
-
-#: templates/core/cookie_policy.html:15
-msgid "Cross Site Request Forgery protection"
-msgstr "Cross Site Request Forgery protection"
-
-#: templates/core/cookie_policy.html:16
-msgid ""
-"The CSRF middleware and template tag provides easy-to-use protection against "
-"Cross Site Request Forgeries."
-msgstr ""
-"CSRF middleware og skabelon tag giver brugervenlig beskyttelse mod "
-"forfalskninger på tværs af websteder."
-
-#: templates/core/cookie_policy.html:17
-msgid "We save cookies for ten years from the latest visit to our website"
-msgstr ""
-"Vi gemmer dine cookiedata i op til ti år efter den seneste aktivering (dit "
-"seneste besøg på vores hjemmeside)."
-
-#: templates/core/cookie_policy.html:18
-msgid "Google Cookies lifetime and policy can be checked on google."
-msgstr "Tjek Google Cookies levetid og politik på google."
-
-#: templates/core/cookie_policy.html:19
-msgid "Deleting of cookies"
-msgstr "Sletning af cookies"
-
-#: templates/core/cookie_policy.html:20
-msgid ""
-"Cookies from our website can be easily deleted. It depends on which browser "
-"you are using. So in order to do that check the specifics of your browser "
-"on, How to delete cookies."
-msgstr ""
-"Cookies fra vores hjemmeside kan let slettes. Det afhænger af, hvilken "
-"browser du bruger. Så for at gøre det skal du kontrollere detaljerne i din "
-"browser på, Sådan slettes cookies."
+#: templates/core/compare_modal.html:23 templates/left_menu.html:6
+#: templates/offer/bootstrap_mobile_offers_card.html:33
+#: templates/offer/mobile_offers_card.html:22
+msgid "Compare"
+msgstr "Sammenligne"
 
 #: templates/core/home.html:11 templates/core/mobile_brands.html:17
 msgid "Popular Mobiles"
@@ -423,10 +333,6 @@ msgstr "Beklager, der skete noget fejl i vores ende. Vi vil undersøge det."
 msgid "Home"
 msgstr "Hjem"
 
-#: templates/left_menu.html:6
-msgid "Compare"
-msgstr "Sammenligne"
-
 #: templates/main_footer.html:46
 msgid "Copyright"
 msgstr "Ophavsret"
@@ -448,6 +354,62 @@ msgstr "Tjek"
 msgid "Price From: "
 msgstr "Pris Fra: "
 
+#: templates/mobile/mobile_comparison.html:7
+#: templates/mobile/mobile_comparison.html:10
+msgid "Mobile Comparison"
+msgstr "Mobil Sammenligning"
+
+#: templates/mobile/mobile_comparison.html:32
+#: templates/mobile/mobile_detail.html:50
+msgid "Colours"
+msgstr "Farver"
+
+#: templates/mobile/mobile_comparison.html:37
+#: templates/mobile/mobile_detail.html:79
+msgid "Rear Camera Lenses"
+msgstr "Bagsidekamera, antal linser"
+
+#: templates/mobile/mobile_comparison.html:42
+#: templates/mobile/mobile_detail.html:83
+msgid "Rear Camera Megapixel"
+msgstr "Bagsidekamera Megapixel"
+
+#: templates/mobile/mobile_comparison.html:52
+#: templates/mobile/mobile_detail.html:91
+msgid "Rear Camera Resolution"
+msgstr "Bagsidekamera Videooptagelse"
+
+#: templates/mobile/mobile_comparison.html:57
+#: templates/mobile/mobile_detail.html:97
+msgid "Front Camera Lenses"
+msgstr "Frontkamera Linser"
+
+#: templates/mobile/mobile_comparison.html:62
+#: templates/mobile/mobile_detail.html:101
+msgid "Front Camera Megapixel"
+msgstr "Frontkamera Megapixel"
+
+#: templates/mobile/mobile_comparison.html:67
+#: templates/mobile/mobile_detail.html:105
+msgid "Front Camera Aperture"
+msgstr "Frontkamera Blændetal"
+
+#: templates/mobile/mobile_comparison.html:72
+#: templates/mobile/mobile_detail.html:109
+msgid "Front Camera Video Resolution"
+msgstr "Frontkamera Videoopløsning"
+
+#: templates/mobile/mobile_comparison.html:112
+#: templates/mobile/mobile_detail.html:142
+msgid "Dual Sim"
+msgstr "Dobbelt SIM-kort"
+
+#: templates/mobile/mobile_comparison.html:207
+#: templates/mobile/mobile_detail.html:40
+#: templates/mobile/mobile_detail.html:58
+msgid "Memory"
+msgstr "Hukommelse"
+
 #: templates/mobile/mobile_detail.html:26
 msgid "Manufacturer"
 msgstr "Fabrikant"
@@ -456,11 +418,6 @@ msgstr "Fabrikant"
 msgid "Colors"
 msgstr "Farver"
 
-#: templates/mobile/mobile_detail.html:40
-#: templates/mobile/mobile_detail.html:58
-msgid "Memory"
-msgstr "Hukommelse"
-
 #: templates/mobile/mobile_detail.html:42
 msgid "Specs"
 msgstr "Specs"
@@ -468,10 +425,6 @@ msgstr "Specs"
 #: templates/mobile/mobile_detail.html:44
 msgid "Camera"
 msgstr "Kamera"
-
-#: templates/mobile/mobile_detail.html:50
-msgid "Colours"
-msgstr "Farver"
 
 #: templates/mobile/mobile_detail.html:53
 msgid "Sorry! No color details available yet"
@@ -489,41 +442,30 @@ msgstr "Der er i øjeblikket ikke noget tilbud"
 msgid "No camera details available"
 msgstr "Ingen kameradetaljer fundet"
 
-#: templates/mobile/mobile_detail.html:79
-msgid "Rear Camera Lenses"
-msgstr "Bagsidekamera, antal linser"
-
-#: templates/mobile/mobile_detail.html:83
-msgid "Rear Camera Megapixel"
-msgstr "Bagsidekamera Megapixel"
-
-#: templates/mobile/mobile_detail.html:91
-msgid "Rear Camera Resolution"
-msgstr "Bagsidekamera Videooptagelse"
-
-#: templates/mobile/mobile_detail.html:97
-msgid "Front Camera Lenses"
-msgstr "Frontkamera Linser"
-
-#: templates/mobile/mobile_detail.html:101
-msgid "Front Camera Megapixel"
-msgstr "Frontkamera Megapixel"
-
-#: templates/mobile/mobile_detail.html:105
-msgid "Front Camera Aperture"
-msgstr "Frontkamera Blændetal"
-
-#: templates/mobile/mobile_detail.html:109
-msgid "Front Camera Video Resolution"
-msgstr "Frontkamera Videoopløsning"
-
 #: templates/mobile/mobile_detail.html:117
 msgid "No technical specification available"
 msgstr "Ingen teknisk specifikation fundet"
 
-#: templates/mobile/mobile_detail.html:142
-msgid "Dual Sim"
-msgstr "Dobbelt SIM-kort"
+#: templates/offer/bootstrap_mobile_offers_card.html:35
+#: templates/offer/mobile_offers_card.html:21
+msgid "View All Offers"
+msgstr "Se Alle Tilbud"
+
+#: templates/offer/bootstrap_mobile_offers_card.html:43
+#: templates/offer/mobile_offers_card.html:28
+#: templates/offer/offer_detail.html:27
+msgid "Company"
+msgstr "Selskab"
+
+#: templates/offer/bootstrap_mobile_offers_card.html:46
+#: templates/offer/mobile_offers_card.html:31
+msgid "Link"
+msgstr "Link"
+
+#: templates/offer/bootstrap_mobile_offers_card.html:62
+#: templates/offer/mobile_offers_card.html:45
+msgid "Details"
+msgstr "Detaljer"
 
 #: templates/offer/compare_offers.html:66
 #: templates/offer/compare_offers.html:71 templates/offer/offer_detail.html:10
@@ -534,23 +476,6 @@ msgstr "Tilbudsdetaljer"
 #: templates/offer/compare_offers.html:75
 msgid "Compare More"
 msgstr "Sammenligne mere"
-
-#: templates/offer/mobile_offers_card.html:18
-msgid "View All Offers"
-msgstr "Se Alle Tilbud"
-
-#: templates/offer/mobile_offers_card.html:24
-#: templates/offer/offer_detail.html:27
-msgid "Company"
-msgstr "Selskab"
-
-#: templates/offer/mobile_offers_card.html:27
-msgid "Link"
-msgstr "Link"
-
-#: templates/offer/mobile_offers_card.html:41
-msgid "Details"
-msgstr "Detaljer"
 
 #: templates/offer/offer_detail.html:45
 msgid "Mobile Details"
@@ -678,9 +603,6 @@ msgstr "Sidst"
 
 #~ msgid "Mobile Price"
 #~ msgstr "Mobilens pris"
-
-#~ msgid "Mobile Prices"
-#~ msgstr "Mobilpriser"
 
 #~ msgid "Set Reminders"
 #~ msgstr "Indstil påmindelser"

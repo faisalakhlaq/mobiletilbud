@@ -41,10 +41,34 @@
     </div>
     {% endif %}
 <div>
+<div class='oh-compare-container'>
+{% include 'core/compare_modal.html' %}
+</div>
 {% endblock content %}
 {% block extra_scripts %}
+{{ block.super }}
 <script>
-$("[id='filter'][value={{filter}}]").css('background-color', '#007AD0').css('color','#fff');
+var elements = document.getElementsByClassName("compare-btn");
+var m_name = document.getElementsByClassName('mo-mobile-name');
+var m_image = document.getElementsByClassName('mo-image');
+for(var i=0; i<elements.length; i++) {
+  img = m_image[i].src;
+  value = elements[i].value;
+  name = m_name[i].innerHTML;
+  elements[i].addEventListener('click', function(){
+    //console.log('Image: ' + this.value + '- PK = ' + this.id);
+    open_modal();
+    add_mobile(this.id, this.name, this.value);
+  });
+  //elements[i].addEventListener('click', add_mobile('{{mobile.name}}'));
+}
+//$("[id='compare']").click(function() {
+  //$("[id='mobile1_name']").text("Hello")
+  //open_modal();
+  //add_mobile('{{mobile.full_name}}');
+  //alert( "Handler for .click() called." );
+//});
+$("[id='filter'][value={{filter}}]").css('background-color', 'rgb(167, 123, 12);').css('color','#fff');
 $(function() {
   $( "#query" ).autocomplete({
     source: "/tilbud_search_auto_complete",

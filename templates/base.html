@@ -5,21 +5,20 @@
 <head>
 {% if "cookielaw_accepted" in request.COOKIES %}
 <!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-7QL4QB4QW9"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-7QL4QB4QW9');
-</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-7QL4QB4QW9"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('set', {cookie_domain:'www.mobiletilbud.dk', cookie_flags: 'SameSite=None;Secure'});
+    gtag('config', 'G-7QL4QB4QW9');
+  </script>
   <!-- Google Analytics -->
   <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
   })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
   ga('create', 'UA-XXXXX-Y', 'auto');
   ga('send', 'pageview');
   </script>
@@ -29,7 +28,7 @@
   {% comment %} <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"> {% endcomment %}
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
-  <title>{% block title %} MobilTilbud {% endblock %}</title>
+  <title>{% block title %} MobileTilbud {% endblock %}</title>
   {% block extra_head %}
   {% endblock %}
   {% include 'bootstrap/css.html' %}
@@ -37,15 +36,15 @@
 </head>
 <body>
 <div>
-{% include 'main_nav.html'%}
+  {% include 'main_nav.html'%}
 </div>
 
 <div class='mt-4'>
-{% include 'baner.html' %}
+  {% include 'baner.html' %}
 </div>
 
 {% if messages %}
-  <div class='mt-5 pt-4'>
+  <div id='message_container' class=''>
     {% for message in messages %}
       <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
         {{ message }}
@@ -56,20 +55,26 @@
     {% endfor %}
   </div>
 {% endif %}
-{% comment %} <div> {% endcomment %}
-    <div class='row mt-2'>
-        {% comment %} <div class='col-3'>{% include 'left_menu.html' %}</div> {% endcomment %}
-        <div class='col-12'>{% block content %}{% endblock content %}</div>
-    </div>
-    <div class='row mt-2'>
-        <div class='col-9 ml-auto'>{% block extra_body %}{% endblock extra_body %}</div>
-    </div>
-{% comment %} </div> {% endcomment %}
+<div class='row mt-2'>
+    <div class='col-12'>{% block content %}{% endblock content %}</div>
+</div>
+<div class='row mt-2'>
+    <div class='col-9 ml-auto'>{% block extra_body %}{% endblock extra_body %}</div>
+</div>
 {% include 'main_footer.html' %}
 {% include 'bootstrap/js.html' %}
 {% load cookielaw_tags %}
 {% cookielaw_banner %}
 {% block extra_scripts %}
+<script>
+var message_ele = document.getElementById("message_container");
+setTimeout(function(){ 
+  if(message_ele != null){
+    message_ele.style.display = "none"; 
+  }
+}, 15000);
+// message div should disappear after 15 sec
+</script>
 {% endblock extra_scripts %}
 </body>
 </html>
