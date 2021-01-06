@@ -9,6 +9,6 @@ urlpatterns = [
         name='mobile-detail'),
     path('fetch-mobiles', fetch_mobiles, 
         name='fetch-mobiles'),
-    path('mobile-comparison/<int:id1><int:id2>', CompareMobile.as_view(),
+    path('mobile-comparison/', CompareMobile.as_view(),
         name='mobile-comparison')
 ]

@@ -1,0 +1,69 @@
+{% load static %}
+{% load i18n %}
+{% block extra_head %}
+<head>
+    <link rel='stylesheet' href="{% static '/mobile_offers_card.css'%}">
+</head>
+        {% comment %} <meta name="viewport" content="width=device-width, initial-scale=1.0"> {% endcomment %}
+{% endblock %}
+<div class='col-md-6 col-sm-12 col-xs-12'>
+<div style="height:450px; width:98%; margin:2%;" class='border shadow-lg p-3 mb-5 bg-white rounded'>
+<div class="row">
+    <div class='col-md-4 col-sm-4 col-xs-4'>
+        <div class='border-right shadow-lg p-3 mb-5 bg-white rounded'>
+            <div class='d-flex justify-content-center text-center font-weight-bold pb-3'>
+                {% if mobile.full_name %}{{ mobile.full_name }}
+                {% else %}{{ mobile.name }}{% endif %}
+            </div>
+            <div class=''>
+                <a href={{ mobile.get_absolute_url }}>
+                {% if mobile.image %}<img style="max-height:23rem" class="mo-image" src={{ mobile.image.url }}>
+                {% else %}<img class="mo-image" src={{'/media/images/default_mobile_image.png' }}>{% endif %}
+                </a>
+                {% comment %} <div>
+                    <div class='d-flex justify-content-center'>
+                        <button id='{{mobile.slug|safe}}' class='mo-link-btn' value='{{mobile.image}}' name='{{mobile.name|safe}}'>{% trans 'Compare' %}</button>
+                    </div>
+                </div> {% endcomment %}
+            </div>
+        </div>
+        <div class=''>
+            <button id='{{mobile.slug|safe}}' class='moc-tilbud-btn' value='{{mobile.image}}' name='{{mobile.name|safe}}'>{% trans 'Compare' %}</button>
+            <button class='moc-tilbud-btn' onclick="location.href = '{{ mobile.get_absolute_url }}'">
+            {% trans 'View All Offers' %}</button>
+        </div>
+    </div>
+    <div class='col-md-8 col-sm-8 col-xs-8'>
+        <div style="height:100%">
+            <table class='table table-striped'>
+                <thead>
+                    <tr>
+                        <th>{% trans 'Company' %}</th>
+                        <th>{% trans 'Discount' %}</th>
+                        <th>{% trans 'Price' %}</th>
+                        <th>{% trans 'Link' %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for offer in offers %}
+                    <tr>
+                        <td>{{offer.telecom_company.name}}</td>
+                        <td>
+                            {% if offer.discount_offered %}<span class='danger'>{{ offer.discount_offered }}.kr </span>
+                            {% elif offer.discount %}<span class='danger'>{{ offer.discount }}<span>
+                            {% else %}{% trans "Discount" %}{% endif %}
+                        </td>
+                        <td class='mo-price-column'>{% if offer.price %}{{offer.price}} 
+                            {% else %}{%trans "Offer" %} {% endif %}
+                        </td>
+                        <td><button class='btn btn-sm btn-info' onclick="location.href = '{{ offer.get_absolute_url }}'">
+                            {% trans 'Details' %}</button></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</div>
+</div>
