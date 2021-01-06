@@ -2,7 +2,7 @@
 {% load  i18n %}
 {% load static %}
 {% block extra_head %}
-    <link rel='stylesheet' href="{% static '/compare_mobiles.css'%}">
+    <link rel='stylesheet' href="{% static '/mobiles_comparison.css'%}">
 {% endblock extra_head %}
 {% block title %} {% trans 'Mobile Comparison' %} | {{ block.super }}{% endblock title %}
 {% block content %}
@@ -11,8 +11,8 @@
     <table class="cm-table">
         <tr>
             <td class='cm-attribute'></td>
-            {% if mobile2.image %}<td  class='cm-table-col'><img class='cm-image' src={{mobile.image.url}}/></td>{% endif %}
-            {% if mobile2.image %}<td  class='cm-table-col'><img class='cm-image' src={{mobile2.image.url}}/></td>{% endif %}
+            {% if mobile.image %}<td  class='cm-table-col'><img class='cm-image' src={{mobile.image.url}}></td>{% endif %}
+            {% if mobile2.image %}<td  class='cm-table-col'><img class='cm-image' src={{mobile2.image.url}}></td>{% endif %}
         </tr>
         <tr>
             <th class='cm-attribute'>{% trans "Mobile Name" %}</th>
@@ -22,10 +22,10 @@
         <tr>
             <td class='cm-attribute'><b>{% trans 'Offers' %}</b></td>
             <td class='cm-table-col'>{% for offer in offers %}
-            <a class='btn btn-primary btn-sm ml-1' href={{ offer.get_absolute_url }}>
+            <a class='btn btn-primary btn-sm m-1' href={{ offer.get_absolute_url }}>
             {{offer.telecom_company.name}}</button> {% endfor %}</td>
             <td class='cm-table-col'>{% for offer in offers2 %}
-            <a class='btn btn-primary btn-sm ml-1' href={{ offer.get_absolute_url }}>
+            <a class='btn btn-primary btn-sm m-1' href={{ offer.get_absolute_url }}>
             {{offer.telecom_company.name}}</a> {% endfor %}</td>
         </tr>
         <tr>
