@@ -49,11 +49,12 @@
 
 {% endblock content %}
 {% block extra_scripts %}
+{{ block.super }}
 <script>
 $("[id='brand'][value={{brand}}]").css('background-color', '#007AD0').css('color','#fff');
 $(function() {
   $( "#query" ).autocomplete({
-    source: "/mobile_search_auto_complete",
+    source: "/mobile_search_auto_complete/",
     select: function (event, ui) { //item selected
       AutoCompleteSelectHandler(event, ui)
     },

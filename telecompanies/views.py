@@ -1,6 +1,8 @@
+from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q, Count
 from django.shortcuts import render
+from django.utils.translation import gettext as _
 from django.views.generic import ListView, DetailView, View
 from django.http import HttpResponse
 from itertools import chain
@@ -28,6 +30,9 @@ class OffersHome(View):
         if query and len(query.strip()) > 0:
             all_offers = all_offers.filter(Q(mobile_name__icontains=query.strip()) |
             Q(mobile__full_name__icontains=query.strip())).order_by('-mobile_name')
+            if not all_offers:
+                output_msg = _('Sorry no offers found for %(m_name)s.') % {'m_name': query}
+                messages.info(self.request, output_msg)
             offer_mobiles = offer_mobiles.filter(Q(name__icontains=query.strip()) |
             Q(full_name__icontains=query.strip()))
             # create a list of offers where the mobile is null
@@ -83,7 +88,7 @@ class OfferDetailView(DetailView):
     model = Offer
 
 class PopularOffersView(ListView):
-    """ Return top 5 offers from each company.
+    """ Return top 3 offers from each company.
     """
     model = Offer
     template_name = 'offer/offer_list.html'
@@ -94,17 +99,20 @@ class PopularOffersView(ListView):
         query = self.request.GET.get('query')
         all_offers = Offer.objects.all().order_by('updated')
         if query and len(query.strip()) > 0:
-            return all_offers.filter(Q(mobile_name__icontains=query.strip()) |
+            rs_mobiles = all_offers.filter(Q(mobile_name__icontains=query.strip()) |
             Q(mobile__full_name__icontains=query.strip())).order_by('-mobile_name')
-        # elif offer_type and offer_type == 'Popular':
+            if not rs_mobiles:
+                output_msg = _('Sorry no offers found for %(m_name)s.') % {'m_name': query}
+                messages.info(self.request, output_msg)
+            return rs_mobiles
         elif company:
             if company == 'Popular':
-                return get_popular_offers(offers=all_offers, offers_per_company=5)
+                return get_popular_offers(offers=all_offers, offers_per_company=3)
             elif company == 'All':
                 return all_offers
             else:
                 return all_offers.filter(telecom_company__name__iexact=company.strip())         
-        return get_popular_offers(offers=all_offers, offers_per_company=5)
+        return get_popular_offers(offers=all_offers, offers_per_company=3)
 
     def get_context_data(self, **kwargs):
         context = super(PopularOffersView, self).get_context_data(**kwargs)

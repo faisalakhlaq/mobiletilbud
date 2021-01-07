@@ -49,7 +49,7 @@ class MobileDetailView(View):
             }
         return context
 
-class CompareMobile(View):
+class MobileComparison(View):
     """Gets the two mobile ids to be compared from the request.
     Redirects to the mobile comparison page."""
     def get(self, *args, **kwargs):
@@ -111,15 +111,3 @@ class CompareMobile(View):
                 'memory2': memory2,
             }
         return context
-
-def fetch_mobiles(request):
-    """Find the two mobiles to be compared using the ids from the request."""
-    if request.is_ajax():
-        mobile1_id = request.GET.get('mobile1_id')
-        mobile2_id = request.GET.get('mobile2_id')
-        mobile1 = Mobile.objects.get(id=mobile1_id)
-        mobile2 = Mobile.objects.get(id=mobile2_id)
-        print(mobile1)
-        print(mobile2)
-        # data = json.dumps([mobile1, mobile2])
-        return HttpResponse(mobile1, 'application/json')

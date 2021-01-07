@@ -44,11 +44,12 @@
 {% include 'paginator_template.html' with page_obj=page_obj %}
 {% endblock content %}
 {% block extra_scripts %}
+{{ block.super }}
 <script>
 $("[id='company'][value={{company}}]").css('background-color', '#007AD0').css('color','#fff');
 $(function() {
   $( "#query" ).autocomplete({
-    source: "/tilbud_search_auto_complete",
+    source: "/tilbud_search_auto_complete/",
     select: function (event, ui) { //item selected
       AutoCompleteSelectHandler(event, ui)
     },

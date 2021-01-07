@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-06 09:12+0100\n"
+"POT-Creation-Date: 2021-01-07 04:07+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -40,6 +40,11 @@ msgstr "Teleselskaber"
 #: core/models.py:31
 msgid "Country Name"
 msgstr "Landenavn"
+
+#: core/views.py:46
+#, python-format
+msgid "Sorry no mobile found with name %(m_name)s."
+msgstr "Vi har ikke fundet en mobil med navn %(m_name)s."
 
 #: mobiles/models.py:13 mobiles/models.py:37
 msgid "Image"
@@ -205,11 +210,11 @@ msgstr "Oprettet"
 msgid "Please try choosing two different mobiles"
 msgstr "Prøv at vælge to forskellige mobiltelefoner"
 
-#: mobiletilbud/settings/base.py:69
+#: mobiletilbud/settings/base.py:70
 msgid "English"
 msgstr "Engelsk"
 
-#: mobiletilbud/settings/base.py:70
+#: mobiletilbud/settings/base.py:71
 msgid "Danish"
 msgstr "Dansk"
 
@@ -260,6 +265,11 @@ msgstr "Tilbud"
 #: templates/mobile/mobile_detail.html:36
 msgid "Offers"
 msgstr "Tilbud"
+
+#: telecompanies/views.py:34
+#, python-format
+msgid "Sorry no offers found for %(m_name)s."
+msgstr "i øjeblikket er der ikke noget tilbud for %(m_name)s."
 
 #: templates/cookielaw/banner.html:9
 msgid "Accept"

@@ -1,14 +1,12 @@
 from django.urls import path
 
-from .views import (MobileDetailView, CompareMobile, fetch_mobiles)
+from .views import (MobileDetailView, MobileComparison)
 
 app_name = 'mobiles'
 
 urlpatterns = [
-    path('mobile-detail/<slug>', MobileDetailView.as_view(), 
+    path('<slug:slug>', MobileDetailView.as_view(), 
         name='mobile-detail'),
-    path('fetch-mobiles', fetch_mobiles, 
-        name='fetch-mobiles'),
-    path('mobile-comparison/', CompareMobile.as_view(),
-        name='mobile-comparison')
+    path('mobile-comparison/', MobileComparison.as_view(),
+        name='mobile-comparison'),
 ]

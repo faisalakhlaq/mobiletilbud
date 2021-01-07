@@ -56,22 +56,14 @@ for(var i=0; i<elements.length; i++) {
   value = elements[i].value;
   name = m_name[i].innerHTML;
   elements[i].addEventListener('click', function(){
-    //console.log('Image: ' + this.value + '- PK = ' + this.id);
     open_modal();
     add_mobile(this.id, this.name, this.value);
   });
-  //elements[i].addEventListener('click', add_mobile('{{mobile.name}}'));
 }
-//$("[id='compare']").click(function() {
-  //$("[id='mobile1_name']").text("Hello")
-  //open_modal();
-  //add_mobile('{{mobile.full_name}}');
-  //alert( "Handler for .click() called." );
-//});
 $("[id='filter'][value={{filter}}]").css('background-color', 'rgb(167, 123, 12);').css('color','#fff');
 $(function() {
   $( "#query" ).autocomplete({
-    source: "/tilbud_search_auto_complete",
+    source: "/tilbud_search_auto_complete/",
     select: function (event, ui) { //item selected
       AutoCompleteSelectHandler(event, ui)
     },

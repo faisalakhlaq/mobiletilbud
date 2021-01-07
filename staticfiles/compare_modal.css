@@ -1,5 +1,7 @@
 /* The Modal (background) */
 .modal {
+  /* display: flex;
+  justify-content: center; */
   /* display: none; Hidden by default */
   position: fixed; /* Stay in place */
   z-index: 100; /* Sit on top */

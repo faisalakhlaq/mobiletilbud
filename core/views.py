@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.contrib import messages
 from django.db.models import Q, F
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
@@ -21,7 +22,7 @@ class HomeView(View):
     def get_context_data(self, **kwargs):
         """Returns all the popular mobiles and one offer from 
         each telecompany"""
-        popular_mobiles = PopularMobile.objects.all().order_by(F('mobile__launch_date').desc(nulls_last=True))[:10]
+        popular_mobiles = PopularMobile.objects.all().order_by(F('mobile__launch_date').desc(nulls_last=True))[:15]
         context = {
             "popular_mobiles": popular_mobiles,
         }
@@ -39,8 +40,12 @@ class MobileManufacturersView(ListView):
         company = self.request.GET.get("brand")
         query = self.request.GET.get('query')            
         if query and len(query.strip()) > 0:
-            return Mobile.objects.filter(Q(name__icontains=query.strip()) |
+            rs_mobiles = Mobile.objects.filter(Q(name__icontains=query.strip()) |
             Q(full_name__icontains=query.strip())).order_by(F('launch_date').desc(nulls_last=True))
+            if not rs_mobiles:
+                output_msg = _('Sorry no mobile found with name %(m_name)s.') % {'m_name': query}
+                messages.info(self.request, output_msg)
+            return rs_mobiles
         elif company:
             # If popular mobiles is not selected then a brand name is 
             # selected. Therefore, find the mobiles of the selected brand
