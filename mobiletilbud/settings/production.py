@@ -38,12 +38,12 @@ MEDIA_ROOT = BASE_DIR / 'media'
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
-    "root": {"level": "INFO", "handlers": ["file"]},
+    "root": {"level": "WARNING", "handlers": ["file"]},
     "handlers": {
         "file": {
-            "level": "INFO",
+            "level": "WARNING",
             "class": "logging.FileHandler",
-            "filename": "/home/faisalakhlaq/logs",
+            "filename": "/home/faisalakhlaq/logs/django.log",
             "formatter": "app",
         },
     },
