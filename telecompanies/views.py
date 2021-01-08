@@ -28,13 +28,14 @@ class OffersHome(View):
         slider_offers = offer_mobiles.distinct()
         context = {}
         if query and len(query.strip()) > 0:
-            all_offers = all_offers.filter(Q(mobile_name__icontains=query.strip()) |
-            Q(mobile__full_name__icontains=query.strip())).order_by('-mobile_name')
+            query = query.strip()
+            all_offers = all_offers.filter(Q(mobile_name__icontains=query) |
+            Q(mobile__full_name__icontains=query)).order_by('-mobile_name')
             if not all_offers:
                 output_msg = _('Sorry no offers found for %(m_name)s.') % {'m_name': query}
                 messages.info(self.request, output_msg)
-            offer_mobiles = offer_mobiles.filter(Q(name__icontains=query.strip()) |
-            Q(full_name__icontains=query.strip()))
+            offer_mobiles = offer_mobiles.filter(Q(name__icontains=query) |
+            Q(full_name__icontains=query))
             # create a list of offers where the mobile is null
             context['unknown_offers'] = all_offers.filter(mobile=None)
         elif filters:
@@ -55,6 +56,7 @@ class OffersHome(View):
         return context
 
 class TelecomCompaniesView(View):
+    """This class is NOT USED anymore"""
     def get(self, *args, **kwargs):
         template_name = 'core/telecom_companies.html'
         context = self.get_context_data(args, kwargs)
@@ -111,6 +113,7 @@ class PopularOffersView(ListView):
             elif company == 'All':
                 return all_offers
             else:
+                # We want offers from a given company. So filter by company name
                 return all_offers.filter(telecom_company__name__iexact=company.strip())         
         return get_popular_offers(offers=all_offers, offers_per_company=3)
 

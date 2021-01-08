@@ -5,6 +5,7 @@ from django.core.files.base import ContentFile
 from django.db.models import Q
 import io
 from itertools import cycle
+import logging
 from PIL import Image
 import requests
 import time
@@ -22,6 +23,8 @@ from selenium.common.exceptions import (
 from mobiles.models import MobileBrand, Mobile
 from mobiles.mobile_specs_spider import HeaderFactory, ProxyFactory
 from .mobile_specs_spider import GsmarenaMobileSpecSpider
+
+logger = logging.getLogger(__name__)
 
 class AbstractMobileSpider(ABC):
  
@@ -45,12 +48,15 @@ class AbstractMobileSpider(ABC):
             if not brand:
                 brand = MobileBrand.objects.get(name__iexact=brand_name)
             # mobile = Mobile.objects.get(name__iexact=name, brand=brand)
-            mobile, _created = Mobile.objects.get_or_create(
-                name=name,
-                full_name=full_name,
-                brand=brand,
-                url=url,
-            )
+            try:
+                mobile, _created = Mobile.objects.get_or_create(
+                    name=name,
+                    full_name=full_name,
+                    brand=brand,
+                    url=url,
+                )
+            except MultipleObjectsReturned as e:
+                logger.error(f"Multiple mobiles returned for full_name {full_name}")
             # if not mobile:
             #     print('Cannot find mobile: ', full_name)
             #     return

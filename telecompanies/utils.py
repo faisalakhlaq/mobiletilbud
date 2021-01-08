@@ -1,40 +1,18 @@
 from itertools import chain
 
+from core.models import TelecomCompany
 from telecompanies.models import Offer
 
 def get_popular_offers(offers=None, offers_per_company=1):
-    """Returns highest discount offers. 
-    number of offers_per_company for each telecomcompany."""
+    """Returns offers with highest discount. Number of 
+    offers_per_company for each telecomcompany."""
+    telecompanies = TelecomCompany.objects.all()
     if not offers:
         offers = Offer.objects.all().order_by('updated')
-    telenor_best_offer = offers.filter(
-        telecom_company__name__iexact='Telenor').order_by('-discount_offered')
-    if not telenor_best_offer:
-        telenor_best_offer = offers.filter(telecom_company__name__iexact='Telenor')
-    if telenor_best_offer and len(telenor_best_offer) > offers_per_company:
-        telenor_best_offer = telenor_best_offer[:offers_per_company]
-    three_best_offer = offers.filter(
-        telecom_company__name__iexact='3').order_by('-discount_offered')
-    if not three_best_offer:
-        three_best_offer = offers.filter(telecom_company__name__iexact='3')
-    if three_best_offer and len(three_best_offer) > offers_per_company:
-        three_best_offer = three_best_offer[:offers_per_company]
-    telia_best_offer = offers.filter(
-        telecom_company__name__iexact='Telia').order_by('-discount_offered')[:5]
-    if not telia_best_offer:
-        telia_best_offer = offers.filter(telecom_company__name__iexact='Telia')
-    if telia_best_offer and len(telia_best_offer) > offers_per_company:
-        telia_best_offer = telia_best_offer[:offers_per_company]
-    
-    yousee_best_offer = offers.filter(
-        telecom_company__name__iexact='YouSee').order_by('-discount_offered')[:5]
-    if not yousee_best_offer:
-        yousee_best_offer = offers.filter(telecom_company__name__iexact='YouSee')
-    if yousee_best_offer and len(yousee_best_offer) > offers_per_company:
-        yousee_best_offer = yousee_best_offer[:offers_per_company]
-
-    result_list = list(chain(telenor_best_offer, 
-                        three_best_offer, 
-                        telia_best_offer,
-                        yousee_best_offer,))
+    offers_list = []
+    for telecompany in telecompanies:
+        comp_offers = offers.filter(telecom_company = telecompany).order_by('-discount_offered')[:offers_per_company]
+        if comp_offers and len(comp_offers) > 0:
+            offers_list = offers_list + list(comp_offers)
+    result_list = list(chain(offers_list))
     return result_list

@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 # from celery import shared_task
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
+import logging
 import re
 import requests
 from selenium import webdriver
@@ -18,6 +19,8 @@ from .models import Offer
 from core.models import TelecomCompany
 from mobiles.models import Mobile, MobileBrand
 from mobiles.utils import HeaderFactory, ProxyFactory
+
+logger = logging.getLogger(__name__)
 
 def task_fetch_offers():
     TelenorSpider().fetch_offers()
@@ -63,7 +66,8 @@ class AbstractTilbudSpider(ABC):
             try:
                 mobile = Mobile.objects.get(full_name__iexact=m_full_name)
             except ObjectDoesNotExist as e:
-                print(f'Unable to find {m_full_name} mobile by full name :', e)
+                logger.error(f'Unable to find {m_full_name} mobile by full name :', e)
+                # print(f'Unable to find {m_full_name} mobile by full name :', e)
         if not mobile:
             filtered_mobile = Mobile.objects.filter(Q(name__iexact=mobile_name) | 
                                         Q(full_name__iexact=mobile_name))

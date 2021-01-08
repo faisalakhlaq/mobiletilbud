@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.db.models import Q, F
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
+from django.utils import translation
 from django.utils.translation import gettext as _
 from django.views import View
 from django.views.generic import ListView, View
@@ -20,7 +21,7 @@ class HomeView(View):
         return render(self.request, 'core/home.html', context)
 
     def get_context_data(self, **kwargs):
-        """Returns all the popular mobiles and one offer from 
+        """Returns all the popular mobiles and two offers from 
         each telecompany"""
         popular_mobiles = PopularMobile.objects.all().order_by(F('mobile__launch_date').desc(nulls_last=True))[:15]
         context = {
@@ -108,7 +109,6 @@ def change_language(request):
                 redirect_path = f'{referer_page}'
             else:
                 return response
-            from django.utils import translation
             translation.activate(language)
             response = HttpResponseRedirect(redirect_path)
     return response

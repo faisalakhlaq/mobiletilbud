@@ -2,7 +2,7 @@
 {% load static %}
 <link rel='stylesheet' href="{% static '/compare_modal.css'%}">
 <div id="compare_mobile_modal" class="modal">
-    <span class="close">&times;</span>
+    <span class="close" onclick='close_modal()'>&times;</span>
     <ul class='compare-ul'>
         <li class='cm-mobile-container'>
             <span class="delete-mobile delete-mobile1">&times;</span>
@@ -17,19 +17,11 @@
             <p id='cm_mobile2_id' hidden></p>
         </li>
         <li>
-        <form method='GET' action='/mobile-comparison/'>
-          <input id='form_id1' name='id1' hidden value={{request.GET.id1}}>
-          <input id='form_id2' name='id2' hidden value={{request.GET.id2}}>
-          <button type="submit" class='cm-compare-mobile-btn'>{% trans 'Compare' %}</button>
-        </form>
-        {% comment %} 
-        {% url 'mobiles:mobile_comparison' 1655 1655 as c_url %}
-        <a class='btn btn-primary' href={{c_url}}>Compare Link</a>
-        <button id='cm_compare_mobile_btn' class='cm-compare-mobile-btn'
-        onclick="location.href ={% url 'mobiles:mobile-comparison' id1=1655 id2=1655 %}">
-        onclick="location.href = '{% url 'mobiles:mobile-comparison' 
-        id1=cm_mobile1_id.innerHTML id2=cm_mobile2_id.innerHTML %}'"> 
-        {% trans 'Compare' %}</button>{% endcomment %}
+          <form method='GET' action='/mobile-comparison/'>
+            <input id='form_id1' name='id1' hidden value={{request.GET.id1}}>
+            <input id='form_id2' name='id2' hidden value={{request.GET.id2}}>
+            <button type="submit" class='cm-compare-mobile-btn'>{% trans 'Compare' %}</button>
+          </form>
         </li>
     </ul>
 </div>
@@ -49,15 +41,12 @@ var mobile2_id = document.getElementById("cm_mobile2_id");
 var mobile2_image = document.getElementById("cm_mobile2_image");
 
 // Get the <span> element that closes the modal
-var span = document.getElementsByClassName("close")[0];
+{% comment %} var span = document.getElementsByClassName("close")[0]; {% endcomment %}
 var delete_mobile1 = document.getElementsByClassName("delete-mobile1")[0];
 var delete_mobile2 = document.getElementsByClassName("delete-mobile2")[0];
 
+// When the user clicks on (x), close the modal
 function close_modal(){
-  modal.style.display = "none";
-}
-// When the user clicks on <span> (x), close the modal
-span.onclick = function() {
   modal.style.display = "none";
 }
 delete_mobile1.onclick = function() {
