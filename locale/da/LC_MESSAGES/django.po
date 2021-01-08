@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-07 04:07+0100\n"
+"POT-Creation-Date: 2021-01-08 15:35+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -41,7 +41,7 @@ msgstr "Teleselskaber"
 msgid "Country Name"
 msgstr "Landenavn"
 
-#: core/views.py:46
+#: core/views.py:47
 #, python-format
 msgid "Sorry no mobile found with name %(m_name)s."
 msgstr "Vi har ikke fundet en mobil med navn %(m_name)s."
@@ -206,7 +206,11 @@ msgstr "værdi"
 msgid "Created"
 msgstr "Oprettet"
 
-#: mobiles/views.py:60 mobiles/views.py:67
+#: mobiles/views.py:26
+msgid "Sorry no mobile found."
+msgstr "Vi fandt ingen mobil."
+
+#: mobiles/views.py:72 mobiles/views.py:79 mobiles/views.py:91
 msgid "Please try choosing two different mobiles"
 msgstr "Prøv at vælge to forskellige mobiltelefoner"
 
@@ -266,7 +270,7 @@ msgstr "Tilbud"
 msgid "Offers"
 msgstr "Tilbud"
 
-#: telecompanies/views.py:34
+#: telecompanies/views.py:35 telecompanies/views.py:107
 #, python-format
 msgid "Sorry no offers found for %(m_name)s."
 msgstr "i øjeblikket er der ikke noget tilbud for %(m_name)s."
