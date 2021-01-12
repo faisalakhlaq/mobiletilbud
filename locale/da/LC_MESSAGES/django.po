@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-08 15:35+0100\n"
+"POT-Creation-Date: 2021-01-10 22:25+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -402,6 +402,14 @@ msgstr ""
 "Cookies fra vores hjemmeside kan let slettes. Det afhænger af, hvilken "
 "browser du bruger. Så for at gøre det skal du kontrollere detaljerne i din "
 "browser på, Sådan slettes cookies."
+
+#: templates/core/cookie_policy.html:21
+msgid "More information about cookies"
+msgstr "Mere om cookies"
+
+#: templates/core/cookie_policy.html:22
+msgid "You can learn more about cookies on: aboutcookies.org."
+msgstr "Du kan læse mere om cookies here: aboutcookies.org."
 
 #: templates/core/home.html:11 templates/core/mobile_brands.html:17
 msgid "Popular Mobiles"

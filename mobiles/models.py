@@ -19,7 +19,6 @@ class MobileBrand(models.Model):
     # def get_absolute_url(self):
     #     return reverse("mobile_detail", kwargs={"slug": self.name})
 
-#TODO make sure the image is deleted on deleting the record
 class Mobile(models.Model):
     name                    = models.CharField(_("name"), max_length=50)
     # full name will be Brand name + name
@@ -179,5 +178,23 @@ class PopularMobile(models.Model):
 def pre_save_receiver(sender, instance, *args, **kwargs):
     if not instance.slug:
         instance.slug = unique_slug_generator(instance=instance)
+    delete_image(sender, instance, args, kwargs)
+
+def delete_image(sender, instance, *args, **kwargs):
+    """If the image for the given object is updated, 
+    then delete the previous one."""
+    try:
+        Klass = instance.__class__
+        old_image = Klass.objects.get(pk=instance.pk).image
+        if not old_image:
+            return
+        new_image_url = None
+        if instance.image:
+            new_image_url = instance.image.url
+        if old_image and old_image.url != new_image_url:
+            old_image.delete(save=False)
+    except Klass.DoesNotExist:
+        return
 
 pre_save.connect(pre_save_receiver, sender=Mobile)
+pre_save.connect(delete_image, sender=MobileBrand)

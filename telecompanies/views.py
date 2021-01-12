@@ -146,8 +146,8 @@ class CompareOffersView(View):
         return context
 
 def get_tilbud_auto_complete(request):    
-    """Search tilbud containing mobile names.
-    Return 5 matching names."""
+    """Return 5 mobile names matching the given name.
+     Names are searched from the offers table."""
     data = 'fail'
     mimetype = 'application/json'
     if not request.is_ajax():
