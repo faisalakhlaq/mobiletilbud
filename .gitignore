@@ -1,5 +1,6 @@
-# ####################################### #
-mobiletilbud,db
+# ########################################
+chromedriver
+mobiletilbud.db
 wsgi.py
 local.py
 quidelines-ideas
