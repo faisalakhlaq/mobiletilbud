@@ -24,8 +24,8 @@ logger = logging.getLogger(__name__)
 
 def task_fetch_offers():
     TelenorSpider().fetch_offers()
-    YouSeeSpider().fetch_offers()
     TeliaSpider().fetch_offers()
+    YouSeeSpider().fetch_offers()
     ThreeSpider().fetch_offers()
 
 class AbstractTilbudSpider(ABC):
@@ -215,8 +215,10 @@ class YouSeeSpider(AbstractTilbudSpider):
             lis = None
             tele_company = None
             for i in range(3):
-                # import pdb; pdb.set_trace()
                 driver = self.configure_driver()
+                if not driver: 
+                    logger.error('Unable to configure driver for YouSeeSpider')
+                    continue
                 driver.get(self.tilbud_url)
                 devices = WebDriverWait(driver, 60).until(
                     EC.presence_of_element_located((By.CLASS_NAME, "component-terminal-list__terminal-list"))
@@ -228,11 +230,14 @@ class YouSeeSpider(AbstractTilbudSpider):
                     tele_company = TelecomCompany.objects.get(name='YouSee')
                     self.delete_old_offers(telecom_company=tele_company)
                     break
-            
-            self.get_devices(lis, telecom_company=tele_company)
-            self.close_webdriver(driver)
+            if not lis or len(lis) == 0:
+                logger.error('No offers fetched for YouSee')
+            else:
+                self.get_devices(lis, telecom_company=tele_company)
         except (TimeoutException, Exception) as e:
-            print('Exception while fetching YouSee offers: ', e)
+            logger.error('Exception while fetching YouSee offers: ', e)
+            self.close_webdriver(driver)
+        finally:
             self.close_webdriver(driver)
 
     def get_devices(self, rows, telecom_company=None):
@@ -378,6 +383,9 @@ class ThreeSpider(AbstractTilbudSpider):
             tele_company = None
             for i in range(3):
                 driver = self.configure_driver()
+                if not driver: 
+                    logger.error('Unable to configure driver for ThreeSpider')
+                    continue
                 driver.get(self.tilbud_url)
                 devices = WebDriverWait(driver, 20).until(
                     EC.presence_of_element_located((By.CLASS_NAME, "devices"))
@@ -393,11 +401,14 @@ class ThreeSpider(AbstractTilbudSpider):
                     tele_company = TelecomCompany.objects.get(name='3')
                     self.delete_old_offers(telecom_company=tele_company)
                     break
-
-            self.get_tilbud_devices(devices_li=devices_li, telecom_company=tele_company)
-            self.close_webdriver(driver)
+            if devices_li and len(devices_li) > 0:
+                self.get_tilbud_devices(devices_li=devices_li, telecom_company=tele_company)
+            else:
+                logger.error('Unable to fetch offers for Three!')
         except (TimeoutException, Exception) as e:
-            print('Exception while fetching Three offers: ', e)
+            logger.error('Exception while fetching Three offers: ', e)
+            self.close_webdriver(driver)
+        finally:
             self.close_webdriver(driver)
 
     def get_tilbud_devices(self, devices_li, telecom_company=None):
