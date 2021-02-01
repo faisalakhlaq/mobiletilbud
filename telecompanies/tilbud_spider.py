@@ -7,13 +7,14 @@ import logging
 import re
 import requests
 from selenium import webdriver
-from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import TimeoutException, WebDriverException
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.firefox.options import Options as FirefoxOptions
+# from selenium.webdriver.firefox.options import Options as FirefoxOptions
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
-from webdriver_manager.firefox import GeckoDriverManager
+# from webdriver_manager.firefox import GeckoDriverManager
 
 from .models import Offer
 from core.models import TelecomCompany
@@ -39,17 +40,30 @@ class AbstractTilbudSpider(ABC):
             driver.quit()
 
     def configure_driver(self):
-        # Add additional Options to the webdriver
-        firefox_options = FirefoxOptions()
-        # add the argument and make the browser Headless.
-        firefox_options.add_argument("--headless")
+        chrome_options = Options()
+        chrome_options.add_argument("--headless")
+        chrome_options.add_argument("--disable-dev-shm-usage") # overcome limited resource problems
+        chrome_options.add_argument("--disable-gpu") # applicable to windows os only
+        # chrome_options.add_argument("no-sandbox") # Bypass OS security model
+        # chrome_options.add_argument("--disable-extensions") # disabling extensions
         try:
-            driver = webdriver.Firefox(options=firefox_options,
-                                       executable_path=GeckoDriverManager().install())
-        except:
-            driver = webdriver.Firefox(options=firefox_options,
-                                       executable_path='/usr/local/bin/geckodriver')
-        return driver
+            driver = webdriver.Chrome(chrome_options=chrome_options) #, executable_path='/snap/bin/chromium.chromedriver')
+            return driver
+        except WebDriverException as we:
+            msg = f'Unable to get chrome driver. WebDriverException: {we}'
+            logger.error(msg)
+            # driver = webdriver.Chrome(
+            #     executable_path='/snap/bin/chromium.chromedriver', 
+            #     options=chrome_options)
+            # return driver
+        except Exception as e:
+            msg = f'Unable to get chrome driver. Exception: {e}'
+            logger.error(msg)
+            # driver = webdriver.Chrome(
+            #     executable_path='/snap/bin/chromium.chromedriver', 
+            #     options=chrome_options)
+            # return driver
+        return None
 
     @abstractmethod
     def fetch_offers(self):
@@ -66,8 +80,8 @@ class AbstractTilbudSpider(ABC):
             try:
                 mobile = Mobile.objects.get(full_name__iexact=m_full_name)
             except ObjectDoesNotExist as e:
-                logger.error(f'Unable to find {m_full_name} mobile by full name :', e)
-                # print(f'Unable to find {m_full_name} mobile by full name :', e)
+                msg = f'Unable to find {m_full_name} mobile by full name :{e}'
+                logger.error(msg)
         if not mobile:
             filtered_mobile = Mobile.objects.filter(Q(name__iexact=mobile_name) | 
                                         Q(full_name__iexact=mobile_name))
@@ -199,7 +213,8 @@ class TelenorSpider(AbstractTilbudSpider):
                                 discount=discount, price=price,
                                 telecom_company=telecom_company)
                 except Exception as e:
-                    print('Telenor Spider Exception: ', e)
+                    msg = f'Telenor Spider Exception: {e}'
+                    logger.error(msg)
                     continue
 
 
@@ -214,7 +229,7 @@ class YouSeeSpider(AbstractTilbudSpider):
         try:
             lis = None
             tele_company = None
-            for i in range(3):
+            for i in range(1):
                 driver = self.configure_driver()
                 if not driver: 
                     logger.error('Unable to configure driver for YouSeeSpider')
@@ -234,8 +249,13 @@ class YouSeeSpider(AbstractTilbudSpider):
                 logger.error('No offers fetched for YouSee')
             else:
                 self.get_devices(lis, telecom_company=tele_company)
-        except (TimeoutException, Exception) as e:
-            logger.error('Exception while fetching YouSee offers: ', e)
+        except TimeoutException as te:
+            msg = f'Exception while fetching YouSee offers: {te}'
+            logger.error(msg)
+            self.close_webdriver(driver)
+        except Exception as e:
+            msg = f'Exception while fetching YouSee offers: {e}'
+            logger.error(msg)
             self.close_webdriver(driver)
         finally:
             self.close_webdriver(driver)
@@ -381,7 +401,7 @@ class ThreeSpider(AbstractTilbudSpider):
         try:
             devices_li = None
             tele_company = None
-            for i in range(3):
+            for i in range(1):
                 driver = self.configure_driver()
                 if not driver: 
                     logger.error('Unable to configure driver for ThreeSpider')
@@ -406,7 +426,8 @@ class ThreeSpider(AbstractTilbudSpider):
             else:
                 logger.error('Unable to fetch offers for Three!')
         except (TimeoutException, Exception) as e:
-            logger.error('Exception while fetching Three offers: ', e)
+            msg = f'Exception while fetching Three offers: {e}'
+            logger.error(msg)
             self.close_webdriver(driver)
         finally:
             self.close_webdriver(driver)
