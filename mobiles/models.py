@@ -1,5 +1,6 @@
 from django.db import models
-from django.db.models.signals import pre_save
+from django.db.models.signals import pre_save, post_delete
+from django.dispatch import receiver
 from django.shortcuts import reverse
 from django.utils.translation import gettext_lazy as _
 
@@ -174,6 +175,12 @@ class PopularMobile(models.Model):
     def __str__(self):
         return self.mobile.name
 
+@receiver(post_delete, sender=Mobile)
+@receiver(post_delete, sender=MobileBrand)
+def post_delete_image(sender, instance, *args, **kwargs):
+    """ Deletes image files on `post_delete` """
+    if instance.image and instance.image.url:
+        instance.image.delete(save=True)
 
 def pre_save_receiver(sender, instance, *args, **kwargs):
     if not instance.slug:

@@ -19,6 +19,7 @@ INSTALLED_APPS = [
     'django_celery_beat',
     'cookielaw',
     'django.contrib.sitemaps',
+    # 'rest_framework',
 ]
 
 MIDDLEWARE = [
