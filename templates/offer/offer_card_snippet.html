@@ -11,7 +11,11 @@
         </div>
         <div class="offer-card-body">
             <div class="offer-mobile-image">
-                <img class="offer-mob-image" src={{ offer.mobile.image.url | default:'/media/images/default_mobile_image.png' }}>
+            {% if offer.mobile.image %}
+                <img class="offer-mob-image" src={{ offer.mobile.image.url }}>
+            {% else %}
+                <img class="offer-mob-image" src={{ '/media/images/default_mobile_image.png' }}>
+            {% endif %}
             </div>
             <div class="offer-card-title">{% if offer.mobile %}
                 {{offer.mobile.full_name}} {% elif offer.mobile_name %}
