@@ -401,7 +401,7 @@ class ThreeSpider(AbstractTilbudSpider):
         try:
             devices_li = None
             tele_company = None
-            for i in range(1):
+            for i in range(3):
                 driver = self.configure_driver()
                 if not driver: 
                     logger.error('Unable to configure driver for ThreeSpider')

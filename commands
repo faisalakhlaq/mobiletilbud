@@ -15,7 +15,7 @@ redis-server
 celery -A mobiletilbud beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
 
 GIT
-git -c user.name=faisalakhlaq stash create
+git -c user.name=faisalakhlaq -c user.email=faisalakhlaq@aol.com stash create
 git commit -a --allow-empty-message -m ''
 
 Datadump for whole database
