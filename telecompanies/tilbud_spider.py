@@ -24,10 +24,10 @@ from mobiles.utils import HeaderFactory, ProxyFactory
 logger = logging.getLogger(__name__)
 
 def task_fetch_offers():
-    TelenorSpider().fetch_offers()
+    # TelenorSpider().fetch_offers()
     TeliaSpider().fetch_offers()
-    YouSeeSpider().fetch_offers()
-    ThreeSpider().fetch_offers()
+    # YouSeeSpider().fetch_offers()
+    # ThreeSpider().fetch_offers()
 
 class AbstractTilbudSpider(ABC):
     def __init__(self):
@@ -47,7 +47,7 @@ class AbstractTilbudSpider(ABC):
         # chrome_options.add_argument("no-sandbox") # Bypass OS security model
         # chrome_options.add_argument("--disable-extensions") # disabling extensions
         try:
-            driver = webdriver.Chrome(chrome_options=chrome_options) #, executable_path='/snap/bin/chromium.chromedriver')
+            driver = webdriver.Chrome(chrome_options=chrome_options, executable_path='/snap/bin/chromium.chromedriver')
             return driver
         except WebDriverException as we:
             msg = f'Unable to get chrome driver. WebDriverException: {we}'
@@ -73,7 +73,6 @@ class AbstractTilbudSpider(ABC):
                 offer_url=None, m_full_name=None, 
                 discount=0, price=0, telecom_company=None):
         """Save the offer in the database"""
-        # import pdb; pdb.set_trace()
         offer = Offer()
         mobile = None
         if m_full_name:
@@ -107,7 +106,7 @@ class AbstractTilbudSpider(ABC):
             offer.mobile_name = mobile_name
         if offer_url:
             offer.offer_url = offer_url
-        if discount != 0:
+        if discount and discount != 0:
             # extract the float value from the string
             offer.discount = discount
             value = (''.join(i for i in discount if i.isdigit()))
@@ -137,7 +136,8 @@ class AbstractTilbudSpider(ABC):
                 timeout=30, # timeout in 20 seconds in order to avoid hanging/freezing
             )
         except Exception as e:
-            print(f'Exception while Requesting {tele_comp_name} offers: ', e)
+            msg = f'Exception while Requesting {tele_comp_name} offers: {e}'
+            logger.error(msg)
         return response
 
 class TelenorSpider(AbstractTilbudSpider):
@@ -151,7 +151,6 @@ class TelenorSpider(AbstractTilbudSpider):
         offers = None
         try:
             # proxies = ProxyFactory().get_proxies(number_of_proxies=3)
-            # import pdb; pdb.set_trace()
             for i in range(3):
                 # Make 3 tries to get the offers 
                 # in case something goes wrong
@@ -229,7 +228,7 @@ class YouSeeSpider(AbstractTilbudSpider):
         try:
             lis = None
             tele_company = None
-            for i in range(1):
+            for i in range(3):
                 driver = self.configure_driver()
                 if not driver: 
                     logger.error('Unable to configure driver for YouSeeSpider')
@@ -262,7 +261,7 @@ class YouSeeSpider(AbstractTilbudSpider):
 
     def get_devices(self, rows, telecom_company=None):
         if not rows or not len(rows) > 0: 
-            print('No offers found for YouSee!')
+            logger.info('No offers found for YouSee!')
             return
         for li in rows:
             try:
@@ -289,14 +288,15 @@ class YouSeeSpider(AbstractTilbudSpider):
                 discount=discount, price=price,
                 telecom_company=telecom_company)
             except Exception as e:
-                print('Error-YouSee offer spider. Exception: ', e)
+                msg = 'Error-YouSee offer spider. Exception: {e}'
+                logger.error(msg)
                 continue
 
 
 class TeliaSpider(AbstractTilbudSpider):
     def __init__(self):
-        self.telia_base_url = 'https://shop.telia.dk'
-        self.tilbud_url = 'https://shop.telia.dk/cgodetilbud.html'
+        self.telia_base_url = 'https://www.telia.dk'
+        self.tilbud_url = 'https://www.telia.dk/privat/webshop/mobiler/kampagner/mobil-tilbud/'
         super(TeliaSpider, self).__init__()
 
     # @shared_task
@@ -308,68 +308,67 @@ class TeliaSpider(AbstractTilbudSpider):
             try:
                 # Make 3 tries to get the offers 
                 # in case something goes wrong
-                response = self.get_response(url=self.tilbud_url, 
-                tele_comp_name='Telia')
-                content = None
-                if response:
-                    content = response.content
-                if not content:
+                driver = self.configure_driver()
+                if not driver: 
+                    logger.error('Unable to configure driver for TeliaSpider')
                     continue
-                soup = BeautifulSoup(content, "html.parser")
+                driver.get(self.tilbud_url)
+                devices = WebDriverWait(driver, 60).until(
+                    EC.presence_of_element_located((By.CLASS_NAME, "cm-c-category-grid-wrapper"))
+                )
+                soup = BeautifulSoup(driver.page_source, "html.parser")
                 if not soup: continue
-                wrap_div = soup.find('div', {'id': 'page'}).find('div',{'class':'wrap clear'})
-                ajax_div = wrap_div.find('div', {"class", "wide clear"}).find('div')
-                rows = ajax_div.find_all("div", {'class': 'grids'})
+                category_sort = soup.find('div', {'id': 'category-sort'}) 
+                section = category_sort.find('section', {'class': 'cm-c-category-grid'})
+                cat_grid_wrapper = section.find('div', {"class", 'cm-c-category-grid-wrapper'})
+                rows = cat_grid_wrapper.find_all("a", {'class': 'cm-c-product-card-simple'})
                 if rows and len(rows) > 0:
                     break
-            except Exception as e:
-                print('Exception in Telia while fetching request: ', e)
+            except TimeoutException as te:
+                msg = f'TimeoutException while fetching Telia offers: {te}'
+                logger.error(msg)
+                self.close_webdriver(driver)
                 continue
-        if not rows or not len(rows) == 0: 
-            print('No offers found for Telia')
+            except Exception as e:
+                msg = f'Exception while fetching Telia offers: {e}'
+                logger.error(msg)
+                self.close_webdriver(driver)
+                continue
+            finally:
+                self.close_webdriver(driver)
+        if not rows or not len(rows) > 0: 
+            logger.error('No offers found for Telia')
             return
-        offer_divs = []
-        for row in rows:
-            for div in row.find_all('div'):
-                offer_divs.append(div.find('div', {'class': 'productbox'}))
-        tele_company = None
-        if offer_divs and len(offer_divs) > 0:
+        try:
+            tele_company = None
             tele_company = TelecomCompany.objects.get(name='Telia')
             self.delete_old_offers(tele_company)
-        # import pdb; pdb.set_trace()
-        for p_box in offer_divs:
-            try:
-                rabat_div = p_box.find('div', {'class': ' tsr-tactical-flash tsr-tactical-round tsr-color-purple tsr-first'})
-                if not rabat_div: rabat_div = p_box.find_all('div')[0]
-                discount_div = rabat_div.find('span', {'class':'discountamount'})
-                discount = 0
-                if discount_div: discount = discount_div.find('b').text.strip()
-                name_and_link = p_box.find('h2').find('a', href=True)
-                # TODO mobile name includes the memory. Use this as mobile memory variation 
-                mobile_name = self.extract_name(name_and_link)
-                offer_url = self.telia_base_url + name_and_link['href']
-                table = p_box.find('table', {'class': 'product-prices'})
-                # price_tr = table.find('tbody').find_all('tr')
-                price_tr = table.find_all('tr')
-                price = None
-                for tr in price_tr:
-                    td = tr.find_all('td')
-                    if len(td) < 2:
-                        continue
-                    td1 = td[0]
-                    td2 = td[1]
-                    if 'Mindstepris' in td1.text.strip() or 'Pris.' in td1.text.strip():
-                        if not price:
-                            price = td1.text.strip() +" "+td2.text.strip()
-                        else:
-                            price = price +" - "+ td1.text.strip() +" "+td2.text.strip()
-                self.save_offer(mobile_name=mobile_name, 
-                                telecom_company_name='Telia',
-                                offer_url=offer_url, discount=discount, 
-                                price=price, telecom_company=tele_company)
-            except Exception as e:
-                print('Exception in extracting Telia offer: ', e)
-                continue
+            self.extract_offers(rows=rows, tele_company=tele_company)
+        except Exception as e:
+            msg = f'Exception in extracting Telia offer: {e}'
+            logger.error(msg)
+            
+    def extract_offers(self, rows, tele_company):
+        for row in rows:
+            offer_url = self.telia_base_url + row['href']
+            divs = row.find('div', {'class':'cm-c-product-card-simple__right'})
+            m_name_p = divs.find('div', {'class':'cm-c-product-card-simple__top'}).find_all('p')
+            mobile_name = m_name_p[1].text.strip()
+            m_full_name = (" ").join([m_name_p[0].text.strip(), mobile_name])
+            price_div = divs.find('div', {'class': 'cm-c-product-card-simple__bottom'})
+            price = price_div.find('p').text.strip()
+            price += " " + price_div.find('div', {'class': 'cm-c-product-card-simple__desc'}).find('p').text.strip()
+            price = price.replace('med ONE abn.', '').strip()
+            discount = None
+            discount_div = row.find('div', {'class': 'cm-c-product-card-simple__left'})
+            discount_splash = discount_div.find('div', {'class': 'cm-c-splash cm-c-splash--offer'})
+            if discount_splash:
+                discount = discount_splash.find('span').text
+            self.save_offer(mobile_name=mobile_name, 
+                            telecom_company_name='Telia',
+                            offer_url=offer_url, m_full_name=m_full_name,
+                            discount=discount, 
+                            price=price, telecom_company=tele_company)
 
     def extract_name(self, sequence):
         pattern = r'\(\d+\S+\s\S+\)'
