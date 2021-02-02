@@ -9,6 +9,7 @@
 
 {% block content %}
     <div class='pl-container'>
+        <small><a href={% url 'partners:create_offer' %}>Create Offer</a></small>
         <h3>{% trans 'Partners Login'%}</h3>
         <p>{% trans 'If you do not have a login and would like to post mobile offers from your company on our website, then please sign up first.' %}</p>
         <form action='' method='POST'>
