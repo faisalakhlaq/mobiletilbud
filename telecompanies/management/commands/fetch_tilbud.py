@@ -3,7 +3,7 @@ CommandError, no_translations)
 from telecompanies.tilbud_spider import task_fetch_offers
 
 class Command(BaseCommand):
-    help = 'Fetches the tlbuds for all telecom companies'
+    help = 'Fetches the offers for all telecom companies'
     
     @no_translations
     def handle(self, *args, **options):

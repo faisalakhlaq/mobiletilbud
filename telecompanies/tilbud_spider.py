@@ -24,10 +24,10 @@ from mobiles.utils import HeaderFactory, ProxyFactory
 logger = logging.getLogger(__name__)
 
 def task_fetch_offers():
-    # TelenorSpider().fetch_offers()
+    TelenorSpider().fetch_offers()
     TeliaSpider().fetch_offers()
-    # YouSeeSpider().fetch_offers()
-    # ThreeSpider().fetch_offers()
+    YouSeeSpider().fetch_offers()
+    ThreeSpider().fetch_offers()
 
 class AbstractTilbudSpider(ABC):
     def __init__(self):
@@ -47,7 +47,7 @@ class AbstractTilbudSpider(ABC):
         # chrome_options.add_argument("no-sandbox") # Bypass OS security model
         # chrome_options.add_argument("--disable-extensions") # disabling extensions
         try:
-            driver = webdriver.Chrome(chrome_options=chrome_options, executable_path='/snap/bin/chromium.chromedriver')
+            driver = webdriver.Chrome(chrome_options=chrome_options) #, executable_path='/snap/bin/chromium.chromedriver')
             return driver
         except WebDriverException as we:
             msg = f'Unable to get chrome driver. WebDriverException: {we}'

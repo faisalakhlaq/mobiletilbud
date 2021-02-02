@@ -117,6 +117,43 @@ class GsmarenaMobileSpecSpider:
         # self.proxies = loop.run_until_complete(get_proxies())
         # self.proxies = asyncio.run(get_proxies())
         # loop.close()
+    def fetch_mobile(self, mobile_name, brand_name, url):
+        '''Fetch the mobile and its specs from the given url.
+        The fetched mobile and specs will be saved in the DB.'''
+        if not url or url.strip() == '': return 
+        import pdb; pdb.set_trace()
+        # Check if this mobile already exists. Otherwise create a new mobile
+        mobile = Mobile.objects.filter(Q(full_name__iexact=mobile_name), 
+                                Q(brand__name__iexact=brand_name))
+        # If we have not found mobile with full name and try with the name
+        if not mobile:
+            mobile = Mobile.objects.filter(Q(name__iexact=mobile_name), 
+                                            Q(brand__name__iexact=brand_name))
+        if mobile: mobile = mobile[0]
+        else:
+            brand = MobileBrand.objects.filter(name__iexact=brand_name)
+            if brand: brand = brand[0]
+            mobile = Mobile.objects.create(
+                name=mobile_name, 
+                url=url,
+                brand = brand,
+                )
+        header = self.headers.get_header()
+        print(f'Sending Request to fetch mobile')
+        response = requests.get(
+            url=url, 
+            headers=header,
+            timeout=20, # timeout in 20 seconds in order to avoid hanging/freezing
+        )
+        soup = BeautifulSoup(response.content, 'html.parser')
+        tables = soup.find_all('table')
+        rows = []
+        # import pdb; pdb.set_trace()
+        for table in tables:
+            new_rows = table.find_all('tr')
+            if new_rows: rows = rows + new_rows
+        
+        self.extract_mobile_info(rows, mobile)
 
     def fetch_single_specs(self, mobile):
         '''Fetches specs for a single mobile and 
