@@ -38,6 +38,7 @@ urlpatterns += i18n_patterns(
     path('', include('core.urls')),
     path('', include('telecompanies.urls')),
     path('', include('mobiles.urls')),
+    path('', include('partners.urls')),
     prefix_default_language=False,
 )
 

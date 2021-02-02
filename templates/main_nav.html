@@ -42,6 +42,11 @@
             </ul>
             <!-- Right -->
             <ul class="navbar-nav nav-flex-icons">
+                <li class="nav-item">
+                    <a class="nav-link waves-effect" href={% url 'partners:partners_login' %}>
+                        {% translate "Partners" %}
+                    </a>
+                </li>
                 {% get_current_language as LANGUAGE_CODE %}
                 <form class="navbar-form form-inline" action="{% url 'change_language' %}" method="post">
                     {% csrf_token %}
