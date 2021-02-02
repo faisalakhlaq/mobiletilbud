@@ -75,7 +75,6 @@ class AbstractMobileSpider(ABC):
             mobile.save()
             # if created:
             print("Saved a new mobile: ", mobile.full_name)
-            # import pdb; pdb.set_trace()
             # else:
             # print('Updated mobile image: ', mobile.full_name)
         except Exception as e:
@@ -290,7 +289,6 @@ class GsmarenaMobileSpider(AbstractMobileSpider):
                     continue
 
     def fetch_mobiles(self, brand_name_):
-        # import pdb; pdb.set_trace()
         pages = self.get_pages(brand_name_)
         brand = MobileBrand.objects.get(name='HTC')
         for page in pages:
@@ -326,7 +324,6 @@ class DoroMobileSpider(AbstractMobileSpider):
         super().__init__()
 
     def fetch_mobiles(self, brand_name_):
-        # import pdb; pdb.set_trace()
         pages = []
         for url in self.doro_urls:
             response = requests.get(url=url, headers=self.headers.get_header())

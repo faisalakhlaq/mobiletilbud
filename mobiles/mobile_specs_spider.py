@@ -2,7 +2,11 @@ from bs4 import BeautifulSoup
 from celery import shared_task
 from dateutil import parser
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.files.base import ContentFile
 from django.db.models import Q, F
+import io
+import logging
+from PIL import Image
 import requests
 import random 
 import time
@@ -14,6 +18,8 @@ from .models import (Mobile, MobileBrand, MobileTechnicalSpecification,
                      MobileCameraSpecification, MobileVariation, Variation)
 from .utils import HeaderFactory, ProxyFactory, update_mobile_launch_date
 from itertools import cycle
+
+logger = logging.getLogger(__name__)
 
 
 class PricePusher:
@@ -60,7 +66,6 @@ class PricePusher:
             res = row.find_all('div')
             if res:
                 mobile_divs += res
-        # import pdb; pdb.set_trace()
         for mobile_detail in mobile_divs:
             try:
                 name = mobile_detail.find('h4').text.strip()
@@ -147,12 +152,35 @@ class GsmarenaMobileSpecSpider:
         soup = BeautifulSoup(response.content, 'html.parser')
         tables = soup.find_all('table')
         rows = []
-        # import pdb; pdb.set_trace()
         for table in tables:
             new_rows = table.find_all('tr')
             if new_rows: rows = rows + new_rows
-        
+        if not mobile.image:
+            image = self.download_mobile_image(
+                soup=soup, 
+                mobile=mobile, 
+                brand_name=brand_name)
         self.extract_mobile_info(rows, mobile)
+
+    def download_mobile_image(self, soup, mobile, brand_name):
+        img_src = soup.find('div', {'class':"specs-photo-main"}).find('a').find('img')['src']
+        try:
+            if img_src and len(img_src.strip()) > 5:
+                response = requests.get(img_src, stream=True, timeout=30).content
+                image_file = io.BytesIO(response)
+                image = Image.open(image_file)
+                # return image
+                if image:
+                    thumb_io = io.BytesIO()
+                    image.save(thumb_io, image.format, quality=95)
+                    # TODO if mobile/ OR ANyName/ is not provided in the save method then 
+                    # the image is saved to the parent folder i.e. media
+                    # mobile.image.save('sony/'+image.filename, ContentFile(thumb_io.getvalue()), save=False)
+                    mobile.image.save(brand_name+'/'+image.filename, ContentFile(thumb_io.getvalue()), save=False)
+                    mobile.save()
+        except Exception as e:
+            msg = f'Exception occured while downloading the image: {e}'
+            logger.error(msg)
 
     def fetch_single_specs(self, mobile):
         '''Fetches specs for a single mobile and 
@@ -171,7 +199,6 @@ class GsmarenaMobileSpecSpider:
         soup = BeautifulSoup(response.content, 'html.parser')
         tables = soup.find_all('table')
         rows = []
-        # import pdb; pdb.set_trace()
         for table in tables:
             new_rows = table.find_all('tr')
             if new_rows: rows = rows + new_rows
@@ -188,7 +215,6 @@ class GsmarenaMobileSpecSpider:
         except ObjectDoesNotExist as e:
             print(f'Brand with the given name {band_name} not found: ', e)
             return None
-        # import pdb; pdb.set_trace()
         # mobiles = Mobile.objects.filter(brand=brand)
         # mobiles = Mobile.objects.filter(brand=brand).order_by(F('launch_date').desc(nulls_last=True))
         # mobiles = Mobile.objects.filter(brand__name=brand_name)[:100]
@@ -214,7 +240,6 @@ class GsmarenaMobileSpecSpider:
                 soup = BeautifulSoup(response.content, 'html.parser')
                 tables = soup.find_all('table')
                 rows = []
-                # import pdb; pdb.set_trace()
                 for table in tables:
                     new_rows = table.find_all('tr')
                     if new_rows: rows = rows + new_rows
@@ -254,7 +279,6 @@ class GsmarenaMobileSpecSpider:
         """Extract the data from the webpage 
         and put it in a dictionary"""
         # isinstance(rows, list)
-        # import pdb; pdb.set_trace()
         if len(rows) == 0:
             print(f'Got no data for {mobile.name}')
             return None
@@ -402,7 +426,6 @@ class GsmarenaMobileSpecSpider:
         print('Saved Variation for ', mobile)
 
     def save_camera_specs(self, data_dict, mobile):
-        # import pdb; pdb.set_trace()
         old_cam_specs = MobileCameraSpecification.objects.filter(mobile=mobile)
         cam_specs = MobileCameraSpecification.objects.create(mobile=mobile)
         single = data_dict.get('main camera-single')
@@ -469,7 +492,6 @@ class GadgetsMobileSpecSpider:
     def fetch_mobile_specs(self):
         brand = MobileBrand.objects.get(name__iexact=self.brand_name)
         # updated_urls = Mobile.objects.filter(Q(brand=brand),Q(url__icontains='gadgets'))
-        # import pdb; pdb.set_trace()
         # Read the file 
         # with open('to_fetch_mobile_specs.txt', 'r') as f:
         #     lines = f.readlines()
