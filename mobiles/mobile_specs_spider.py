@@ -121,7 +121,6 @@ class GsmarenaMobileSpecSpider:
         '''Fetch the mobile and its specs from the given url.
         The fetched mobile and specs will be saved in the DB.'''
         if not url or url.strip() == '': return 
-        import pdb; pdb.set_trace()
         # Check if this mobile already exists. Otherwise create a new mobile
         mobile = Mobile.objects.filter(Q(full_name__iexact=mobile_name), 
                                 Q(brand__name__iexact=brand_name))
