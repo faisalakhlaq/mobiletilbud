@@ -9,9 +9,10 @@ User = settings.AUTH_USER_MODEL
 
 class PartnerEmployee(models.Model):
     """This is a special user who is representing a company.
-    This user will be able to login to a form and add their products.
-    The products should come unders the model.Item. Supplier can
-    edit, update, delete and add new items only for its company."""
+    This user will be able to login to a form and add their offers.
+    The offer should come unders the telecompany.model.Offer. 
+    Partner employee can edit, update, delete and add new 
+    items only for its company."""
     user                = models.OneToOneField(User, on_delete=models.CASCADE)
     birth_date          = models.DateField(null=True, blank=True)
     image               = models.ImageField(_("Picture"), 
@@ -33,7 +34,8 @@ class PartnerEmployee(models.Model):
         verbose_name_plural = _("Partner Employees")
 
     def __str__(self):
-        return self.user.name
+        if self.user.first_name: return self.user.first_name
+        else: return self.user.username
 
     def get_absolute_url(self):
         return reverse("partners:partner_employee_detail", kwargs={"pk": self.pk})

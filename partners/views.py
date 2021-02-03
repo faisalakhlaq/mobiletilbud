@@ -1,11 +1,13 @@
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.views.generic import View
 from django.views.generic.edit import CreateView
 
 from telecompanies.models import Offer
-from .forms import UserForm, CreatePartnerForm
 from utils.forms import AddressForm
+from .models import PartnerEmployee
+from .forms import UserForm, CreatePartnerForm
 
 class PartnersLogin(View):
     def get(self, *args, **kwargs):
@@ -36,7 +38,7 @@ class PartnersCreateView(View):
 
     def post(self, *args, **kwargs):
         user_form = UserForm(self.request.POST)
-        employee_form = CreateSupplierEmployeeForm(self.request.POST, self.request.FILES)
+        employee_form = CreatePartnerForm(self.request.POST, self.request.FILES)
         address_form = AddressForm(self.request.POST)
         if user_form.is_valid() and employee_form.is_valid() and address_form.is_valid():
             user = user_form.save()
@@ -46,7 +48,7 @@ class PartnersCreateView(View):
             bday = employee_form.cleaned_data.get("birth_date")
             image = employee_form.cleaned_data.get('image')
             company = employee_form.cleaned_data.get('company')
-            employee = SupplierEmployee.objects.create(
+            employee = PartnerEmployee.objects.create(
                user = user,
                birth_date = bday,
                image = image,
@@ -61,4 +63,4 @@ class PartnersCreateView(View):
             'employee_form':employee_form,
             'address_form':address_form,
         }
-        return render(self.request, 'customers/signup.html', context)
+        return render(self.request, 'partners/signup.html', context)

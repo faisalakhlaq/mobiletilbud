@@ -25,12 +25,7 @@
                 offers from your company on our website, then please {% endblocktrans %}
               <a href="{% url 'partners:partners_signup' %}">{% trans 'sign up' %}</a>.
               </p>
-
-            {% comment %} <a class="btn btn-primary" href="{% url 'signup' %}">{% trans "sign up first." %}</a> {% endcomment %}
         {% endif %}
-
-        {% comment %} <small><a href={% url 'partners:create_offer' %}>Create Offer</a></small> {% endcomment %}
-
         <form method='post'  action="{% url 'login' %}">
             {% csrf_token %}
             <table>
@@ -45,11 +40,11 @@
             </table>
             <div class='login-buttons-div'>
             <button class="btn btn-primary" type="submit">{% trans "Sign In" %}</button>
-            <a class="btn btn-primary" href="{% url 'password_reset' %}">{% trans "Forgot Password?" %}</a>
+            {% comment %} <a class="btn btn-primary" href="{% url 'password_reset' %}">{% trans "Forgot Password?" %}</a> {% endcomment %}
             <input type="hidden" name="next" value="{{ next }}" />
             </div>
         </form>
-        {% comment %} <p><a href="{% url 'password_reset' %}">Lost password?</a></p> {% endcomment %}
+        <p><a href="{% url 'password_reset' %}">{% trans 'Lost password?' %}</a></p>
     </div>
 {% endblock content %}
 

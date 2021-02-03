@@ -7,6 +7,8 @@
     text-align: justify;
 }
 .login-buttons-div{
-    float: right;
-    margin: 1rem;
+    text-align: center;
+    margin: 1rem; 
+
+    /* float: right;*/
 }

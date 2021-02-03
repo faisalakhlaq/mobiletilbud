@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% load static i18n %}
+
+{% block content %}
+<div class='container flex text-center mt-5'>
+  <h3>{% trans 'Logged out!' %}</h3>
+  <a href="{% url 'login'%}">{% trans 'Click here to login again.' %}</a>
+</div>
+{% endblock %}

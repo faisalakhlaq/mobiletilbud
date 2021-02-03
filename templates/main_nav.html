@@ -42,11 +42,24 @@
             </ul>
             <!-- Right -->
             <ul class="navbar-nav nav-flex-icons">
+                {% if user.is_authenticated %}
                 <li class="nav-item">
-                    <a class="nav-link waves-effect" href={% url 'partners:partners_login' %}>
-                        {% translate "Partners" %}
+                    <a class="nav-link waves-effect" href={% url 'partners:create_offer' %}>
+                        {% translate "Create Offer" %}
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link waves-effect" href={% url 'logout' %}>
+                        {% translate "Logout" %}
+                    </a>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link waves-effect" href={% url 'partners:partners_login' %}>
+                        {% translate "Login" %}
+                    </a>
+                </li>
+                {% endif %}
                 {% get_current_language as LANGUAGE_CODE %}
                 <form class="navbar-form form-inline" action="{% url 'change_language' %}" method="post">
                     {% csrf_token %}
