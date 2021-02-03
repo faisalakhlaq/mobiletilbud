@@ -4,6 +4,8 @@ from django.views.generic import View
 from django.views.generic.edit import CreateView
 
 from telecompanies.models import Offer
+from .forms import UserForm, CreatePartnerForm
+from utils.forms import AddressForm
 
 class PartnersLogin(View):
     def get(self, *args, **kwargs):
@@ -25,10 +27,9 @@ class CreateOfferView(LoginRequiredMixin, CreateView):
 
 class PartnersCreateView(View):
     def get(self, *args, **kwargs):
-        import pdb; pdb.set_trace()
         context = {
             'user_form': UserForm(),
-            'employee_form': CreateSupplierEmployeeForm(),
+            'partners_form': CreatePartnerForm(),
             'address_form': AddressForm(),
         }
         return render(self.request, 'partners/signup.html', context)

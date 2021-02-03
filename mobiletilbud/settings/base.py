@@ -8,6 +8,7 @@ MOBILETILBUD_APPS = [
     'telecompanies',
     'mobiles',
     'partners',
+    'utils'
 ]
 INSTALLED_APPS = [
     'django.contrib.admin',
