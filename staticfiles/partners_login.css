@@ -1,6 +1,12 @@
-.pl-container{
+.login-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     margin: 2rem;
     padding: 2rem;
-    width: 80%; 
     text-align: justify;
+}
+.login-buttons-div{
+    float: right;
+    margin: 1rem;
 }

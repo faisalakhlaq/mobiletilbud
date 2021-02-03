@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load static i18n %}
+{% block extra_head %}
+  <link rel='stylesheet' href="{% static '/partners_login.css'%}">
+{% endblock extra_head %}
+
+{% block title %} {% translate "Partners Login" %} | {{ block.super }}
+{% endblock title %}
+
+{% block content %}
+    <div class='login-container'>
+        <h3>{% trans 'Partner Login'%}</h3>
+        {% if form.errors %}
+            <p>{% trans 'Your username and password didnot match. Please try again.' %}</p>
+        {% endif %}
+        {% if next %}
+            {% if user.is_authenticated %}
+            <p>{% trans 'Your account doesnot have access to this page. To proceed,
+            please login with an account that has access.' %}</p>
+            {% else %}
+            <p>{% trans 'Please login to see this page.' %}</p>
+            {% endif %}
+        {% else %}
+            <p>{% blocktrans %}If you do not have a login and would like to post mobile
+                offers from your company on our website, then please {% endblocktrans %}
+              <a href="{% url 'partners:partners_signup' %}">{% trans 'sign up' %}</a>.
+              </p>
+
+            {% comment %} <a class="btn btn-primary" href="{% url 'signup' %}">{% trans "sign up first." %}</a> {% endcomment %}
+        {% endif %}
+
+        {% comment %} <small><a href={% url 'partners:create_offer' %}>Create Offer</a></small> {% endcomment %}
+
+        <form method='post'  action="{% url 'login' %}">
+            {% csrf_token %}
+            <table>
+                <tr>
+                    <td>{{ form.username.label_tag }}</td>
+                    <td>{{ form.username }}</td>
+                </tr>
+                <tr>
+                    <td>{{ form.password.label_tag }}</td>
+                    <td>{{ form.password }}</td>
+                </tr>
+            </table>
+            <div class='login-buttons-div'>
+            <button class="btn btn-primary" type="submit">{% trans "Sign In" %}</button>
+            <a class="btn btn-primary" href="{% url 'password_reset' %}">{% trans "Forgot Password?" %}</a>
+            <input type="hidden" name="next" value="{{ next }}" />
+            </div>
+        </form>
+        {% comment %} <p><a href="{% url 'password_reset' %}">Lost password?</a></p> {% endcomment %}
+    </div>
+{% endblock content %}
+
+{% block extra_scripts %}
+{% endblock extra_scripts %}

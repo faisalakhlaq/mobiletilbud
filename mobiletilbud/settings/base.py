@@ -35,6 +35,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'mobiletilbud.urls'
+LOGIN_REDIRECT_URL = '/'
 
 TEMPLATES = [
     {

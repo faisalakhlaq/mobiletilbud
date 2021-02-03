@@ -31,6 +31,7 @@ urlpatterns = [
 ]
 
 urlpatterns += i18n_patterns(
+    path('accounts/', include('django.contrib.auth.urls')),
     path('cookie-policy/', 
     TemplateView.as_view(template_name="core/cookie_policy.html"), 
     name='cookie-policy'),
