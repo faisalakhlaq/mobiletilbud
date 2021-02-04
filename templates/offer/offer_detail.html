@@ -20,8 +20,8 @@
     {% endif %}<h3>        
     <div class="offer-description">
         <div class="offer-discount">
-                {% trans "Discount"%}
-                {% if object.discount_offered %}: {{object.discount_offered}}{% endif %}
+                {% if object.discount_offered %} {{ object.discount_offered }}
+                {% elif object.discount %}{% trans "Discount"%}: {{ object.discount }}{% endif %}
         </div>
         <div class="offer-discount company-name">
                 <p class="card-text"><span><small>{% translate "Company" %}</small>

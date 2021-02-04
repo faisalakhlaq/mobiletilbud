@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %} {% trans "Update Offer" %} | {{ block.super }}
+{% endblock title %}
+
+{% block content %}
+<div class='container flex text-center mt-5'>
+    <h3>{% trans 'Update Offer' %}</h3>
+    <form method="post">{% csrf_token %}
+        {{ form.as_p }}
+        <input class='btn btn-info' type="submit" value="Update">
+        <a class='btn btn-warning' href={% url "partners:partners_home" %}>{% trans 'Cancel' %}</a>
+    </form>
+</div>
+{% endblock content %}

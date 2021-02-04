@@ -27,7 +27,7 @@
     </table>
     </p>
     <input class='btn btn-danger' type="submit" value="Confirm">
-    <a class='btn btn-warning' href='{% url "partners:partners_home" %}'>{% trans 'Cancel' %}</a>
+    <a class='btn btn-warning' href={% url "partners:partners_home" %}>{% trans 'Cancel' %}</a>
 </form>
 <div>
 {% endblock content %}

@@ -28,17 +28,21 @@
                 <th>{% trans 'Discount' %}</th>
                 <th>{% trans 'Offer URL' %}</th>
                 <th>{% trans 'Price Text' %}</th>
-                <th>{% trans 'Delete Offer' %}</th>
+                <th>{% trans 'Edit Delete' %}</th>
             </tr>
             {% for offer in offers %}
             <tr>
-                <td><a href={{ offer.get_absolute_url }}>{{ offer.mobile.name }}</a></td>
+                <td><a href={{ offer.get_absolute_url }}>
+                {{ offer.mobile.name }}</a></td>
                 <td>{{ offer.discount }}</td>
                 <td>{{ offer.discount_offered }}</td>
                 {% comment %} <td>{{ offer.offer_url|truncatechars:20 }}</td> {% endcomment %}
                 <td>...{{ offer.offer_url|slice:"-20:" }}</td>
                 <td>{{ offer.price }}</td>
                 <td><a class='btn btn-warning' 
+                href='{% url "partners:update_offer" pk=offer.pk %}'>
+                {% trans 'Edit' %}</a>
+                <a class='btn btn-danger' 
                 href='{% url "partners:delete_offer" pk=offer.pk %}'>
                 {% trans 'Delete' %}</a></td>
             </tr>
