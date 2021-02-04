@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %} {% trans "Delete Offer" %} | {{ block.super }}
+{% endblock title %}
+
+{% block content %}
+<div class='container flex text-center mt-5'>
+<form method="post">{% csrf_token %}
+    <h3>Confirm Delete Offer</h3>
+    <p>{% trans 'Are you sure you want to delete offer ' %}"{{ object }}"?
+    <table class='table'>
+        <tr>
+            <td><b>Name</b> </td> <td>{{ offer.mobile.name }}</td> 
+        </tr>
+        <tr>
+            <td><b>Discount Text</td><b> <td>{{ offer.discount }}</td> 
+        </tr>
+        <tr>
+            <td><b>Discount</td><b> <td>{{ offer.discount_offered }}</td> 
+        </tr>
+        <tr>
+            <td><b>Offer URL</td><b> <td>{{ offer.offer_url|slice:"-30:" }}</td>
+        </tr>
+        <tr>
+            <td><b>Price Text</td><b> <td>{{ offer.price }}</td>
+        </tr>
+    </table>
+    </p>
+    <input class='btn btn-danger' type="submit" value="Confirm">
+    <a class='btn btn-warning' href='{% url "partners:partners_home" %}'>{% trans 'Cancel' %}</a>
+</form>
+<div>
+{% endblock content %}

@@ -1,16 +1,53 @@
 {% extends 'base.html' %}
 {% load static i18n %}
 {% block extra_head %}
-  <link rel='stylesheet' href="{% static '/partners_login.css'%}">
+  <link rel='stylesheet' href="{% static '/partners_signup.css'%}">
 {% endblock extra_head %}
 
 {% block title %} {% translate "Partners Login" %} | {{ block.super }}
 {% endblock title %}
 {% block content %}
-    <div class='pl-container'>
+    <div class='container d-flex flex-column justify-content-center align-items-center mt-5'>
+        <h3>{% trans 'Create a new offer' %}</h3>
         <form method="post">{% csrf_token %}
-            {{ form.as_p }}
-            <input type="submit" value="Save">
+            {% comment %} {{ form.as_p }} {% endcomment %}
+            <table class='table bg-light'>
+                <tr>
+                    <td>{{ form.mobile.label }}</td>
+                    <td>{{ form.mobile }}</td>
+                </tr>
+                <tr>
+                    <td>{{ form.telecom_company.label }}</td>
+                    <td>{{ form.telecom_company }}</td>
+                </tr>
+                <tr>
+                    <td>{{ form.mobile_name.label }}</td>
+                    <td>{{ form.mobile_name }}</td>
+                </tr>                
+                <tr>
+                    <td>{% trans 'Discount Text' %}</td>
+                    <td>{{ form.discount }}</td>
+                </tr>                
+                <tr>
+                    <td>{{ form.discount_offered.label }}</td>
+                    <td>{{ form.discount_offered }}</td>
+                </tr>                
+                <tr>
+                    <td>{{ form.offer_url.label }}</td>
+                    <td>{{ form.offer_url }}</td>
+                </tr>                
+                <tr>
+                    <td>{{ form.price.label }}</td>
+                    <td>{{ form.price }}</td>
+                </tr>
+                <tr>                
+                    <td><input class='btn btn-success' 
+                    type="submit" value="Save"></td>
+                    <td><a class='btn btn-warning' 
+                    href='{% url "partners:partners_home" %}'>
+                    {% trans "Cancel" %}</a></td>
+                </tr>
+            </table>
         </form>
     </div>
 {% endblock content %}

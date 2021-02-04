@@ -1,8 +1,9 @@
 from django.contrib import messages
+from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.views.generic import View
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, DeleteView
 
 from telecompanies.models import Offer
 from utils.forms import AddressForm
@@ -16,6 +17,7 @@ class PartnersLogin(View):
 
 class CreateOfferView(LoginRequiredMixin, CreateView):
     model = Offer
+    success_url = reverse_lazy('partners:partners_home')
     fields = [
         'mobile',
         'telecom_company',
@@ -26,6 +28,7 @@ class CreateOfferView(LoginRequiredMixin, CreateView):
         'price',
     ]
     template_name = 'partners/create_offer.html'
+
 
 class PartnersCreateView(View):
     def get(self, *args, **kwargs):
@@ -64,3 +67,25 @@ class PartnersCreateView(View):
             'address_form':address_form,
         }
         return render(self.request, 'partners/signup.html', context)
+
+
+class PartnersHome(LoginRequiredMixin, View):
+    """Displays the offers posted by user's company.
+    User (partner's employee) is provided with different
+    options. e.g. Creating, Deleting offers and profile."""
+    def get(self, *args, **kwargs):
+        # Get the employee and the related company
+        employee = PartnerEmployee.objects.filter(user=self.request.user)
+        context = {}
+        if employee: 
+            employee = employee[0]
+            if employee.company:
+                context['offers'] = Offer.objects.filter(telecom_company=employee.company)
+                context['company'] = employee.company.name
+        return render(self.request, 'partners/partners_home.html', context)
+
+
+class DeleteOfferView(LoginRequiredMixin, DeleteView):
+    model = Offer
+    success_url = reverse_lazy('partners:partners_home')
+

@@ -44,8 +44,8 @@
             <ul class="navbar-nav nav-flex-icons">
                 {% if user.is_authenticated %}
                 <li class="nav-item">
-                    <a class="nav-link waves-effect" href={% url 'partners:create_offer' %}>
-                        {% translate "Create Offer" %}
+                    <a class="nav-link waves-effect" href={% url 'partners:partners_home' %}>
+                        {% translate "Partners" %}
                     </a>
                 </li>
                 <li class="nav-item">

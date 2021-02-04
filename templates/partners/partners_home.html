@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static i18n %}
+{% block extra_head %}
+        <link rel='stylesheet' href="{% static '/partners_home.css'%}">
+{% endblock %}
+
+{% block title %} {% translate "Employee Home" %} | {{ block.super }}
+{% endblock title %}
+
+{% block content %}
+<div class='ph_container'>
+    <h3 class="ph-header">
+        {% trans "Welcome " %} {{ user }}-{{ company }}</h3>
+        <p>{% trans 'You have following options.' %}</br>
+        <a href="{% url 'partners:create_offer' %}">{% trans 'Create Offer' %}</a></br>
+        {% comment %} <a href="{% url 'partners:create_offer' %}">{% trans 'View All Offers You Created' %}</a></br> {% endcomment %}
+        {% comment %} <a href="{% url 'partners:create_offer' %}">{% trans 'Edit Offers' %}</a></br> {% endcomment %}
+        {% comment %} <a href="{% url 'partners:create_offer' %}">{% trans 'Edit You Profile' %}</a></br> {% endcomment %}
+        {% comment %} <a href="{% url 'partners:create_offer' %}">{% trans 'Delete Your Account' %}</a></br> {% endcomment %}
+        </p>
+        {% if offers %}
+        <p>{% trans 'You have created following offers' %}:</p>
+        <p>
+            <table>
+            <tr>
+                <th>{% trans 'Mobile Name' %}</th>
+                <th>{% trans 'Discount Text' %}</th>
+                <th>{% trans 'Discount' %}</th>
+                <th>{% trans 'Offer URL' %}</th>
+                <th>{% trans 'Price Text' %}</th>
+                <th>{% trans 'Delete Offer' %}</th>
+            </tr>
+            {% for offer in offers %}
+            <tr>
+                <td><a href={{ offer.get_absolute_url }}>{{ offer.mobile.name }}</a></td>
+                <td>{{ offer.discount }}</td>
+                <td>{{ offer.discount_offered }}</td>
+                {% comment %} <td>{{ offer.offer_url|truncatechars:20 }}</td> {% endcomment %}
+                <td>...{{ offer.offer_url|slice:"-20:" }}</td>
+                <td>{{ offer.price }}</td>
+                <td><a class='btn btn-warning' 
+                href='{% url "partners:delete_offer" pk=offer.pk %}'>
+                {% trans 'Delete' %}</a></td>
+            </tr>
+            {% endfor %}
+            </table>
+        </p>
+        {% endif %}
+</div>
+{% endblock content %}
