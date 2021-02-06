@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-10 22:25+0100\n"
+"POT-Creation-Date: 2021-02-06 15:18+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: core/models.py:13 mobiles/models.py:11 mobiles/models.py:139
+#: core/models.py:13 mobiles/models.py:12 mobiles/models.py:139
 msgid "Name"
 msgstr "Navn"
 
@@ -46,7 +46,7 @@ msgstr "Landenavn"
 msgid "Sorry no mobile found with name %(m_name)s."
 msgstr "Vi har ikke fundet en mobil med navn %(m_name)s."
 
-#: mobiles/models.py:13 mobiles/models.py:37
+#: mobiles/models.py:14 mobiles/models.py:37
 msgid "Image"
 msgstr "Billede"
 
@@ -214,19 +214,70 @@ msgstr "Vi fandt ingen mobil."
 msgid "Please try choosing two different mobiles"
 msgstr "Prøv at vælge to forskellige mobiltelefoner"
 
-#: mobiletilbud/settings/base.py:70
+#: mobiletilbud/settings/base.py:75
 msgid "English"
 msgstr "Engelsk"
 
-#: mobiletilbud/settings/base.py:71
+#: mobiletilbud/settings/base.py:76
 msgid "Danish"
 msgstr "Dansk"
 
-#: telecompanies/models.py:12
+#: partners/models.py:18
+msgid "Picture"
+msgstr "Billede"
+
+#: partners/models.py:22 templates/offer/bootstrap_mobile_offers_card.html:43
+#: templates/offer/mobile_offers_card.html:28
+#: templates/offer/offer_detail.html:27
+msgid "Company"
+msgstr "Selskab"
+
+#: partners/models.py:27
+msgid "Partner Employee Address"
+msgstr "Partner Medarbejderadresse"
+
+#: partners/models.py:31
+msgid "Activated"
+msgstr "Aktiveret"
+
+#: partners/models.py:34
+msgid "Partner Employee"
+msgstr "Partneransat"
+
+#: partners/models.py:35
+msgid "Partner Employees"
+msgstr "Partneransatte"
+
+#: partners/views.py:64
+msgid "Sorry! You are not registered to create offers."
+msgstr "Undskyld! Du er ikke autoriseret for at oprette tilbud. "
+
+#: partners/views.py:74
+msgid "Sorry! You can create offers only for your company."
+msgstr "Undskyld! Du kan oprette tilbud kun for din firma."
+
+#: partners/views.py:109
+msgid "Your account was successfully created!"
+msgstr "Din konto blev oprettet"
+
+#: partners/views.py:111
+msgid "Unable to create account!"
+msgstr "Kunne ikke oprette konto"
+
+#: partners/views.py:149
+msgid "Sorry! You can delete offers only for your company."
+msgstr "Undskyld! Du kan slet tilbud kun for din firma."
+
+#: partners/views.py:169
+msgid "Sorry! You can only edit offers from your company."
+msgstr "Undskyld! Du kan redigere tilbud kun for din firma."
+
+#: telecompanies/models.py:12 utils/models.py:35
 msgid "Mobile"
 msgstr "Mobil"
 
 #: telecompanies/models.py:20 templates/mobile/mobile_comparison.html:18
+#: templates/partners/partners_home.html:30
 msgid "Mobile Name"
 msgstr "Mobilnavn"
 
@@ -236,7 +287,8 @@ msgstr "Mobilnavn"
 #: templates/offer/mobile_offers_card.html:29
 #: templates/offer/mobile_offers_card.html:39
 #: templates/offer/offer_card_snippet.html:9
-#: templates/offer/offer_detail.html:23 templates/offer/offer_snippet.html:15
+#: templates/offer/offer_detail.html:24 templates/offer/offer_snippet.html:15
+#: templates/partners/partners_home.html:32
 msgid "Discount"
 msgstr "Rabat"
 
@@ -261,7 +313,7 @@ msgstr "Opdateret"
 #: telecompanies/models.py:38 templates/core/telecom_companies.html:33
 #: templates/offer/bootstrap_mobile_offers_card.html:59
 #: templates/offer/mobile_offers_card.html:42
-#: templates/offer/offer_card_snippet.html:23
+#: templates/offer/offer_card_snippet.html:27
 msgid "Offer"
 msgstr "Tilbud"
 
@@ -477,7 +529,15 @@ msgstr "Beklager, der skete noget fejl i vores ende. Vi vil undersøge det."
 msgid "Home"
 msgstr "Hjem"
 
-#: templates/main_footer.html:46
+#: templates/main_footer.html:45
+msgid "Cookie Policy"
+msgstr "Cookie-retningslinjer"
+
+#: templates/main_footer.html:48 templates/privacy_policy.html:6
+msgid "Privacy Policy"
+msgstr "Privatlivspolitik"
+
+#: templates/main_footer.html:53
 msgid "Copyright"
 msgstr "Ophavsret"
 
@@ -492,6 +552,18 @@ msgstr "Mobiler"
 #: templates/main_nav.html:39
 msgid "Check"
 msgstr "Tjek"
+
+#: templates/main_nav.html:48
+msgid "Partners"
+msgstr "Partnere"
+
+#: templates/main_nav.html:53
+msgid "Logout"
+msgstr "Log ud"
+
+#: templates/main_nav.html:59
+msgid "Login"
+msgstr "Log på"
 
 #: templates/mobile/mobile_card_snippet.html:20
 #: templates/mobile/mobile_detail.html:23
@@ -595,12 +667,6 @@ msgstr "Ingen teknisk specifikation fundet"
 msgid "View All Offers"
 msgstr "Se Alle Tilbud"
 
-#: templates/offer/bootstrap_mobile_offers_card.html:43
-#: templates/offer/mobile_offers_card.html:28
-#: templates/offer/offer_detail.html:27
-msgid "Company"
-msgstr "Selskab"
-
 #: templates/offer/bootstrap_mobile_offers_card.html:46
 #: templates/offer/mobile_offers_card.html:31
 msgid "Link"
@@ -661,6 +727,276 @@ msgstr "Først"
 msgid "Last"
 msgstr "Sidst"
 
+#: templates/partners/create_offer.html:7 templates/registration/login.html:7
+msgid "Partners Login"
+msgstr "Partnere log på"
+
+#: templates/partners/create_offer.html:11
+msgid "Create a new offer"
+msgstr "Opret et nyt tilbud"
+
+#: templates/partners/create_offer.html:29
+#: templates/partners/partners_home.html:31
+msgid "Discount Text"
+msgstr "Rabattekst"
+
+#: templates/partners/create_offer.html:49
+#: templates/telecompanies/offer_confirm_delete.html:30
+#: templates/telecompanies/offer_update_form.html:12
+msgid "Cancel"
+msgstr "Annullere"
+
+#: templates/partners/partners_home.html:7
+msgid "Employee Home"
+msgstr "Medarbejderhjemmeside"
+
+#: templates/partners/partners_home.html:13
+msgid "Welcome "
+msgstr "Velkommen"
+
+#: templates/partners/partners_home.html:14
+msgid "You have following options."
+msgstr "Du har følgende muligheder."
+
+#: templates/partners/partners_home.html:15
+msgid "Create Offer"
+msgstr "Oprettet Tilbud"
+
+#: templates/partners/partners_home.html:26
+msgid "You have created following offers"
+msgstr "Du har oprettet følgende tilbud"
+
+#: templates/partners/partners_home.html:33
+msgid "Offer URL"
+msgstr "Tilbud URL"
+
+#: templates/partners/partners_home.html:34
+msgid "Price Text"
+msgstr "Pristekst"
+
+#: templates/partners/partners_home.html:35
+msgid "Edit Delete"
+msgstr "Rediger Slet"
+
+#: templates/partners/partners_home.html:49
+msgid "Edit"
+msgstr "Rediger"
+
+#: templates/partners/partners_home.html:52
+msgid "Delete"
+msgstr "Slet"
+
+#: templates/registration/logged_out.html:6
+msgid "You are logged out!"
+msgstr "Du er logget ud"
+
+#: templates/registration/logged_out.html:7
+msgid "Click here to login again."
+msgstr "Klik her for at logge ind igen."
+
+#: templates/registration/login.html:12
+msgid "Partner Login"
+msgstr "Partner log ind"
+
+#: templates/registration/login.html:18
+msgid ""
+" Your account doesnot have access to this page.</br> \n"
+"        To proceed, please login with an account that has access to this "
+"page.' "
+msgstr ""
+"Din konto har ikke adgang til denne side. </br> \n"
+"       For at fortsætte skal du logge ind med en konto, der har adgang til dette"
+"side.'"
+
+#: templates/registration/login.html:21
+msgid "Please login to view this page."
+msgstr "Log ind for at se denne side."
+
+#: templates/registration/login.html:24
+msgid ""
+"You do not have a login with us yet? <br> \n"
+"            Would like to post mobile offers from your company on our "
+"website?<br> \n"
+"            Then please "
+msgstr ""
+"Du har ikke tilmeldt hos os endnu? <br> \n"
+"           Vil du gerne sende mobile tilbud fra din virksomhed på vores "
+"website? <br> \n"
+"            Så venligst"
+
+#: templates/registration/login.html:27
+msgid "sign up"
+msgstr "Tilmelde"
+
+#: templates/registration/login.html:43
+msgid "Sign In"
+msgstr "Log på"
+
+#: templates/registration/login.html:47
+msgid "Lost password?"
+msgstr "Glemt kodeord?"
+
+#: templates/registration/password_reset_complete.html:5
+msgid "The password has been changed!"
+msgstr "Adgangskoden er blevet ændret!"
+
+#: templates/registration/password_reset_complete.html:6
+msgid "log in again?"
+msgstr "logge ind igen?"
+
+#: templates/registration/password_reset_confirm.html:6
+msgid "Password Reset"
+msgstr "Nulstil kodeord"
+
+#: templates/registration/password_reset_confirm.html:8
+msgid "Please enter (and confirm) your new password."
+msgstr "Indtast (og bekræft) din nye adgangskode."
+
+#: templates/registration/password_reset_confirm.html:14
+msgid "New password:"
+msgstr "Nyt kodeord:"
+
+#: templates/registration/password_reset_confirm.html:19
+msgid "Confirm password:"
+msgstr "Bekræft kodeord:"
+
+#: templates/registration/password_reset_confirm.html:29
+msgid "Password reset failed"
+msgstr "Nulstilling af adgangskode mislykkedes"
+
+#: templates/registration/password_reset_confirm.html:30
+msgid ""
+" 'The password reset link was invalid,\n"
+"         possibly because it has already been used. \n"
+"         Please request a new password reset."
+msgstr ""
+"'Linket til nulstilling af adgangskode var ugyldigt, \n"
+"         muligvis fordi det allerede er brugt. \n"
+"         Bed om nulstilling af en ny adgangskode."
+
+#: templates/registration/password_reset_done.html:6
+msgid "Password Reset Email Sent"
+msgstr "Nulstilling af adgangskode E-mail sendt"
+
+#: templates/registration/password_reset_done.html:7
+msgid ""
+"An email is sent to you with instructions for setting your password. If you "
+"have not got an email in a few minutes, please check your spam folder."
+msgstr ""
+"Der sendes en e-mail med instruktioner til indstilling af din adgangskode. Hvis du"
+"har ikke fået en e-mail på få minutter, tjek venligst din spam-mappe."
+
+#: templates/registration/password_reset_form.html:6
+msgid "Reset Password"
+msgstr "Nulstil kodeord"
+
+#: templates/registration/password_reset_form.html:7
+msgid "Please provide your email address."
+msgstr "Angiv din e-mail-adresse."
+
+#: templates/registration/signup.html:4
+msgid "Signup"
+msgstr "Tilmelde"
+
+#: templates/registration/signup.html:10 templates/registration/signup.html:157
+msgid "Sign Up"
+msgstr "Tilmelde"
+
+#: templates/registration/signup.html:12
+msgid ""
+"Already have an account? Then please \n"
+"  "
+msgstr ""
+"Har du allerede en konto? Så bedes du \n"
+"  "
+
+#: templates/registration/signup.html:154
+msgid "By signing up you agree to our "
+msgstr "Med at tilmelde dig accepterer du vores "
+
+#: templates/registration/signup.html:155
+msgid "privacy policy."
+msgstr "privatlivspolitik"
+
+#: templates/registration/signup_success.html:4
+msgid "Signup- Success"
+msgstr "Tilmelding - Succes"
+
+#: templates/registration/signup_success.html:7
+msgid "Successfully Signed Up"
+msgstr "Du er tilmeldt dig med succes"
+
+#: templates/registration/signup_success.html:8
+msgid ""
+" You have successfully signed up. </br>\n"
+"  If your account is not activated within 5 working days,  \n"
+"  then please contact "
+msgstr ""
+"Du har tilmeldt dig. </br> \n"
+"  Hvis din konto ikke er aktiveret inden for 5 arbejdsdage, \n"
+"  så kontakt"
+
+#: templates/telecompanies/offer_confirm_delete.html:3
+msgid "Delete Offer"
+msgstr "Se alle tilbud"
+
+#: templates/telecompanies/offer_confirm_delete.html:10
+msgid "Are you sure you want to delete offer "
+msgstr "Er du sikker på, at du vil slette tilbudet "
+
+#: templates/telecompanies/offer_update_form.html:3
+#: templates/telecompanies/offer_update_form.html:8
+msgid "Update Offer"
+msgstr "Opdater tilbud"
+
+#: utils/models.py:9
+msgid "First Name"
+msgstr "Fornavn"
+
+#: utils/models.py:11
+msgid "Last Name"
+msgstr "Efternavn"
+
+#: utils/models.py:13
+msgid "Title"
+msgstr "Titel"
+
+#: utils/models.py:16
+msgid "Is Company"
+msgstr "Er virksomhed"
+
+#: utils/models.py:17
+msgid "Company Name"
+msgstr "virksomhed Navn"
+
+#: utils/models.py:21
+msgid "Contact Person Name"
+msgstr "Kontaktpersons navn"
+
+#: utils/models.py:24
+msgid "Street"
+msgstr "Gade"
+
+#: utils/models.py:26
+msgid "City"
+msgstr "By"
+
+#: utils/models.py:28
+msgid "Post Code"
+msgstr "Postnummer"
+
+#: utils/models.py:30
+msgid "Country"
+msgstr "Land"
+
+#: utils/models.py:33
+msgid "Phone"
+msgstr "Telefon"
+
+#: utils/models.py:37
+msgid "Email"
+msgstr "Email"
+
 #~ msgid "Lets find you a new mobile"
 #~ msgstr "Lad os finde en ny mobil"
 
@@ -675,9 +1011,6 @@ msgstr "Sidst"
 
 #~ msgid "And choose the one made exactly for you. "
 #~ msgstr "Og vælg den der er lavet kun til dig. "
-
-#~ msgid "All Offers"
-#~ msgstr "Se alle tilbud"
 
 #~ msgid "Back"
 #~ msgstr "Tilbage"
@@ -694,23 +1027,11 @@ msgstr "Sidst"
 #~ msgid "Select a Phone to Check Details and Offers"
 #~ msgstr "Klik på en mobil og se tilbud"
 
-#~ msgid "Welcome"
-#~ msgstr "Velkommen"
-
 #~ msgid "control_system"
 #~ msgstr "styresystem"
 
 #~ msgid "Mobiles from"
 #~ msgstr "Mobiler fra"
-
-#~ msgid "Logout"
-#~ msgstr "Log ud"
-
-#~ msgid "Login"
-#~ msgstr "Log på"
-
-#~ msgid "Signup"
-#~ msgstr "Tilmelde"
 
 #~ msgid "Monthly Charges"
 #~ msgstr "Månedlig Betaling"
