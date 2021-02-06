@@ -876,15 +876,15 @@ msgstr ""
 
 #: templates/registration/password_reset_done.html:6
 msgid "Password Reset Email Sent"
-msgstr "Nulstilling af adgangskode E-mail sendt"
+msgstr "Nulstilling af adgangskode e-mail sendt"
 
 #: templates/registration/password_reset_done.html:7
 msgid ""
 "An email is sent to you with instructions for setting your password. If you "
 "have not got an email in a few minutes, please check your spam folder."
 msgstr ""
-"Der sendes en e-mail med instruktioner til indstilling af din adgangskode. Hvis du"
-"har ikke fået en e-mail på få minutter, tjek venligst din spam-mappe."
+"Der sendes en e-mail med instruktioner til indstilling af din adgangskode. Hvis du "
+"har ikke fået en e-mail på få minutter, tjek venligst din spam."
 
 #: templates/registration/password_reset_form.html:6
 msgid "Reset Password"

@@ -39,19 +39,26 @@
     </a>
   </div> {% endcomment %}
   <!-- Social icons -->
-  <div class="pb-4">
-    <a href="{% url 'cookie-policy' %}">
-      <i class="fab fa-codepen mr-3">{% trans 'Cookie Policy' %}</i>
-    </a>  
-    <a href="{% url 'privacy-policy' %}">
-      <i class="fab fa-codepen mr-3">{% trans 'Privacy Policy' %}</i>
-    </a>  
-  </div>
-  <!--Copyright-->
-  <div class="footer-copyright py-2">
-    {% trans 'Copyright'%}©2021 
-    <a href="https://www.smartdeveloper.dk" target=blank> Smart Developer </a>
-  </div>
-  <!--/.Copyright-->
 
+<div className="footer">
+  <div class='d-flex flex-column' className="footerAboutUs">
+      <h3 className="footerHeader">About us</h3>
+      <a className="footerLinks" href="https://www.smartdeveloper.dk/about">
+          {% trans 'About' %}
+      </a>
+      <a className="footerLinks" href="https://www.smartdeveloper.dk/contact">
+          {% trans 'Contact' %}
+      </a>
+      <a href="{% url 'cookie-policy' %}">
+        {% trans 'Cookie Policy' %}
+      </a>  
+      <a href="{% url 'privacy-policy' %}">
+        {% trans 'Privacy Policy' %} 
+      </a>  
+      <!--Copyright-->
+      <div class="footer-copyright py-2">
+        {% trans 'Copyright'%}©2021 
+        <a href="https://www.smartdeveloper.dk" target=blank> Smart Developer </a>
+      </div>
+  <!--/.Copyright-->
 </footer>
