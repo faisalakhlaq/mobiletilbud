@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+{% load static i18n %}
+
+{% block title %}{% trans "Signup" %}|{{ block.super }}{% endblock %}
+{% block extra_head %}
+  <link rel='stylesheet' href="{% static '/partners_signup.css' %}">
+{% endblock extra_head %}
+{% block content %}
+<div class="signup-container mt-5">
+  <h1>{% trans "Sign Up" %}</h1>
+
+  <p>{% blocktrans %}Already have an account? Then please 
+  {% endblocktrans %}<a href="{% url 'partners:partners_login' %}">sign in</a></p>
+  {% if user_form.non_field_errors %}
+  <div class="alert alert-danger">{{ user_form.non_field_errors }}</div>
+  {% endif %}
+  {% if partners_form.non_field_errors %}
+  <div class="alert alert-danger">{{ partners_form.non_field_errors }}</div>
+  {% endif %}
+  {% if address_form.non_field_errors %}
+  <div class="alert alert-danger">{{ address_form.non_field_errors }}</div>
+  {% endif %}
+  <form class="signup" id="signup_form" method="post" 
+  action="{% url 'partners:partners_signup' %}" 
+  enctype='multipart/form-data'>
+    {% csrf_token %}
+    <table class='signup-form-table'>
+      <tr>
+          <td>{{ user_form.username.label }}</td>
+          <td>{{ user_form.username }}</td>
+      </tr>
+      {% if user_form.username.errors %}
+      <tr class='alert alert-danger'>
+        <td colspan=2>{{user_form.username.errors}}</td>
+      </tr>
+      {% endif %}
+      <tr><td colspan="2">{{ user_form.username.help_text|safe }}</td></tr>
+      <tr>
+          <td>{{ user_form.first_name.label }}</td>
+          <td>{{ user_form.first_name }}</td>
+      </tr>
+      {% if user_form.first_name.errors %}
+      <tr class='alert alert-danger'>
+        <td colspan=2>{{user_form.first_name.errors}}</td>
+      </tr>
+      {% endif %}
+      {% if user_form.first_name.help_text %}
+      <tr><td colspan="2">{{ user_form.first_name.help_text|safe }}</td></tr>
+      {% endif %}
+      <tr>
+          <td>{{ user_form.last_name.label }}</td>
+          <td>{{ user_form.last_name }}</td>
+      </tr>
+      {% if user_form.last_name.errors %}
+      <tr class='alert alert-danger'>
+        <td colspan=2>{{user_form.last_name.errors}}</td>
+      </tr>
+      {% endif %}
+      <tr>
+          <td>{{ user_form.email.label }}</td>
+          <td>{{ user_form.email }}</td>
+      </tr>
+      {% if user_form.email.errors %}
+      <tr class='alert alert-danger'>
+        <td colspan=2>{{user_form.email.errors}}</td>
+      </tr>
+      {% endif %}
+      <tr>
+          <td>{{ user_form.password.label }}</td>
+          <td>{{ user_form.password }}</td>
+      </tr>
+      {% if user_form.password.errors %}
+      <tr class='alert alert-danger'>
+        <td colspan=2>{{user_form.password.errors}}</td>
+      </tr>
+      {% endif %}
+      {% if user_form.password.help_text %}
+      <tr><td colspan="2">{{ user_form.password.help_text|safe }}</td></tr>
+      {% endif %}
+      <tr>
+          <td>{{ partners_form.image.label }}</td>
+          <td>{{ partners_form.image }}</td>
+      </tr>
+      {% if partners_form.image.errors %}
+      <tr class='alert alert-danger'>
+        <td colspan=2>{{partners_form.image.errors}}</td>
+      </tr>
+      {% endif %}
+      <tr>
+          <td>{{ partners_form.company.label }}</td>
+          <td>{{ partners_form.company }}</td>
+      </tr>
+      {% if partners_form.company.errors %}
+      <tr class='alert alert-danger'>
+        <td colspan=2>{{partners_form.company.errors}}</td>
+      </tr>
+      {% endif %}
+      <tr>
+          <td>{{ address_form.street.label }}</td>
+          <td>{{ address_form.street }}</td>
+      </tr>
+      {% if address_form.street.errors %}
+      <tr class='alert alert-danger'>
+        <td colspan=2>{{address_form.street.errors}}</td>
+      </tr>
+      {% endif %}
+      <tr>
+          <td>{{ address_form.city.label }}</td>
+          <td>{{ address_form.city }}</td>
+      </tr>
+      {% if address_form.city.errors %}
+      <tr class='alert alert-danger'>
+        <td colspan=2>{{address_form.city.errors}}</td>
+      </tr>
+      {% endif %}
+      <tr>
+          <td>{{ address_form.postcode.label }}</td>
+          <td>{{ address_form.postcode }}</td>
+      </tr>
+      {% if address_form.postcode.errors %}
+      <tr class='alert alert-danger'>
+        <td colspan=2>{{address_form.postcode.errors}}</td>
+      </tr>
+      {% endif %}
+      <tr>
+          <td>{{ address_form.country.label }}</td>
+          <td>{{ address_form.country }}</td>
+      </tr>
+      {% if address_form.country.errors %}
+      <tr class='alert alert-danger'>
+        <td colspan=2>{{address_form.country.errors}}</td>
+      </tr>
+      {% endif %}
+      <tr>
+          <td>{{ address_form.phone.label }}</td>
+          <td>{{ address_form.phone }}</td>
+      </tr>
+      {% if address_form.phone.errors %}
+      <tr class='alert alert-danger'>
+        <td colspan=2>{{address_form.phone.errors}}</td>
+      </tr>
+      {% endif %}
+      <tr>
+          <td>{{ address_form.mobile.label }}</td>
+          <td>{{ address_form.mobile }}</td>
+      </tr>
+      {% if address_form.mobile.errors %}
+      <tr class='alert alert-danger'>
+        <td colspan=2>{{address_form.mobile.errors}}</td>
+      </tr>
+      {% endif %}
+    </table>
+    <input type='checkbox' required>
+    {% trans 'By signing up you agree to our ' %}
+    <a href='{% url "privacy-policy" %}'>{% trans 'privacy policy.' %}</a>
+    <div class='signup-button-div'>
+      <button class="btn btn-primary" type="submit">{% trans "Sign Up" %} &raquo;</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

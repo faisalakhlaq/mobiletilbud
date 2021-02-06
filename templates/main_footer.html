@@ -39,7 +39,14 @@
     </a>
   </div> {% endcomment %}
   <!-- Social icons -->
-
+  <div class="pb-4">
+    <a href="{% url 'cookie-policy' %}">
+      <i class="fab fa-codepen mr-3">{% trans 'Cookie Policy' %}</i>
+    </a>  
+    <a href="{% url 'privacy-policy' %}">
+      <i class="fab fa-codepen mr-3">{% trans 'Privacy Policy' %}</i>
+    </a>  
+  </div>
   <!--Copyright-->
   <div class="footer-copyright py-2">
     {% trans 'Copyright'%}©2021 

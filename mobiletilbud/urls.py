@@ -2,6 +2,7 @@ from django.conf import settings
 from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls.static import static
 from django.contrib import admin
+from django.contrib.auth import views as auth_views
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.contrib.sitemaps.views import sitemap
 from django.urls import path, include
@@ -10,6 +11,7 @@ from django.views.generic import TemplateView
 from django.views.generic.base import RedirectView
 
 from core.views import change_language
+from partners.views import PartnersLoginView
 from .sitemaps import StaticViewSitemap, MobilesSitemap, OffersSitemap
 
 sitemaps = {
@@ -28,9 +30,13 @@ urlpatterns = [
         content_type="text/plain"),),
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps},
         name='django.contrib.sitemaps.views.sitemap'),
+    path('privacy-policy/', 
+    TemplateView.as_view(template_name="privacy_policy.html"), 
+    name='privacy-policy'),
 ]
 
 urlpatterns += i18n_patterns(
+    path('accounts/login/', PartnersLoginView.as_view(redirect_authenticated_user=True), name='login'),
     path('accounts/', include('django.contrib.auth.urls')),
     path('cookie-policy/', 
     TemplateView.as_view(template_name="core/cookie_policy.html"), 

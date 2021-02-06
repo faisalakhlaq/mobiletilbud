@@ -2,13 +2,12 @@ from django import forms
 from django.contrib.auth import get_user_model
 from .models import PartnerEmployee
 
-# from telecompanies.models import Offer
-
 class UserForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(UserForm, self).__init__(*args, **kwargs)
         for field in self.fields.values():
             field.widget.attrs['style'] = 'width:20rem'
+            field.widget.attrs['required'] = 'required'
 
     class Meta:
         model = get_user_model()
@@ -22,18 +21,8 @@ class CreatePartnerForm(forms.ModelForm):
         super(CreatePartnerForm, self).__init__(*args, **kwargs)
         for field in self.fields.values():
             field.widget.attrs['style'] = 'width:20rem'
-    
-    birth_date = forms.DateField(required=False,
-    widget=forms.TextInput(     
-        attrs={'type': 'date'} 
-        )
-    )    
+            field.widget.attrs['required'] = 'required'
+
     class Meta:
         model = PartnerEmployee
-        fields = ['birth_date', 'image', 'company']
-
-# class CreateOfferForm(forms.ModelForm):
-#     class Meta:
-#         model = Offer
-#         fields = '__all__'
-#         exclude = 'slug'
+        fields = ['image', 'company']

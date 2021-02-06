@@ -7,6 +7,7 @@ from utils.models import Address
 
 User = settings.AUTH_USER_MODEL
 
+# TODO delete the address after deleting the PartnerEmployee
 class PartnerEmployee(models.Model):
     """This is a special user who is representing a company.
     This user will be able to login to a form and add their offers.
@@ -14,7 +15,6 @@ class PartnerEmployee(models.Model):
     Partner employee can edit, update, delete and add new 
     items only for its company."""
     user                = models.OneToOneField(User, on_delete=models.CASCADE)
-    birth_date          = models.DateField(null=True, blank=True)
     image               = models.ImageField(_("Picture"), 
                             upload_to='profile_images/', 
                             null=True, blank=True)
@@ -28,6 +28,7 @@ class PartnerEmployee(models.Model):
                             related_name='partner_employee', 
                             on_delete=models.SET_NULL, 
                             blank=True, null=True)
+    activated           = models.BooleanField(_("Activated"), default=False)
 
     class Meta:
         verbose_name = _("Partner Employee")
