@@ -1,3 +1,5 @@
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
 from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -40,3 +42,10 @@ class PartnerEmployee(models.Model):
 
     def get_absolute_url(self):
         return reverse("partners:partner_employee_detail", kwargs={"pk": self.pk})
+
+@receiver(post_delete, sender=PartnerEmployee)
+def delete_address(sender, instance, *args, **kwargs):
+    """ Delete the address related to the user or PartnerEmployee """
+    if instance.address:
+        instance.address.delete()
+
