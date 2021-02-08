@@ -44,8 +44,10 @@ class PartnerEmployee(models.Model):
         return reverse("partners:partner_employee_detail", kwargs={"pk": self.pk})
 
 @receiver(post_delete, sender=PartnerEmployee)
-def delete_address(sender, instance, *args, **kwargs):
-    """ Delete the address related to the user or PartnerEmployee """
+def post_delete_partner(sender, instance, *args, **kwargs):
+    """ Delete the user and address related to the PartnerEmployee """
     if instance.address:
         instance.address.delete()
-
+    if instance.user:
+        instance.user.delete()
+        
