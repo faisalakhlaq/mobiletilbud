@@ -129,6 +129,7 @@ class PopularOffersView(ListView):
         return context
 
 class CompareOffersView(View):
+    # Not used
     def get(self, *args, **kwargs):
         template_name = 'offer/compare_offers.html'
         context = self.get_context_data()

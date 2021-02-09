@@ -95,22 +95,43 @@ def get_mobile_auto_complete(request):
     return HttpResponse(data, mimetype)
 
 def change_language(request):
+    """When the user selects another language from the language drop down,
+    this method sets the new language for the website."""
     response = HttpResponseRedirect('/')
     if request.method == 'POST':
         language = request.POST.get('language')
         if language:
             if language != settings.LANGUAGE_CODE and [lang for lang in settings.LANGUAGES if lang[0] == language]:
-                referer_page = urlparse(request.META.get('HTTP_REFERER')).path
-                redirect_path = f'/{language}{referer_page}'
+                # view, args, kwargs = resolve(urlparse(request.META.get('HTTP_REFERER', '/'))[2])
+                parse_result = urlparse(request.META.get('HTTP_REFERER', '/'))
+                path = parse_result.path
+                params = parse_result.params
+                query = parse_result.query
+                redirect_path = f'/{language}{path}{params}'
+                if query:
+                    redirect_path += "?" + query
             elif language == settings.LANGUAGE_CODE:
-                referer_page = urlparse(request.META.get('HTTP_REFERER')).path
-                if '/en' in referer_page:
-                    referer_page = referer_page.replace('/en', '')
-                redirect_path = f'{referer_page}'
+                # view, args, kwargs = resolve(urlparse(request.META.get('HTTP_REFERER', '/'))[2])
+                parse_result = urlparse(request.META.get('HTTP_REFERER', '/'))
+                path = parse_result.path
+                params = parse_result.params
+                query = parse_result.query
+                if '/en' in path:
+                    path = path.replace('/en', '')
+                # redirect_path = f'{path}{params}?{query}'
+                redirect_path = f'{path}{params}'
+                if query:
+                    redirect_path += "?" + query
             else:
                 return response
             translation.activate(language)
             response = HttpResponseRedirect(redirect_path)
+            # TODO setting language can be further improvement
+            #  using the below method (setting the view)
+            # try:
+            #     view(request, *args, **kwargs)
+            # except Http404:
+            #     return HttpResponseRedirect('/')
     return response
 
 # Error page handlers

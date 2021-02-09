@@ -17,7 +17,7 @@
             <p id='cm_mobile2_id' hidden></p>
         </li>
         <li>
-          <form method='GET' action='/mobile-comparison/'>
+          <form method='GET' action="{% url 'mobiles:mobile-comparison' %}">
             <input id='form_id1' name='id1' hidden value={{request.GET.id1}}>
             <input id='form_id2' name='id2' hidden value={{request.GET.id2}}>
             <button type="submit" class='cm-compare-mobile-btn'>{% trans 'Compare' %}</button>
