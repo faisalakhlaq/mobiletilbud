@@ -1,4 +1,6 @@
 # ########################################
+geckodriver.log
+dataflair-debug.log
 chromedriver
 mobiletilbud.db
 wsgi.py

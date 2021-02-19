@@ -8,7 +8,8 @@ MOBILETILBUD_APPS = [
     'telecompanies',
     'mobiles',
     'partners',
-    'utils'
+    'utils',
+    'api',
 ]
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -17,11 +18,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
-    'django_celery_beat',
-    'cookielaw',
     'django.contrib.sitemaps',
-    # 'rest_framework',
+
+    # 3rd party apps
+    # 'django_celery_beat',
+    'cookielaw',
+    'rest_framework',
+    'rest_framework.authtoken',
 ] + MOBILETILBUD_APPS
 
 MIDDLEWARE = [
