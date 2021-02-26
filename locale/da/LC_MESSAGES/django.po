@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-06 15:18+0100\n"
+"POT-Creation-Date: 2021-02-26 19:56+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -222,29 +222,29 @@ msgstr "Engelsk"
 msgid "Danish"
 msgstr "Dansk"
 
-#: partners/models.py:18
+#: partners/models.py:20
 msgid "Picture"
 msgstr "Billede"
 
-#: partners/models.py:22 templates/offer/bootstrap_mobile_offers_card.html:43
+#: partners/models.py:24 templates/offer/bootstrap_mobile_offers_card.html:43
 #: templates/offer/mobile_offers_card.html:28
 #: templates/offer/offer_detail.html:27
 msgid "Company"
 msgstr "Selskab"
 
-#: partners/models.py:27
+#: partners/models.py:29
 msgid "Partner Employee Address"
 msgstr "Partner Medarbejderadresse"
 
-#: partners/models.py:31
+#: partners/models.py:33
 msgid "Activated"
 msgstr "Aktiveret"
 
-#: partners/models.py:34
+#: partners/models.py:36
 msgid "Partner Employee"
 msgstr "Partneransat"
 
-#: partners/models.py:35
+#: partners/models.py:37
 msgid "Partner Employees"
 msgstr "Partneransatte"
 
@@ -326,6 +326,14 @@ msgstr "Tilbud"
 #, python-format
 msgid "Sorry no offers found for %(m_name)s."
 msgstr "i øjeblikket er der ikke noget tilbud for %(m_name)s."
+
+#: templates/base.html:34
+msgid ""
+"MobileTilbud is a website to find offers on mobiles. MobileTilbud gathers "
+"offers on mobiles from all Telecom companies in Denmark making it easy for "
+"the user to find their new mobile."
+msgstr ""
+"MobileTilbud er et website til at finde tilbud på mobiltelefoner. MobileTilbud samler tilbud på mobiltelefoner fra alle Teleselskaber i Danmark, hvilket gør det nemt for brugeren at finde deres nye mobil."
 
 #: templates/cookielaw/banner.html:9
 msgid "Accept"
@@ -529,15 +537,23 @@ msgstr "Beklager, der skete noget fejl i vores ende. Vi vil undersøge det."
 msgid "Home"
 msgstr "Hjem"
 
-#: templates/main_footer.html:45
+#: templates/main_footer.html:48
+msgid "About"
+msgstr ""
+
+#: templates/main_footer.html:51
+msgid "Contact"
+msgstr ""
+
+#: templates/main_footer.html:54
 msgid "Cookie Policy"
 msgstr "Cookie-retningslinjer"
 
-#: templates/main_footer.html:48 templates/privacy_policy.html:6
+#: templates/main_footer.html:57 templates/privacy_policy.html:6
 msgid "Privacy Policy"
 msgstr "Privatlivspolitik"
 
-#: templates/main_footer.html:53
+#: templates/main_footer.html:61
 msgid "Copyright"
 msgstr "Ophavsret"
 
@@ -805,8 +821,8 @@ msgid ""
 "page.' "
 msgstr ""
 "Din konto har ikke adgang til denne side. </br> \n"
-"       For at fortsætte skal du logge ind med en konto, der har adgang til dette"
-"side.'"
+"       For at fortsætte skal du logge ind med en konto, der har adgang til "
+"detteside.'"
 
 #: templates/registration/login.html:21
 msgid "Please login to view this page."
@@ -883,8 +899,8 @@ msgid ""
 "An email is sent to you with instructions for setting your password. If you "
 "have not got an email in a few minutes, please check your spam folder."
 msgstr ""
-"Der sendes en e-mail med instruktioner til indstilling af din adgangskode. Hvis du "
-"har ikke fået en e-mail på få minutter, tjek venligst din spam."
+"Der sendes en e-mail med instruktioner til indstilling af din adgangskode. "
+"Hvis du har ikke fået en e-mail på få minutter, tjek venligst din spam."
 
 #: templates/registration/password_reset_form.html:6
 msgid "Reset Password"
