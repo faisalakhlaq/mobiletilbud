@@ -1,7 +1,17 @@
 from django.contrib import admin
+from django.core import management
+
 
 from .models import Offer
 from .forms import OfferForm
+from .management.commands import fetch_tilbud
+
+
+def run_fetch_tilbud(modeladmin, request, queryset):
+    # queryset.update(refund_requested=False, refund_granted=True)
+    management.call_command(fetch_tilbud.Command())
+
+run_fetch_tilbud.short_description = 'Fetch all Tilbud'
 
 class OfferAdmin(admin.ModelAdmin):
     form = OfferForm
@@ -15,5 +25,7 @@ class OfferAdmin(admin.ModelAdmin):
         'updated',
     ]
     list_filter = ['telecom_company',]
+    actions = [run_fetch_tilbud]
+
 
 admin.site.register(Offer, OfferAdmin)
