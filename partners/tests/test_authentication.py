@@ -1,9 +1,13 @@
-from os import stat
+# from os import stat
+from django.http import response
 from django.test import TestCase
 from django.urls import reverse
-from core.models import TelecomCompany
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
+
+from core.models import TelecomCompany
+from mobiles.models import Mobile
+
 
 class BaseTest(TestCase):
     def setUp(self):
@@ -33,6 +37,7 @@ class BaseTest(TestCase):
     def tearDown(self):
         self.company.delete()
 
+
 class SignupTest(BaseTest):
     def test_signup_page_displayed_correctly(self):
         """Test if the signup page is displayed on
@@ -59,6 +64,7 @@ class SignupTest(BaseTest):
         response = self.client.post(self.sign_url, self.user, format='text/html')
         self.assertEqual(response.status_code, 400)
 
+
 class LoginTest(BaseTest):
     def test_can_access_login_page(self):
         """Test if the login page is displayed correctly."""
@@ -81,8 +87,6 @@ class LoginTest(BaseTest):
     def test_unsuccessfull_login_with_inactive_user(self):
         """Test if an in-active user can not login."""
         self.client.post(self.sign_url, self.user, format='text/html')
-        # response = self.client.post(self.login_url, self.user, format='text/html')
-        # self.assertEqual(response.status_code, 401)
         user = authenticate(username=self.user['username'], 
         password=self.user['password'])
         self.assertTrue(user is None)
