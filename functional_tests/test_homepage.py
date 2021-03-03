@@ -1,6 +1,7 @@
 from selenium import webdriver
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.urls import reverse
+# from webdriver_manager.chrome import ChromeDriverManager
 import time
 
 class TestHomePage(StaticLiveServerTestCase):
@@ -8,10 +9,14 @@ class TestHomePage(StaticLiveServerTestCase):
     def setUp(self):
         chromeOptions = webdriver.ChromeOptions() 
         chromeOptions.add_argument("--remote-debugging-port=8000")
-        # chromeOptions.add_argument("--headless") 
-        self.browser = webdriver.Chrome(executable_path='functional_tests/chromedriver',
+        chromeOptions.add_argument("--headless") 
+        # self.browser = webdriver.Chrome(
+        #     executable_path=ChromeDriverManager().install(),
+        #     options=chromeOptions)
+        self.browser = webdriver.Chrome(
+            executable_path='/snap/bin/chromium.chromedriver',
         options=chromeOptions)
-    
+
     def tearDown(self):
         self.browser.close()
 

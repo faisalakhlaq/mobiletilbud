@@ -96,7 +96,7 @@ class PartnersCreateView(View):
             user.is_active = False
             user.save()
             address = address_form.save()
-            bday = employee_form.cleaned_data.get("birth_date")
+            # bday = employee_form.cleaned_data.get("birth_date")
             image = employee_form.cleaned_data.get('image')
             company = employee_form.cleaned_data.get('company')
             employee = PartnerEmployee.objects.create(
@@ -114,7 +114,7 @@ class PartnersCreateView(View):
             'partners_form':employee_form,
             'address_form':address_form,
         }
-        return render(self.request, 'registration/signup.html', context)
+        return render(self.request, 'registration/signup.html', context, status=400)
 
 
 class PartnersHome(LoginRequiredMixin, View):
