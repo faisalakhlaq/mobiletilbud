@@ -6,15 +6,15 @@ Variation, MobileVariation, MobileCameraSpecification, PopularMobile)
 
 class InLineMobileSpecs(admin.StackedInline):
     model = MobileTechnicalSpecification
-    extra = 1
+    extra = 0
 
 class InLineMobileVariationSpecs(admin.StackedInline):
     model = MobileVariation
-    extra = 1
+    extra = 0
 
 class InLineMobileCameraSpecs(admin.StackedInline):
     model = MobileCameraSpecification
-    extra = 1
+    extra = 0
 
 class MobileAdmin(admin.ModelAdmin):
     inlines = [InLineMobileSpecs, InLineMobileCameraSpecs]
@@ -28,7 +28,7 @@ class MobileAdmin(admin.ModelAdmin):
         'brand',
     ]
     search_fields = ['name','full_name']
-    list_editable = ['cash_price']
+    list_editable = ['full_name', 'cash_price']
 
 class CameraAdmin(admin.ModelAdmin):
     list_display = [
