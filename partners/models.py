@@ -3,6 +3,7 @@ from django.dispatch import receiver
 from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django.urls import reverse
 
 from core.models import TelecomCompany
 from utils.models import Address
@@ -11,7 +12,7 @@ User = settings.AUTH_USER_MODEL
 
 # TODO delete the address after deleting the PartnerEmployee
 class PartnerEmployee(models.Model):
-    """This is a special user who is representing a company.
+    """This is a special user which represents a company.
     This user will be able to login to a form and add their offers.
     The offer should come unders the telecompany.model.Offer. 
     Partner employee can edit, update, delete and add new 

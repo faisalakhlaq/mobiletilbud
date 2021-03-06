@@ -1,11 +1,13 @@
-from rest_framework import status, generics, mixins
+from rest_framework import serializers, status, generics, mixins
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+
 from telecompanies.models import Offer
 from mobiles.models import Mobile
-from api.serializers import OfferSerializer, MobileSerializer
+from api.serializers import (OfferSerializer, MobileSerializer, 
+CreatePartnerEmployeeSerializer, PartnerLoginSerializer)
 
 class TilbudView(
     generics.GenericAPIView, 
@@ -63,3 +65,22 @@ class MobileDetailAPIView(APIView):
         obj = self.get_object(id)
         serializer = MobileSerializer(obj)
         return Response(serializer.data)
+
+
+class RegisterPartnerEmployeeView(generics.GenericAPIView):
+    serializer_class = CreatePartnerEmployeeSerializer
+
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        data = serializer.data
+        return Response(data=data, status=status.HTTP_201_CREATED)
+
+class PartnerLoginAPIView(generics.GenericAPIView):
+    serializer_class = PartnerLoginSerializer
+
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        return Response(serializer.validated_data, status=status.HTTP_200_OK)
