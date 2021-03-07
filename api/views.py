@@ -1,16 +1,20 @@
-from rest_framework import serializers, status, generics, mixins
+from rest_framework import status, mixins
 from rest_framework.authentication import TokenAuthentication
-from rest_framework.views import APIView
-from rest_framework.response import Response
+from rest_framework.generics import GenericAPIView, ListCreateAPIView
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from telecompanies.models import Offer
-from mobiles.models import Mobile
 from api.serializers import (OfferSerializer, MobileSerializer, 
 CreatePartnerEmployeeSerializer, PartnerLoginSerializer)
+from api.permissions import IsEmployeeOfCompany
+from mobiles.models import Mobile
+from partners.models import PartnerEmployee
+from telecompanies.models import Offer
+
 
 class TilbudView(
-    generics.GenericAPIView, 
+    GenericAPIView, 
     mixins.ListModelMixin, 
     mixins.RetrieveModelMixin
     ):
@@ -67,7 +71,7 @@ class MobileDetailAPIView(APIView):
         return Response(serializer.data)
 
 
-class RegisterPartnerEmployeeView(generics.GenericAPIView):
+class RegisterPartnerEmployeeView(GenericAPIView):
     serializer_class = CreatePartnerEmployeeSerializer
 
     def post(self, request):
@@ -77,10 +81,32 @@ class RegisterPartnerEmployeeView(generics.GenericAPIView):
         data = serializer.data
         return Response(data=data, status=status.HTTP_201_CREATED)
 
-class PartnerLoginAPIView(generics.GenericAPIView):
+class PartnerLoginAPIView(GenericAPIView):
     serializer_class = PartnerLoginSerializer
 
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         return Response(serializer.validated_data, status=status.HTTP_200_OK)
+
+class CreateTilbudAPI(ListCreateAPIView):
+    serializer_class = OfferSerializer
+    queryset = Offer.objects.all()
+    permission_classes = [IsAuthenticated, IsEmployeeOfCompany]
+
+    def get_queryset(self):
+        try:
+            employee = PartnerEmployee.objects.get(user=self.request.user)
+            return self.queryset.filter(telecom_company=employee.company)
+        except PartnerEmployee.DoesNotExist:
+            return [] # if the user is not an employee then return empty list
+
+    def perform_create(self, serializer):
+        try:
+            # import pdb; pdb.set_trace()
+            employee = PartnerEmployee.objects.get(user=self.request.user)
+            if not employee.company == serializer.validated_data['telecom_company']:
+                return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+            return serializer.save()
+        except PartnerEmployee.DoesNotExist:
+                return Response(data=None, status=status.HTTP_403_FORBIDDEN)

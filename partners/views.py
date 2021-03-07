@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.views import LoginView
-from django.contrib.auth import login, authenticate
+# from django.contrib.auth import login, authenticate
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
