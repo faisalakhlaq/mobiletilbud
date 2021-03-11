@@ -1,4 +1,3 @@
-import secrets;
 name: Django CI
 
 on:
@@ -28,7 +27,6 @@ jobs:
         pip install -r requirements.txt
     - name: Run Tests
       env: 
-        if [not SECRET_KEY]; then  
-        SECRET_KEY: secrets.token_hex(25)
-      run: |
-        python manage.py test
+        SECRET_KEY: ${{ secrets.SECRET_KEY }}
+      run: python manage.py test
+      
