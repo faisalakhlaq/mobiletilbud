@@ -6,7 +6,6 @@ ALLOWED_HOSTS = ['127.0.0.1']
 SECRET_KEY = None
 
 try:
-    import pdb; pdb.set_trace()
     from .local import *
 except:
    pass
