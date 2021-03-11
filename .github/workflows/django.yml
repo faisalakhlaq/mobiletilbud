@@ -1,5 +1,6 @@
-import secrets;
 name: Django CI
+
+import secrets;
 
 on:
   push:
