@@ -27,7 +27,7 @@ jobs:
         pip install -r requirements.txt
     - name: Run Tests
       env: |
-        if [not SECRET_KEY]; then
+        if [ SECRET_KEY == '' ]; then
         import secrets  
         SECRET_KEY: secrets.token_hex(25)      
       run: python manage.py test
