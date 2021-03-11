@@ -9,6 +9,10 @@ try:
 except:
    pass
 
+if not SECRET_KEY: 
+    import os
+    SECRET_KEY = os.environ.get('SECRET_KEY')
+
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     BASE_DIR / 'staticfiles'
