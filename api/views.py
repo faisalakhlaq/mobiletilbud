@@ -4,6 +4,7 @@ from rest_framework.generics import GenericAPIView, ListCreateAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+# from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 
 from api.serializers import (OfferSerializer, MobileSerializer, 
 CreatePartnerEmployeeSerializer, PartnerLoginSerializer)
@@ -73,6 +74,7 @@ class MobileDetailAPIView(APIView):
 
 class RegisterPartnerEmployeeView(GenericAPIView):
     serializer_class = CreatePartnerEmployeeSerializer
+    # parser_classes = [MultiPartParser, FormParser, JSONParser]
 
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
@@ -81,6 +83,7 @@ class RegisterPartnerEmployeeView(GenericAPIView):
         data = serializer.data
         return Response(data=data, status=status.HTTP_201_CREATED)
 
+
 class PartnerLoginAPIView(GenericAPIView):
     serializer_class = PartnerLoginSerializer
 
@@ -88,6 +91,7 @@ class PartnerLoginAPIView(GenericAPIView):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         return Response(serializer.validated_data, status=status.HTTP_200_OK)
+
 
 class CreateTilbudAPI(ListCreateAPIView):
     serializer_class = OfferSerializer
