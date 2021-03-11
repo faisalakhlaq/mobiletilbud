@@ -6,13 +6,29 @@ ALLOWED_HOSTS = ['127.0.0.1']
 SECRET_KEY = None
 
 try:
-   from .local import *
+    import pdb; pdb.set_trace()
+    from .local import *
 except:
    pass
 
+# Check if we don't have secret and database 
+# then create new to be used for CI in GitHub.
+# This happens because we are not commiting the
+# local settings file to github. We need these 
+# values to run our tests
 if not SECRET_KEY: 
     import os
     SECRET_KEY = os.environ.get('SECRET_KEY')
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': os.environ.get("DB_NAME"),
+            'USER': os.environ.get("DB_USER"),
+            'PASSWORD': os.environ.get("DB_PASSWORD"),
+            'HOST': os.environ.get("DB_HOST"),
+            'PORT': os.environ.get("DB_PORT"),
+        }
+    }
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
