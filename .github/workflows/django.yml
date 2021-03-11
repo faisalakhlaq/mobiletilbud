@@ -1,3 +1,4 @@
+import 
 name: Django CI
 
 on:
@@ -26,5 +27,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
     - name: Run Tests
+    env: 
+      SECRET_KEY: secrets.token_hex(25)
       run: |
         python manage.py test
