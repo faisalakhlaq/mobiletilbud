@@ -30,7 +30,7 @@ jobs:
         SECRET_KEY: ${{ secrets.SECRET_KEY }}
         DATABASES:
         #   #default:
-          ENGINE: "django.db.backends.mysql"
+          ENGINE: ${{ secrets.DB_ENGINE }}
           NAME: ${{ secrets.DB_NAME }}
           USER: ${{ secrets.DB_USER }}
           PASSWORD: ${{ secrets.DB_PASSWORD }}
