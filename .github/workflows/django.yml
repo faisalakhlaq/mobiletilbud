@@ -28,5 +28,13 @@ jobs:
     - name: Run Tests
       env: 
         SECRET_KEY: ${{ secrets.SECRET_KEY }}
+        DATABASES:
+          default:
+              ENGINE: 'django.db.backends.mysql'
+              NAME: ${{ secrets.DB_NAME }}
+              USER: ${{ secrets.DB_USER }}
+              PASSWORD: ${{ secrets.DB_PASSWORD }}
+              HOST: ${{ secrets.DB_HOST }}
+              PORT: ${{ secrets.DB_PORT }}
       run: python manage.py test
       
