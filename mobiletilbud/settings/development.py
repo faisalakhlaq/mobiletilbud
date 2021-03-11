@@ -15,23 +15,23 @@ except:
 # This happens because we are not commiting the
 # local settings file to github. We need these 
 # values to run our tests
-if not SECRET_KEY: 
-    import os
-    SECRET_KEY = os.environ.get('SECRET_KEY')
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': os.environ.get("DB_NAME"),
-            'USER': os.environ.get("DB_USER"),
-            'PASSWORD': os.environ.get("DB_PASSWORD"),
-            'HOST': os.environ.get("DB_HOST"),
-            'PORT': os.environ.get("DB_PORT"),
-            'TEST': {
-                'NAME': os.getenv("DB_NAME"),
-                'HOST': os.getenv("DB_HOST"),
-            },
-        }
-    }
+# if not SECRET_KEY: 
+#     import os
+#     SECRET_KEY = os.environ.get('SECRET_KEY')
+#     DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.mysql',
+#             'NAME': os.environ.get("DB_NAME"),
+#             'USER': os.environ.get("DB_USER"),
+#             'PASSWORD': os.environ.get("DB_PASSWORD"),
+#             'HOST': os.environ.get("DB_HOST"),
+#             'PORT': os.environ.get("DB_PORT"),
+#             'TEST': {
+#                 'NAME': os.environ.get("DB_NAME"),
+#                 'HOST': os.environ.get("DB_HOST"),
+#             },
+#         }
+#     }
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
