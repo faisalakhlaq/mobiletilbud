@@ -27,7 +27,8 @@ if not SECRET_KEY:
             'HOST': os.environ.get("DB_HOST"),
             'PORT': os.environ.get("DB_PORT"),
             'TEST': {
-                'NAME': 'mytestdatabase',
+                'NAME': os.environ.get("DB_NAME"),
+                'HOST': os.environ.get("DB_HOST"),
             },
         }
     }
