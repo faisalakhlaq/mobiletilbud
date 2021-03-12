@@ -29,24 +29,19 @@ jobs:
     #   run: |
     #     pip install flake8
     #     flake8
-    - name: Coverage report
+    # - name: Coverage report
+    #   run: |
+    #     pip install coverage
+    #     coverage run manage.py test
+    #     coverage report
+    - name: Run Tests
       env: 
         SECRET_KEY: ${{ secrets.SECRET_KEY }}
-        DATABASES:
-          #default:
-          name: ${{ secrets.DB_NAME }}
-      run: |
-        pip install coverage
-        coverage run manage.py test
-        coverage report
-    # - name: Run Tests
-    #   env: 
-    #     SECRET_KEY: ${{ secrets.SECRET_KEY }}
         # DATABASES:
-        #   #default:
-        # databases: ${{ secrets.DB_NAME }}
-          # engine: ${{ secrets.DB_ENGINE }}
-          # NAME: ${{ secrets.DB_NAME }}
+          #default:
+          # TEST:
+            # engine: ${{ secrets.DB_ENGINE }}
+            # NAME: ${{ secrets.DB_NAME }}
           # user: ${{ secrets.DB_USER }}
           # password: ${{ secrets.DB_PASSWORD }}
           # host: ${{ secrets.DB_HOST }}

@@ -27,7 +27,7 @@ if not SECRET_KEY:
             'HOST': os.environ.get("DB_HOST"),
             'PORT': os.environ.get("DB_PORT"),
             'TEST': {
-                'NAME': os.environ.get("DB_NAME"),
+                'NAME': 'mobiletilbud',
                 'HOST': os.environ.get("DB_HOST"),
             },
         }
