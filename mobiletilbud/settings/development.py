@@ -28,7 +28,7 @@ if not SECRET_KEY:
             'PORT': os.environ.get("DB_PORT"),
             'TEST': {
                 'NAME': 'mobiletilbud',
-                'HOST': 'localhost',
+                'HOST': '127.0.0.1',
             },
         }
     }
