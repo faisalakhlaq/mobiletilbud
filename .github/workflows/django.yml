@@ -32,6 +32,9 @@ jobs:
     - name: Coverage report
       env: 
         SECRET_KEY: ${{ secrets.SECRET_KEY }}
+        DATABASES:
+          #default:
+          name: ${{ secrets.DB_NAME }}
       run: |
         pip install coverage
         coverage run manage.py test
