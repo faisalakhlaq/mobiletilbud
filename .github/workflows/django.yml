@@ -31,10 +31,11 @@ jobs:
         DATABASES:
         #   #default:
         TEST:
-          ENGINE: ${{ secrets.DB_ENGINE }}
-          NAME: ${{ secrets.DB_NAME }}
-          USER: ${{ secrets.DB_USER }}
-          PASSWORD: ${{ secrets.DB_PASSWORD }}
-          HOST: ${{ secrets.DB_HOST }}
-          PORT: ${{ secrets.DB_PORT }}
+          engine: ${{ secrets.DB_ENGINE }}
+          name: ${{ secrets.DB_NAME }}
+          user: ${{ secrets.DB_USER }}
+          password: ${{ secrets.DB_PASSWORD }}
+          host: ${{ secrets.DB_HOST }}
+          port: ${{ secrets.DB_PORT }}
+
       run: python manage.py test
