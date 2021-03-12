@@ -24,7 +24,7 @@ if not SECRET_KEY:
             'NAME': os.environ.get("DB_NAME"),
             'USER': os.environ.get("DB_USER"),
             'PASSWORD': os.environ.get("DB_PASSWORD"),
-            'HOST': 'localhost',
+            'HOST': '/var/run/mysql',
             'PORT': os.environ.get("DB_PORT"),
             'TEST': {
                 'NAME': 'test_db',
