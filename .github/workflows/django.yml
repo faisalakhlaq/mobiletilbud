@@ -28,7 +28,7 @@ jobs:
     - name: Run Tests
       env: 
         SECRET_KEY: ${{ secrets.SECRET_KEY }}
-        DATABASES:
+        # DATABASES:
         #   #default:
         TEST:
           # engine: ${{ secrets.DB_ENGINE }}
