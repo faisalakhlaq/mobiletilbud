@@ -32,7 +32,7 @@ jobs:
         #   #default:
         TEST:
           # engine: ${{ secrets.DB_ENGINE }}
-          # name: ${{ secrets.DB_NAME }}
+          name: ${{ secrets.DB_NAME }}
           # user: ${{ secrets.DB_USER }}
           # password: ${{ secrets.DB_PASSWORD }}
           # host: ${{ secrets.DB_HOST }}
