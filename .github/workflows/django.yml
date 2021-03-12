@@ -47,4 +47,4 @@ jobs:
           # host: ${{ secrets.DB_HOST }}
           # port: ${{ secrets.DB_PORT }}
 
-      # run: python manage.py test
+      run: python manage.py test
