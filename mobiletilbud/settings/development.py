@@ -20,12 +20,8 @@ if not SECRET_KEY:
     SECRET_KEY = os.environ.get('SECRET_KEY')
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.mysql',
+            'ENGINE': 'django.db.backends.sqlite3',
             'NAME': os.environ.get("DB_NAME"),
-            'USER': os.environ.get("DB_USER"),
-            'PASSWORD': os.environ.get("DB_PASSWORD"),
-            'HOST': '/var/run/mysql',
-            'PORT': os.environ.get("DB_PORT"),
             'TEST': {
                 'NAME': 'test_db',
             },
