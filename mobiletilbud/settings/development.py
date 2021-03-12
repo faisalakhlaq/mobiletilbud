@@ -24,11 +24,10 @@ if not SECRET_KEY:
             'NAME': os.environ.get("DB_NAME"),
             'USER': os.environ.get("DB_USER"),
             'PASSWORD': os.environ.get("DB_PASSWORD"),
-            'HOST': os.environ.get("DB_HOST"),
+            'HOST': os.getenv("DB_HOST"),
             'PORT': os.environ.get("DB_PORT"),
             'TEST': {
-                'NAME': 'mobiletilbud',
-                'HOST': '127.0.0.1',
+                'NAME': 'test_db',
             },
         }
     }
