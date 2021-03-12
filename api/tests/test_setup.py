@@ -18,17 +18,18 @@ class TestSetUp(APITestCase):
         # image = Image.new('RGBA', size=(50, 50), color=(155, 0, 0))
         # file = tempfile.NamedTemporaryFile(suffix='.png')
         # image.save(file)
-        image_path = settings.MEDIA_ROOT / 'images/default_mobile_image.jpg'
-        self.image = {
-            'image': open(image_path, 'rb')
-        }
+        # image_path = settings.MEDIA_ROOT / 'images/default_mobile_image.jpg'
+        # self.image = {
+        #     'image': open(image_path, 'rb')
+        # }
         self.user = {
             'username': 'username',
             'first_name': 'first_name', 
             'last_name': 'last_name', 
             'email': 'email@gmail.com', 
             'password': 'password',
-            'image': str(image_path),
+            'image': 'static/media/images/default_mobile_image.jpg',
+            # 'image': str(image_path),
             'company': self.company.id,
         }
         # self.user = {

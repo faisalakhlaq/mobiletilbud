@@ -1,8 +1,8 @@
-from selenium import webdriver
+from django.conf import settings
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.urls import reverse
+from selenium import webdriver
 # from webdriver_manager.chrome import ChromeDriverManager
-import time
 
 class TestHomePage(StaticLiveServerTestCase):
 
@@ -24,7 +24,10 @@ class TestHomePage(StaticLiveServerTestCase):
         self.browser.get(self.live_server_url)
         # first time request with no offers on the page
         alert = self.browser.find_element_by_tag_name('h3').text
-        self.assertEquals(alert, 'POPULÆRE TILBUD')
+        heading_text = 'POPULÆRE TILBUD'
+        if settings.LANGUAGE_CODE == 'en':
+            heading_text = 'POPULAR OFFERS'
+        self.assertEquals(alert, heading_text)
 
     def test_company_page_redirect(self):
         """check if clicking to the companies

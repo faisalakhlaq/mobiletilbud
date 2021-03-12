@@ -10,9 +10,7 @@ from django.views.generic import ListView, View
 import json
 from urllib.parse import urlparse
 
-from .models import TelecomCompany
 from mobiles.models import Mobile, MobileBrand, PopularMobile
-from telecompanies.models import Offer
 from telecompanies.utils import get_popular_offers
 
 class HomeView(View):
