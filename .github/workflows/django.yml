@@ -29,11 +29,12 @@ jobs:
       env: 
         SECRET_KEY: ${{ secrets.SECRET_KEY }}
         DATABASES:
-          TEST:
-            ENGINE: ${{ secrets.DB_ENGINE }}
-            NAME: ${{ secrets.DB_NAME }}
-            USER: ${{ secrets.DB_USER }}
-            PASSWORD: ${{ secrets.DB_PASSWORD }}
-            HOST: ${{ secrets.DB_HOST }}
-            PORT: ${{ secrets.DB_PORT }}
+        #   #default:
+        TEST:
+          ENGINE: ${{ secrets.DB_ENGINE }}
+          NAME: ${{ secrets.DB_NAME }}
+          USER: ${{ secrets.DB_USER }}
+          PASSWORD: ${{ secrets.DB_PASSWORD }}
+          HOST: ${{ secrets.DB_HOST }}
+          PORT: ${{ secrets.DB_PORT }}
       run: python manage.py test
