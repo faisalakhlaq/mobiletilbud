@@ -22,9 +22,9 @@ if not SECRET_KEY:
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
             'NAME': os.environ.get("DB_NAME"),
-            'TEST': {
-                'NAME': 'test_db',
-            },
+            # 'TEST': {
+            #     'NAME': 'test_db',
+            # },
         }
     }
 
