@@ -30,12 +30,12 @@ jobs:
         SECRET_KEY: ${{ secrets.SECRET_KEY }}
         # DATABASES:
         #   #default:
-      database:
-        # engine: ${{ secrets.DB_ENGINE }}
-        - NAME: ${{ secrets.DB_NAME }}
-        # user: ${{ secrets.DB_USER }}
-        # password: ${{ secrets.DB_PASSWORD }}
-        # host: ${{ secrets.DB_HOST }}
-        # port: ${{ secrets.DB_PORT }}
+        DATABASES:
+          # engine: ${{ secrets.DB_ENGINE }}
+          NAME: ${{ secrets.DB_NAME }}
+          # user: ${{ secrets.DB_USER }}
+          # password: ${{ secrets.DB_PASSWORD }}
+          # host: ${{ secrets.DB_HOST }}
+          # port: ${{ secrets.DB_PORT }}
 
       run: python manage.py test
