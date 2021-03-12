@@ -30,9 +30,9 @@ jobs:
         SECRET_KEY: ${{ secrets.SECRET_KEY }}
         # DATABASES:
         #   #default:
-        TEST:
+        test:
           # engine: ${{ secrets.DB_ENGINE }}
-          name: ${{ secrets.DB_NAME }}
+          NAME: ${{ secrets.DB_NAME }}
           # user: ${{ secrets.DB_USER }}
           # password: ${{ secrets.DB_PASSWORD }}
           # host: ${{ secrets.DB_HOST }}
