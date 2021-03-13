@@ -25,12 +25,14 @@ INSTALLED_APPS = [
     'cookielaw',
     'rest_framework',
     'rest_framework.authtoken',
+    'corsheaders'
 ] + MOBILETILBUD_APPS
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -79,3 +81,4 @@ LANGUAGES = [
     ('da', _('Danish')),
 ]
 LOCALE_PATHS = [Path(BASE_DIR / 'locale')]
+CORS_ALLOW_ALL_ORIGINS = False

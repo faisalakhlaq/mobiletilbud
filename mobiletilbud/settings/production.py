@@ -64,3 +64,7 @@ LOGGING = {
         },
     },
 }
+
+CORS_ALLOWED_ORIGINS = [
+    "https://www.mobiletilbud.dk",
+]
