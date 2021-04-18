@@ -139,6 +139,7 @@ class GsmarenaMobileSpecSpider:
             if brand: brand = brand[0]
             mobile = Mobile.objects.create(
                 name=mobile_name, 
+                full_name=mobile_name,
                 url=url,
                 brand = brand,
                 )

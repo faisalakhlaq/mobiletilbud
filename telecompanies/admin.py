@@ -23,6 +23,7 @@ class OfferAdmin(admin.ModelAdmin):
         'updated',
     ]
     list_filter = ['telecom_company',]
+    list_editable = ['discount']
     actions = [run_fetch_tilbud]
 
 
