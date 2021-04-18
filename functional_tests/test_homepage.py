@@ -2,7 +2,7 @@ from django.conf import settings
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.urls import reverse
 from selenium import webdriver
-# from webdriver_manager.chrome import ChromeDriverManager
+from webdriver_manager.chrome import ChromeDriverManager
 
 class TestHomePage(StaticLiveServerTestCase):
 
@@ -10,12 +10,16 @@ class TestHomePage(StaticLiveServerTestCase):
         chromeOptions = webdriver.ChromeOptions() 
         chromeOptions.add_argument("--remote-debugging-port=8000")
         chromeOptions.add_argument("--headless") 
-        # self.browser = webdriver.Chrome(
-        #     executable_path=ChromeDriverManager().install(),
-        #     options=chromeOptions)
-        self.browser = webdriver.Chrome(
-            executable_path='/snap/bin/chromium.chromedriver',
-        options=chromeOptions)
+        self.browser = None
+        try:
+            self.browser = webdriver.Chrome(
+                executable_path=ChromeDriverManager().install(),
+                options=chromeOptions)
+        except:{}
+        if not self.browser:
+            self.browser = webdriver.Chrome(
+                executable_path='/snap/bin/chromium.chromedriver',
+            options=chromeOptions)
 
     def tearDown(self):
         self.browser.close()
@@ -31,8 +35,8 @@ class TestHomePage(StaticLiveServerTestCase):
         self.assertTrue(mathing_heading)
 
     def test_company_page_redirect(self):
-        """check if clicking to the companies
-        button open the company page."""
+        """check if clicking the companies
+        button opens the company page."""
         companies_url = self.live_server_url + reverse("telecompanies:offers")
         self.browser.get(self.live_server_url)
         self.browser.find_element_by_id('company').click()
