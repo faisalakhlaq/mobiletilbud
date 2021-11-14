@@ -16,8 +16,7 @@ except:
 # local settings file to github. We need these 
 # values to run our tests
 if not SECRET_KEY: 
-    import os
-    SECRET_KEY = os.environ.get('SECRET_KEY')
+    SECRET_KEY = env('SECRET_KEY')
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
