@@ -26,3 +26,5 @@ which will be displayed along the other offers.
 - Web-Scraping
 - Celery
 - User AUTH
+
+The website was previously deployed on pythonanywhere but is currently down. 
